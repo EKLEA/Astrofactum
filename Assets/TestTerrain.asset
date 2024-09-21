@@ -16,11 +16,11 @@ MonoBehaviour:
   baseHeight: 4
   Octaves:
   - noiseType: 3
-    frequency: 0.01
+    frequency: 0.001
+    amplitude: 1
+  - noiseType: 3
+    frequency: 0.0625
     amplitude: 2
-  - noiseType: 5
-    frequency: 0.01
-    amplitude: 3
   DomainWarp:
     noiseType: 0
     frequency: 0.2

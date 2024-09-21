@@ -12,6 +12,8 @@ public class PlayerInput: MonoBehaviour
 	public float maxAngleCam;
 	public Camera cam;
 	public GameObject camObj;
+	public GameObject point;
+	public GameWorld gameWorld;
 	
 	
 	float distanceToPlayer
@@ -19,40 +21,47 @@ public class PlayerInput: MonoBehaviour
 		get{return _disToPlayer;}
 		set
 		{
-			if((value>=minDistance)&&(value<=maxDistance))
+			if(value==_disToPlayer) return;
+			else 
 			{
-				_disToPlayer=value;
+				if((value>=minDistance)&&(value<=maxDistance))		_disToPlayer=value;
+				else if(value<minDistance)		_disToPlayer=minDistance;
+				else if(value>maxDistance)		_disToPlayer=maxDistance;
 			}
+			camObj.transform.localPosition=new Vector3(0,ChekY(math.sin(currentAngle*Mathf.Deg2Rad)*_disToPlayer ),-math.cos(currentAngle*Mathf.Deg2Rad)*_disToPlayer);
 		}
 	}
 	float _disToPlayer;
-	float cameraPosZ
+	bool isRotating = false;
+	public float _curAn;
+	float currentAngle
 	{
-		get
-		{
-			return _camPosZ;
-		}
+		get{ return _curAn;}
 		set
 		{
-			
-			float minZ=-distanceToPlayer*math.cos(math.radians(maxAngleCam));
-			if(value>minZ) _camPosZ=minZ;
-			if((math.sqrt(distanceToPlayer*distanceToPlayer-value*value) >= GetGroundHeight()+2)&&(value<minZ)) _camPosZ=value;
+			if(value>maxAngleCam) _curAn=maxAngleCam;
+			else if(value<0) _curAn=0;
+			else if
+			(
+				value<=maxAngleCam
+				&&value>=0
+				&&((math.sin(value*Mathf.Deg2Rad)*distanceToPlayer)>=GetGroundHeight(camObj.transform.position)+0.01f)
+				) _curAn=value;
 		}
 	}
-	float _camPosZ;
-	private bool isRotating = false;
 
 	void Start()
 	{
 		_disToPlayer=100;
-		camObj.transform.localPosition = new Vector3(0,70.7f,-70.7f);
+		currentAngle=50;
 	}
 	void Update()
 	{
 		CameraRotation();
 		CameraMove();
+		camObj.transform.localPosition=new Vector3(0,ChekY(math.sin(currentAngle*Mathf.Deg2Rad)*distanceToPlayer ),-math.cos(currentAngle*Mathf.Deg2Rad)*distanceToPlayer);
 		cam.transform.LookAt(transform.position);
+		
 	}
 	
 	void CameraRotation()
@@ -70,12 +79,9 @@ public class PlayerInput: MonoBehaviour
 			float mouseX = Input.GetAxis("Mouse X");
 			float mouseY = Input.GetAxis("Mouse Y");
 			transform.Rotate(Vector3.up, mouseX * rotationSpeed * Time.deltaTime);
-			cameraPosZ += mouseY * rotationSpeed * Time.deltaTime;
-			camObj.transform.localPosition=new Vector3(0,math.sqrt(distanceToPlayer*distanceToPlayer-cameraPosZ*cameraPosZ),cameraPosZ);
+			currentAngle += mouseY * rotationSpeed * Time.deltaTime;
 		}
 	}
-
-
 	void CameraMove()
 	{
 		float moveX = Input.GetAxis("Horizontal");
@@ -88,17 +94,26 @@ public class PlayerInput: MonoBehaviour
 			Vector3 worldDirection = transform.TransformDirection(localDirection);
 
 			transform.position += worldDirection * Time.deltaTime * moveSpeed;
+			transform.position=new Vector3(transform.position.x,GetGroundHeight(point.transform.position)+0.01f,transform.position.z);
 		}
 		float scroll = Input.GetAxis("Mouse ScrollWheel");
 		distanceToPlayer -= scroll * zoomSpeed;
-		
 	}
-	float GetGroundHeight()
+	float ChekY(float yToChek)
+	{
+		float temp=  GetGroundHeight(camObj.transform.position);
+		if (yToChek <=temp ) return temp+0.01f;
+		else return yToChek;
+	}
+	float GetGroundHeight( Vector3 position)
 	{
 		RaycastHit hit;
-		if (Physics.Raycast(cam.transform.position, Vector3.down, out hit))
+		
+		if (Physics.Raycast(position+Vector3.up*100, Vector3.down, out hit))
 		{
-			return hit.point.y;
+			var terrain=hit.collider.GetComponent<Terrain>();
+			Vector2 posChunkInWorld = gameWorld.GetChunkPos(new Vector2(hit.point.x,hit.point.z));
+			return terrain.SampleHeight(new Vector3(hit.point.x-posChunkInWorld.x,0,hit.point.z-posChunkInWorld.y));
 		}
 		return 20; 
 	}
