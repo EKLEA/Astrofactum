@@ -12,16 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df32372e792eaf444bf48581d9525290, type: 3}
   m_Name: TestTerrain
   m_EditorClassIdentifier: 
-  heightScale: 5
-  baseHeight: 4
+  heightScale: 2
+  baseHeight: 0
   Octaves:
-  - noiseType: 3
-    frequency: 0.001
-    amplitude: 1
-  - noiseType: 3
-    frequency: 0.0625
-    amplitude: 2
+  - noiseType: 0
+    frequency: 0.032
+    amplitude: 0.01875
   DomainWarp:
     noiseType: 0
     frequency: 0.2
-    amplitude: 1
+    amplitude: 10
