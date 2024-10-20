@@ -6,6 +6,7 @@ public class TerrainGenerator : ScriptableObject
 {
 	public float heightScale = 10f; // Множитель высоты для рельефа
 	public float baseHeight = 4f; // Базовая высота (смещение)
+	public int scale = 1; // Базовая высота (смещение)
 	 // Множитель разрешения (качество)
 
 	private TerrainData terrainData;
@@ -50,7 +51,7 @@ public class TerrainGenerator : ScriptableObject
 		terrainData.heightmapResolution = resolution;
 
 		// Задаем физические размеры террейна (по осям X, Y, Z)
-		terrainData.size = new Vector3(32, 32, 32);
+		terrainData.size = new Vector3(32*scale, 32*scale, 32*scale);
 
 		// Создаем массив высот для карты высот
 		float[,] heights = new float[resolution, resolution];
@@ -61,8 +62,8 @@ public class TerrainGenerator : ScriptableObject
 			for (int z = 0; z < resolution; z++)
 			{
 				// Генерация координат в мировых единицах
-				float worldX = x * (32f / (resolution - 1)) + offsetX;
-				float worldZ = z * (32f / (resolution - 1)) + offsetZ;
+				float worldX = x * ((32f*scale) / (resolution - 1)) + offsetX;
+				float worldZ = z * ((32f*scale) / (resolution - 1)) + offsetZ;
 
 				// Генерация высоты для каждой точки
 				heights[z, x] = GetHeight(worldX, worldZ);
@@ -78,12 +79,12 @@ public class TerrainGenerator : ScriptableObject
 	float GetHeight(float x, float y)
 	{
 		//warpNoise.DomainWarp(ref x, ref y);
-		float result = baseHeight;
+		float result = baseHeight*scale;
 		for (int i = 0; i < Octaves.Length; i++)
 		{
 			float noise = octaveNoises[i].GetNoise(x, y);
 			result += noise * Octaves[i].amplitude / 2;
 		}
-		return Mathf.Clamp01(result * heightScale / 32);
+		return Mathf.Clamp01(result * heightScale / (32*scale));
 	}
 }

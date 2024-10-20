@@ -13,9 +13,12 @@ public class PlayerInput: MonoBehaviour
 	public Camera cam;
 	public GameObject camObj;
 	public GameObject point;
-	public GameWorld gameWorld;
+	public GameWorld gameWorld;//переделать
 	
-	
+	float _disToPlayer;
+	bool isRotating = false;
+	bool isMoving= true;
+	float _curAn;	
 	float distanceToPlayer
 	{
 		get{return _disToPlayer;}
@@ -28,25 +31,19 @@ public class PlayerInput: MonoBehaviour
 				else if(value<minDistance)		_disToPlayer=minDistance;
 				else if(value>maxDistance)		_disToPlayer=maxDistance;
 			}
-			camObj.transform.localPosition=new Vector3(0,ChekY(math.sin(currentAngle*Mathf.Deg2Rad)*_disToPlayer ),-math.cos(currentAngle*Mathf.Deg2Rad)*_disToPlayer);
+			camObj.transform.localPosition=new Vector3(0,math.sin(currentAngle*Mathf.Deg2Rad)*_disToPlayer,-math.cos(currentAngle*Mathf.Deg2Rad)*_disToPlayer);
 		}
 	}
-	float _disToPlayer;
-	bool isRotating = false;
-	public float _curAn;
+
 	float currentAngle
 	{
 		get{ return _curAn;}
 		set
 		{
-			if(value>maxAngleCam) _curAn=maxAngleCam;
+			var worldPos=camObj.transform.parent.TransformPoint(new Vector3(0,math.sin(value*Mathf.Deg2Rad)*distanceToPlayer,-math.cos(value*Mathf.Deg2Rad)*distanceToPlayer));
+			if((GetGroundHeight(worldPos)+0.01f <= worldPos.y)&&value<=maxAngleCam&&(value>=0)) _curAn=value;
+			else if(value>maxAngleCam) _curAn=maxAngleCam;
 			else if(value<0) _curAn=0;
-			else if
-			(
-				value<=maxAngleCam
-				&&value>=0
-				&&((math.sin(value*Mathf.Deg2Rad)*distanceToPlayer)>=GetGroundHeight(camObj.transform.position)+0.01f)
-				) _curAn=value;
 		}
 	}
 
@@ -59,35 +56,46 @@ public class PlayerInput: MonoBehaviour
 	{
 		CameraRotation();
 		CameraMove();
-		camObj.transform.localPosition=new Vector3(0,ChekY(math.sin(currentAngle*Mathf.Deg2Rad)*distanceToPlayer ),-math.cos(currentAngle*Mathf.Deg2Rad)*distanceToPlayer);
+		camObj.transform.localPosition=new Vector3(0,math.sin(currentAngle*Mathf.Deg2Rad)*distanceToPlayer,-math.cos(currentAngle*Mathf.Deg2Rad)*distanceToPlayer);
+		camObj.transform.position=new Vector3(camObj.transform.position.x,checkY(camObj.transform.position.y),camObj.transform.position.z);
 		cam.transform.LookAt(transform.position);
+		if(Input.GetButtonDown("Fire1"))  EditWorldController.Instance.LeftClick();
+		if(Input.GetButtonDown("Fire2"))  EditWorldController.Instance.RightClick();
 		
 	}
-	
 	void CameraRotation()
 	{
-		if (Input.GetMouseButtonDown(1))
+		if (Input.GetMouseButtonDown(2))
 		{
 			isRotating = true;
+			isMoving=false;
 		}
-		if (Input.GetMouseButtonUp(1))
+		if (Input.GetMouseButtonUp(2))
 		{
 			isRotating = false;
+			isMoving = true;
 		}
 		if (isRotating)
 		{
+			
 			float mouseX = Input.GetAxis("Mouse X");
 			float mouseY = Input.GetAxis("Mouse Y");
 			transform.Rotate(Vector3.up, mouseX * rotationSpeed * Time.deltaTime);
 			currentAngle += mouseY * rotationSpeed * Time.deltaTime;
 		}
 	}
+	float checkY(float y)
+	{
+		float terrHeight=GetGroundHeight(cam.transform.position);
+		if(y<terrHeight)  return terrHeight+1f;
+		else return y;
+	}
 	void CameraMove()
 	{
 		float moveX = Input.GetAxis("Horizontal");
 		float moveZ = Input.GetAxis("Vertical");
 
-		if (moveX != 0 || moveZ != 0)
+		if ((moveX != 0 || moveZ != 0 )&&isMoving)
 		{
 			Vector3 localDirection = new Vector3(moveX, 0, moveZ);
 
@@ -98,12 +106,6 @@ public class PlayerInput: MonoBehaviour
 		}
 		float scroll = Input.GetAxis("Mouse ScrollWheel");
 		distanceToPlayer -= scroll * zoomSpeed;
-	}
-	float ChekY(float yToChek)
-	{
-		float temp=  GetGroundHeight(camObj.transform.position);
-		if (yToChek <=temp ) return temp+0.01f;
-		else return yToChek;
 	}
 	float GetGroundHeight( Vector3 position)
 	{
