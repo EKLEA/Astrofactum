@@ -6,7 +6,9 @@ using UnityEngine;
 public class TerrainGenerator : ScriptableObject
 {
 	public float heightScale = 10f; // Множитель высоты для рельефа
-	public float baseHeight = 2f; // Базовая высота (смещение)
+
+	public float baseHeight = 4f; // Базовая высота (смещение)
+	public int scale = 1; // Базовая высота (смещение)
 	 // Множитель разрешения (качество)
 
 	
@@ -71,6 +73,7 @@ public class TerrainGenerator : ScriptableObject
 		// Задаем физические размеры террейна (по осям X, Y, Z)
 		terrainData.size = new Vector3(32, 96, 32);
 
+
 		// Создаем массив высот для карты высот
 		float[,] heights = new float[resolution, resolution];
 
@@ -80,8 +83,8 @@ public class TerrainGenerator : ScriptableObject
 			for (int z = 0; z < resolution; z++)
 			{
 				// Генерация координат в мировых единицах
-				float worldX = x * (32f / (resolution - 1)) + offsetX;
-				float worldZ = z * (32f / (resolution - 1)) + offsetZ;
+				float worldX = x * ((32f*scale) / (resolution - 1)) + offsetX;
+				float worldZ = z * ((32f*scale) / (resolution - 1)) + offsetZ;
 
 				// Генерация высоты для каждой точки
 				heights[z, x] = GetHeight(worldX, worldZ);
@@ -93,6 +96,7 @@ public class TerrainGenerator : ScriptableObject
 
 		return terrainData;
 	}
+
 
 	 float GetHeight(float worldX, float worldZ)
     {

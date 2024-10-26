@@ -82,4 +82,15 @@ public static class StaticMethods
 		else 
 			return 0;
 	}
+	public static Vector3 RotatePoint(Vector3 point, Vector3 pivot, float angle, Vector3 axis)
+    {
+        // Переносим точку к началу координат
+        Vector3 direction = point - pivot;
+
+        // Поворачиваем вектор
+        Vector3 rotatedDirection = Quaternion.AngleAxis(angle, axis) * direction;
+
+        // Возвращаем вектор обратно
+        return rotatedDirection + pivot;
+    }
 }

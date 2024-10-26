@@ -32,8 +32,8 @@ public class GameWorld : MonoBehaviour
 				
 				if (ChunksDatas.ContainsKey(chunkPosition)) continue;
 				
-				var xPos= chunkPosition.x*32;
-				var zPos= chunkPosition.y*32;
+				var xPos= chunkPosition.x*32*terrainGenerator.scale;
+				var zPos= chunkPosition.y*32*terrainGenerator.scale;
 						
 				ChunkData chunkData=new ChunkData();
 				chunkData.chunkPosition= chunkPosition;
@@ -103,7 +103,7 @@ public class GameWorld : MonoBehaviour
 			var chunkPos =GetChunkPos(pos);
 			if(ChunksDatas.TryGetValue(chunkPos, out var chunkData))
 			{
-				var posInChunk=pos-chunkPos*32;
+				var posInChunk=pos-chunkPos*(32*terrainGenerator.scale);
 				if(!chunksChanged.ContainsKey(chunkData)) chunksChanged.Add(chunkData,new Dictionary<Vector2,float>());
 				if(chunksChanged[chunkData].ContainsKey(posInChunk))continue;
 				chunksChanged[chunkData].Add(posInChunk,targetHeihth);
@@ -117,7 +117,7 @@ public class GameWorld : MonoBehaviour
 	
 	public Vector2Int GetChunkPos(Vector2 pointPos)
 	{
-		Vector2Int chunkPosition = Vector2Int.FloorToInt(new Vector2(pointPos.x/32 , pointPos.y/32));
+		Vector2Int chunkPosition = Vector2Int.FloorToInt(new Vector2(pointPos.x/(32*terrainGenerator.scale) , pointPos.y/(32*terrainGenerator.scale)));
 		
 		return  chunkPosition;
 	}
