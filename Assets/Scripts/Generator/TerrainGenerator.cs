@@ -1,29 +1,40 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Game/Terrain/Terrain")]
 public class TerrainGenerator : ScriptableObject
 {
 	public float heightScale = 10f; // Множитель высоты для рельефа
-	public float baseHeight = 4f; // Базовая высота (смещение)
+	public float baseHeight = 2f; // Базовая высота (смещение)
 	 // Множитель разрешения (качество)
 
-	private TerrainData terrainData;
+	
 
 	public NoiseOctaveSettings[] Octaves;
 	public NoiseOctaveSettings DomainWarp;
+	public NoiseOctaveSettings ContinentNoise;
+	public NoiseOctaveSettings ErosionNoise;
+
+	private FastNoiseLite[] octaveNoises;
+	private FastNoiseLite warpNoise;
+	private FastNoiseLite continentNoise;
+	private FastNoiseLite erosionNoise;
+	private TerrainData terrainData;
+	private int _quality;
+
 
 	[Serializable]
 	public class NoiseOctaveSettings
 	{
 		public FastNoiseLite.NoiseType noiseType;
 		public float frequency = 0.2f;
-		public float amplitude = 1;
+		public float amplitude = 2f;
+		public AnimationCurve splineCurve = AnimationCurve.Linear(-1, 0, 1, 1); // ВЕЛИКИЙ СПЛАЙН, ОПРЕДЕЛЯЕТ СУДЬБУ МИРА
+		
 	}
 
-	FastNoiseLite[] octaveNoises;
-	FastNoiseLite warpNoise;
-	int _quality;
+
 	public void Init(int quality)
 	{
 		_quality=quality;
@@ -39,6 +50,14 @@ public class TerrainGenerator : ScriptableObject
 		warpNoise.SetNoiseType(DomainWarp.noiseType);
 		warpNoise.SetFrequency(DomainWarp.frequency);
 		warpNoise.SetDomainWarpAmp(DomainWarp.amplitude);
+
+		continentNoise = new FastNoiseLite();
+        continentNoise.SetNoiseType(ContinentNoise.noiseType);
+        continentNoise.SetFrequency(ContinentNoise.frequency);
+
+        erosionNoise = new FastNoiseLite();
+        erosionNoise.SetNoiseType(ErosionNoise.noiseType);
+        erosionNoise.SetFrequency(ErosionNoise.frequency);
 	}
 
 	public TerrainData GenerateTerrain(int offsetX, int offsetZ)
@@ -50,7 +69,7 @@ public class TerrainGenerator : ScriptableObject
 		terrainData.heightmapResolution = resolution;
 
 		// Задаем физические размеры террейна (по осям X, Y, Z)
-		terrainData.size = new Vector3(32, 32, 32);
+		terrainData.size = new Vector3(32, 96, 32);
 
 		// Создаем массив высот для карты высот
 		float[,] heights = new float[resolution, resolution];
@@ -75,15 +94,23 @@ public class TerrainGenerator : ScriptableObject
 		return terrainData;
 	}
 
-	float GetHeight(float x, float y)
-	{
-		//warpNoise.DomainWarp(ref x, ref y);
-		float result = baseHeight;
-		for (int i = 0; i < Octaves.Length; i++)
-		{
-			float noise = octaveNoises[i].GetNoise(x, y);
-			result += noise * Octaves[i].amplitude / 2;
-		}
-		return Mathf.Clamp01(result * heightScale / 32);
-	}
+	 float GetHeight(float worldX, float worldZ)
+    {
+        warpNoise.DomainWarp(ref worldX, ref worldZ);
+
+        float result = baseHeight;
+        for (int i = 0; i < Octaves.Length; i++)
+        {
+            float noise = octaveNoises[i].GetNoise(worldX, worldZ);
+            result += noise * Octaves[i].amplitude;
+        }
+
+        float continentalNoiseValue = continentNoise.GetNoise(worldX, worldZ);
+        float erosionNoiseValue = erosionNoise.GetNoise(worldX, worldZ);
+
+        result *= ContinentNoise.splineCurve.Evaluate(continentalNoiseValue);
+        result *= ErosionNoise.splineCurve.Evaluate(erosionNoiseValue);
+
+        return Mathf.Clamp(result * heightScale / 64, 0f, 1f); // Ограничиваем значение от 0 до 1
+    }
 }
