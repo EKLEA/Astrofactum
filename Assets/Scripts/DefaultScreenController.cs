@@ -9,10 +9,10 @@ public class DefaultScreenController : MonoBehaviour
 	public ActionButton button;
 	void Start()
 	{
-		for (int i = 0;i<4;i++)
+		for (int i = 0;i<1;i++)
 		{
 			var gm =Instantiate(button,buttonsGrid.transform);
-			gm.SetUpButton("Core",ActionTypes.EditTerrain);
+			gm.SetUpButton("Core",ActionTypes.BuildFoundation);
 			buttons.Add(gm);
 		}
 		

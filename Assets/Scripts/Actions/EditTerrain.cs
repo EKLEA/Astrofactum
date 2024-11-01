@@ -114,5 +114,10 @@ public class EditTerrain : ActionWithWorld
 	{
 		ModifyTerrain();
 	}
+
+    public override void Update()
+    {
+        throw new NotImplementedException();
+    }
 }
 

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34820d5bc901fb44ea7cc1d806da3401, type: 3}
   m_Name: Core
   m_EditorClassIdentifier: 
-  size: {x: 2, y: 2, z: 2}
-  prefab: {fileID: 919132149155446097, guid: faaad06289f708b498a7ee1576af8696, type: 3}
+  size: {x: 5, y: 5, z: 5}
+  prefab: {fileID: 9160772032888254118, guid: da2deb774a2ae2944ad3ae0c3b5e9404, type: 3}
   icon: {fileID: 0}
   id: Core
   disctiption: 

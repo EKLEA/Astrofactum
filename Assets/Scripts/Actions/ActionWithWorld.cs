@@ -9,6 +9,7 @@ public abstract class ActionWithWorld
 	public event Action endOfAction;
 	public abstract void LeftClick();
 	public abstract void RightClick();
+	public abstract void Update();
 	protected virtual void onActionEnded()
 	{
 		endOfAction?.Invoke();

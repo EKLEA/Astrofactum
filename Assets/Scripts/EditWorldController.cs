@@ -6,6 +6,7 @@ using UnityEngine;
 public class EditWorldController : MonoBehaviour
 {
 	public static EditWorldController Instance;
+	
 	void Awake()
 	{
 		if (Instance != null && Instance != this)
@@ -26,7 +27,10 @@ public class EditWorldController : MonoBehaviour
 			button.OnActionButtonClicked+=SetUpActions;
 		}
 	}
-	
+	void Update()
+	{
+		action.Update();
+	}
 	Action currentLeftClickAction;
 	Action currentRightClickAction;
 	public void LeftClick()
