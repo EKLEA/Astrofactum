@@ -28,18 +28,15 @@ public class EditTerrain : ActionWithWorld
 			{
 				terrain=hit.collider.gameObject.GetComponent<Terrain>();
 				TerrainData terrainData = terrain.terrainData;
-
-				// Получаем координаты по x и z на Terrain
 				Vector3 terrainPos = GetTerrainRelativePosition(hit.point);
-
-				// Получаем текущую высоту в этой точке
 				float[,] heightMap = terrainData.GetHeights(Mathf.FloorToInt(terrainPos.x), Mathf.FloorToInt(terrainPos.z), 1, 1);
 
 				if (isModifying == false)
 				{
-					targetHeight = heightMap[0, 0];
+					targetHeight = heightMap[0,0];
 					gameWorld=terrain.GetComponentInParent<GameWorld>();
 					step= 1.0f / gameWorld.quality;
+					isModifying=true;
 				}
 				points.Add(hit.point);
 			}
@@ -57,6 +54,7 @@ public class EditTerrain : ActionWithWorld
 			
 			
 		gameWorld.EditTerrain(uniquePoints.ToArray(),targetHeight);
+		
 		onActionEnded();
 	}
 	
@@ -115,9 +113,9 @@ public class EditTerrain : ActionWithWorld
 		ModifyTerrain();
 	}
 
-    public override void Update()
-    {
-        throw new NotImplementedException();
-    }
+	public override void Update()
+	{
+		throw new NotImplementedException();
+	}
 }
 

@@ -1105,9 +1105,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1422761612404505348}
   - component: {fileID: -7663942115351206195}
+  - component: {fileID: -8797010891418665120}
   m_Layer: 6
   m_Name: Core
-  m_TagString: Foundation
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1147,6 +1148,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 8, y: 3, z: 8}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &-8797010891418665120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9160772032888254118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f86121a189eb80945aaea636e378cdc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 
+  buildingType: 0
 --- !u!1 &9174722105662714763
 GameObject:
   m_ObjectHideFlags: 0

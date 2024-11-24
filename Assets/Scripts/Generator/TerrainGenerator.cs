@@ -24,6 +24,7 @@ public class TerrainGenerator : ScriptableObject
 	private FastNoiseLite erosionNoise;
 	private TerrainData terrainData;
 	private int _quality;
+	public int resolution;
 
 
 	[Serializable]
@@ -54,18 +55,18 @@ public class TerrainGenerator : ScriptableObject
 		warpNoise.SetDomainWarpAmp(DomainWarp.amplitude);
 
 		continentNoise = new FastNoiseLite();
-        continentNoise.SetNoiseType(ContinentNoise.noiseType);
-        continentNoise.SetFrequency(ContinentNoise.frequency);
+		continentNoise.SetNoiseType(ContinentNoise.noiseType);
+		continentNoise.SetFrequency(ContinentNoise.frequency);
 
-        erosionNoise = new FastNoiseLite();
-        erosionNoise.SetNoiseType(ErosionNoise.noiseType);
-        erosionNoise.SetFrequency(ErosionNoise.frequency);
+		erosionNoise = new FastNoiseLite();
+		erosionNoise.SetNoiseType(ErosionNoise.noiseType);
+		erosionNoise.SetFrequency(ErosionNoise.frequency);
 	}
 
 	public TerrainData GenerateTerrain(int offsetX, int offsetZ)
 	{
 		terrainData = new TerrainData();
-		int resolution = _quality * 32+1;
+		resolution = _quality * 32+1;
 
 		// Задаем разрешение карты высот
 		terrainData.heightmapResolution = resolution;
@@ -99,22 +100,22 @@ public class TerrainGenerator : ScriptableObject
 
 
 	 float GetHeight(float worldX, float worldZ)
-    {
-        warpNoise.DomainWarp(ref worldX, ref worldZ);
+	{
+		warpNoise.DomainWarp(ref worldX, ref worldZ);
 
-        float result = baseHeight;
-        for (int i = 0; i < Octaves.Length; i++)
-        {
-            float noise = octaveNoises[i].GetNoise(worldX, worldZ);
-            result += noise * Octaves[i].amplitude;
-        }
+		float result = baseHeight;
+		for (int i = 0; i < Octaves.Length; i++)
+		{
+			float noise = octaveNoises[i].GetNoise(worldX, worldZ);
+			result += noise * Octaves[i].amplitude;
+		}
 
-        float continentalNoiseValue = continentNoise.GetNoise(worldX, worldZ);
-        float erosionNoiseValue = erosionNoise.GetNoise(worldX, worldZ);
+		float continentalNoiseValue = continentNoise.GetNoise(worldX, worldZ);
+		float erosionNoiseValue = erosionNoise.GetNoise(worldX, worldZ);
 
-        result *= ContinentNoise.splineCurve.Evaluate(continentalNoiseValue);
-        result *= ErosionNoise.splineCurve.Evaluate(erosionNoiseValue);
+		result *= ContinentNoise.splineCurve.Evaluate(continentalNoiseValue);
+		result *= ErosionNoise.splineCurve.Evaluate(erosionNoiseValue);
 
-        return Mathf.Clamp(result * heightScale / 64, 0f, 1f); // Ограничиваем значение от 0 до 1
-    }
+		return Mathf.Clamp(result * heightScale / 64, 0f, 1f); // Ограничиваем значение от 0 до 1
+	}
 }

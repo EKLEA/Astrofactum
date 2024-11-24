@@ -121,4 +121,8 @@ public class GameWorld : MonoBehaviour
 		
 		return  chunkPosition;
 	}
+	public ChunkData GetChunkData(Vector2Int pos)
+	{
+		return ChunksDatas[pos];
+	}
 }

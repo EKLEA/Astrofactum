@@ -7,7 +7,7 @@ using UnityEngine;
 public class ChunkRenderer : MonoBehaviour
 {
 	public Material material;
-	Terrain terrain => GetComponent<Terrain>();
+	public Terrain terrain => GetComponent<Terrain>();
 	TerrainCollider terrCollider => GetComponent<TerrainCollider>();
 
 	public void SetUpData(ChunkData chunkData)

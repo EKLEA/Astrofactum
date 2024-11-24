@@ -6,6 +6,7 @@ using UnityEngine;
 public class EditWorldController : MonoBehaviour
 {
 	public static EditWorldController Instance;
+	public Material previewMaterial; 
 	
 	void Awake()
 	{
@@ -57,6 +58,7 @@ public class EditWorldController : MonoBehaviour
 		{
 			action = new BaseAction();
 		}
+		action.previewMaterial=previewMaterial;
 		action.endOfAction+=ClearAction;
 		currentLeftClickAction=action.LeftClick;
 		currentRightClickAction=action.RightClick;

@@ -9,12 +9,13 @@ public class DefaultScreenController : MonoBehaviour
 	public ActionButton button;
 	void Start()
 	{
-		for (int i = 0;i<1;i++)
-		{
 			var gm =Instantiate(button,buttonsGrid.transform);
-			gm.SetUpButton("Core",ActionTypes.BuildFoundation);
+			gm.SetUpButton("core",ActionTypes.BuildFoundation);
 			buttons.Add(gm);
-		}
+			
+			gm =Instantiate(button,buttonsGrid.transform);
+			gm.SetUpButton("foundation",ActionTypes.BuildFoundation);
+			buttons.Add(gm);
 		
 		EditWorldController.Instance.SetUpController(buttons);
 		

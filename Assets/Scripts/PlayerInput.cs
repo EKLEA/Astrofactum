@@ -113,9 +113,10 @@ public class PlayerInput: MonoBehaviour
 		
 		if (Physics.Raycast(position+Vector3.up*100, Vector3.down, out hit))
 		{
-			var terrain=hit.collider.GetComponent<Terrain>();
-			Vector2 posChunkInWorld = gameWorld.GetChunkPos(new Vector2(hit.point.x,hit.point.z));
-			return terrain.SampleHeight(new Vector3(hit.point.x-posChunkInWorld.x,0,hit.point.z-posChunkInWorld.y));
+			
+			Vector2Int posChunkInWorld = gameWorld.GetChunkPos(new Vector2(hit.point.x,hit.point.z));
+			var terrain=gameWorld.GetChunkData(posChunkInWorld);
+			return terrain.chunkRenderer.terrain.SampleHeight(new Vector3(hit.point.x-posChunkInWorld.x,0,hit.point.z-posChunkInWorld.y))+hit.point.y;
 		}
 		return 20; 
 	}

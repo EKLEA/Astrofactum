@@ -9,16 +9,85 @@ public class BuildStructure : ActionWithWorld
 {
 	bool canBuild=true;	
 	public Vector3 currentPos;
+	public Vector3 currentRot;
 	public BuildingStructure _buildingStructure;
+	GameObject renderPoint;
+	
+	void SetUpMeshes()
+	{
+		renderPoint=new GameObject("render point");
+		foreach (var building in _buildingStructure.buildings)
+		{
+			var gm = InfoDataBase.buildingBase.GetInfo(building.Value).prefab;
+			var phantomParentObject=new GameObject("phantomParentObject");
+			
+			
+			phantomParentObject.transform.position=building.Key.Item1+currentPos;
+			phantomParentObject.transform.rotation=Quaternion.Euler(building.Key.Item2+currentRot);
+			if(gm.transform.childCount>0)
+			{
+				foreach (Transform child in gm.transform)
+				{
+					var meshFilter = child.GetComponent<MeshFilter>();
+					if (meshFilter != null)
+					{
+						var mesh = meshFilter.sharedMesh;
+						GameObject phantomObject = new GameObject("PhantomObject");
+						
+						phantomObject.transform.rotation = child.rotation;
+						phantomObject.transform.localScale= child.localScale;
+
+						
+						MeshFilter newMeshFilter = phantomObject.AddComponent<MeshFilter>();
+						MeshRenderer newMeshRenderer = phantomObject.AddComponent<MeshRenderer>();
+
+					
+						newMeshFilter.sharedMesh = mesh;
+
+						
+						newMeshRenderer.material = previewMaterial;
+						phantomObject.transform.parent=phantomParentObject.transform;
+					}
+				}
+			}
+			else
+			{
+				var meshFilter = gm.GetComponent<MeshFilter>();
+				if (meshFilter != null)
+				{
+					var mesh = meshFilter.sharedMesh;
+						GameObject phantomObject = new GameObject("PhantomObject");
+						
+						phantomObject.transform.rotation = gm.transform.rotation;
+						phantomObject.transform.localScale= gm.transform.localScale;
+
+						
+						MeshFilter newMeshFilter = phantomObject.AddComponent<MeshFilter>();
+						MeshRenderer newMeshRenderer = phantomObject.AddComponent<MeshRenderer>();
+
+					
+						newMeshFilter.sharedMesh = mesh;
+
+						
+						newMeshRenderer.material = previewMaterial;
+						phantomObject.transform.parent=phantomParentObject.transform;
+				}
+			}
+			phantomParentObject.transform.parent=renderPoint.transform;
+		}
+	}
 	public override void Update()
 	{
+		if(renderPoint==null)SetUpMeshes();
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out RaycastHit hit))
 		{
-			currentPos=hit.point;
-			canBuild=ValidateBuild(hit.point);
-			Debug.Log(canBuild);
+			canBuild=ValidateBuild(hit.point,hit.collider.GetComponent<BuildingLogicBase>());
+			
+			
+			renderPoint.transform.position=currentPos;
 		}
+		
 	}
 	public BuildStructure(string id)
 	{
@@ -38,16 +107,20 @@ public class BuildStructure : ActionWithWorld
 				var gm=MonoBehaviour.Instantiate(InfoDataBase.buildingBase.GetInfo(building.Value).prefab, building.Key.Item1+currentPos, Quaternion.Euler(building.Key.Item2.x,building.Key.Item2.y,building.Key.Item2.z));
 				
 				gm.layer=LayerMask.NameToLayer("Building");
+				BuildingLogicBase logic =gm.GetComponent<BuildingLogicBase>();
+				logic.id=building.Value;
+				logic.buildingType=InfoDataBase.buildingBase.GetInfo(building.Value).buildingType;
 				
 			}
 			if(!Input.GetButton("hold"))
 			{
+				MonoBehaviour.DestroyImmediate(renderPoint);
 				onActionEnded();
 			}
 		}
 	}
 	
-	bool ValidateBuild(Vector3 pos)
+	bool ValidateBuild(Vector3 pos,BuildingLogicBase buildingLogicBase)
 	{
 		// Инициализируем список objs при каждом вызове, чтобы избежать накопления объектов
 		List<Collider> objs = new List<Collider>();
@@ -55,20 +128,34 @@ public class BuildStructure : ActionWithWorld
 		foreach (var col in _buildingStructure.colliders.Keys)
 		{
 			// Используем GetMask для корректной проверки на слое "Building"
-			objs.AddRange(Physics.OverlapBox( col.Item1+pos, _buildingStructure.colliders[col]/2, Quaternion.Euler(col.Item2), LayerMask.GetMask("Building")));
+			objs.AddRange(Physics.OverlapBox( col.Item1+pos+Vector3.up*_buildingStructure.colliders[col].y/2, _buildingStructure.colliders[col]*0.95f/2, Quaternion.Euler(col.Item2), LayerMask.GetMask("Building")));///
 
 			// Если найдены пересечения, сразу возвращаем false
 			if (objs.Count > 0) 
 				return false;
 		}
-
-		// Если пересечений нет, возвращаем true
+		if (buildingLogicBase!=null)
+		{
+			if (buildingLogicBase.buildingType!=BuildingsTypes.Foundation) currentPos=pos;
+			else currentPos=SnapToGrid(pos);
+		}
+		else
+		{
+			currentPos=pos;
+		}
 		return true;
 	}
 
 	public override void RightClick()
 	{
+		MonoBehaviour.DestroyImmediate(renderPoint);
 		onActionEnded();
+	}
+	Vector3 SnapToGrid(Vector3 point)
+	{
+		float x = Mathf.Round(point.x / 1f) * 1f;
+		float z = Mathf.Round(point.z / 1f) * 1f;
+		return new Vector3(x, point.y, z);
 	}
 
 	
