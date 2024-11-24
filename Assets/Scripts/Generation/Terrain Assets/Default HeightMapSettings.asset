@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f40bdf2351b0a1b41be9735da15d6611, type: 3}
   m_Name: Default HeightMapSettings
   m_EditorClassIdentifier: 
-  autoUpdate: 0
+  autoUpdate: 1
   noiseSettings:
     normilizeMode: 1
     scale: 420
     octaves: 8
-    persistance: 0.52
+    persistance: 0.51
     lacunarity: 2.1
     seed: 0
     offset: {x: 0, y: 0}
