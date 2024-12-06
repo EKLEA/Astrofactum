@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEngine.UIElements;
+using Unity.Mathematics;
+using System;
 
 public class TerrainGeneretion : MonoBehaviour {
 
@@ -28,7 +31,7 @@ public class TerrainGeneretion : MonoBehaviour {
 
 	void Start() {
 		textureSettings.ApplyToMaterial(mapMaterial);
-        textureSettings.UpdateMeshHeights(mapMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
+		textureSettings.UpdateMeshHeights(mapMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
 
 		float maxViewDst = detailLevels [detailLevels.Length - 1].visibleDstThreshold;
 		meshWorldSize = meshSettings.meshWorldSize;
@@ -86,6 +89,24 @@ public class TerrainGeneretion : MonoBehaviour {
 		} else {
 			visibleTerrainChunks.Remove(chunk);
 		}
+	}
+	public float GetHeight(Vector2 position)
+	{
+		Vector2Int chunkOrigin=GetChunkPosOrigin(position);
+		return terrainChunkDictionary[chunkOrigin].GetHeightInPos(GetPosInChunk(position,chunkOrigin));
+	}
+	Vector2Int GetPosInChunk(Vector2 position,Vector2Int chunkOrigin)
+	{
+		Vector2 chunkPosInWorld =new Vector2(chunkOrigin.x*meshWorldSize,chunkOrigin.y*meshWorldSize);
+		int x =Mathf.FloorToInt(position.x-(chunkPosInWorld.x-(int)meshWorldSize/2));
+		int y =Mathf.FloorToInt(position.y-(chunkPosInWorld.y-(int)meshWorldSize/2));
+		return new Vector2Int(x,y);
+	}
+	Vector2Int GetChunkPosOrigin(Vector2 position)
+	{
+		int x = Mathf.RoundToInt(position.x/meshWorldSize);
+		int y = Mathf.RoundToInt(position.y/meshWorldSize);
+		return new Vector2Int(x,y);
 	}
 }
 

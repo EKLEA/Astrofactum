@@ -13,7 +13,7 @@ public class PlayerInput: MonoBehaviour
 	public Camera cam;
 	public GameObject camObj;
 	public GameObject point;
-	public GameWorld gameWorld;//переделать
+	public TerrainGeneretion gameWorld;//переделать
 	
 	float _disToPlayer;
 	bool isRotating = false;
@@ -102,22 +102,13 @@ public class PlayerInput: MonoBehaviour
 			Vector3 worldDirection = transform.TransformDirection(localDirection);
 
 			transform.position += worldDirection * Time.deltaTime * moveSpeed;
-			transform.position=new Vector3(transform.position.x,GetGroundHeight(point.transform.position)+0.01f,transform.position.z);
+			transform.position=new Vector3(transform.position.x,GetGroundHeight(transform.position)+0.01f,transform.position.z);
 		}
 		float scroll = Input.GetAxis("Mouse ScrollWheel");
 		distanceToPlayer -= scroll * zoomSpeed;
 	}
 	float GetGroundHeight( Vector3 position)
 	{
-		RaycastHit hit;
-		
-		if (Physics.Raycast(position+Vector3.up*100, Vector3.down, out hit))
-		{
-			
-			Vector2Int posChunkInWorld = gameWorld.GetChunkPos(new Vector2(hit.point.x,hit.point.z));
-			var terrain=gameWorld.GetChunkData(posChunkInWorld);
-			return terrain.chunkRenderer.terrain.SampleHeight(new Vector3(hit.point.x-posChunkInWorld.x,0,hit.point.z-posChunkInWorld.y))+hit.point.y;
-		}
-		return 20; 
+		return gameWorld.GetHeight(new Vector2(position.x,position.z));
 	}
 }
