@@ -172,7 +172,7 @@ public class TerrainChunk
 	}
 	public float GetHeightInPos(Vector2Int position)
 	{
-		return heightMap.values[position.x,position.y];
+		return heightMap.values[Mathf.Abs(242-position.x),Mathf.Abs(242-position.y)];
 	}
 
 }
