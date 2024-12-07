@@ -8,54 +8,46 @@ using UnityEngine;
 public class EditTerrain : ActionWithWorld
 {
 	public Terrain terrain;
-	public float radius = 5f; 
+	public float radius = 5f; //изменть
 	private float targetHeight; 
-	private bool isModifying = false; 
-	public GameWorld gameWorld;
-	List<Vector3> points=new();
-	float step;
+	public TerrainGeneretion gameWorld;
 
-	// Фиксируем начальную высоту под курсором мыши
-	void AddPoint()
+	public override void SetUpAction(int minCount)
 	{
+		base.SetUpAction(minCount);
+		gameWorld=TerrainGeneretion.Instance;
+		canAction=true;
+	}
+	public override void AddPoint()
+	{
+		
 		RaycastHit hit;
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-		// Проверяем, попала ли мышь в Terrain
 		if (Physics.Raycast(ray, out hit))
 		{
-			if (hit.collider.gameObject.GetComponent<Terrain>()!=null)
+			if (hit.collider.gameObject.tag=="Ground")
 			{
-				terrain=hit.collider.gameObject.GetComponent<Terrain>();
-				TerrainData terrainData = terrain.terrainData;
-				Vector3 terrainPos = GetTerrainRelativePosition(hit.point);
-				float[,] heightMap = terrainData.GetHeights(Mathf.FloorToInt(terrainPos.x), Mathf.FloorToInt(terrainPos.z), 1, 1);
-
-				if (isModifying == false)
+				if(points.Count==0)
 				{
-					targetHeight = heightMap[0,0];
-					gameWorld=terrain.GetComponentInParent<GameWorld>();
-					step= 1.0f / gameWorld.quality;
-					isModifying=true;
+					targetHeight=gameWorld.GetHeight(new Vector2(hit.point.x, hit.point.z));
 				}
 				points.Add(hit.point);
+				
 			}
 		}
 	}
 
 	HashSet<Vector2> uniquePoints = new HashSet<Vector2>();
 	
-	void ModifyTerrain()
+	public override void Action()
 	{
-		if(points.Count<=1) return;
-		
 		for (int i = 0; i < points.Count-1; i++)
 			AddPoints(points[i],points[i+1]);
 			
 			
-		gameWorld.EditTerrain(uniquePoints.ToArray(),targetHeight);
 		
-		onActionEnded();
+		gameWorld.EditTerrain(uniquePoints.ToArray(),targetHeight);
 	}
 	
 	void AddPoints(Vector3 point1,Vector3 point2)
@@ -67,14 +59,15 @@ public class EditTerrain : ActionWithWorld
 		{
 			
 			
-			for (float x = p.x- radius-2; x <=p.x + radius+2; x += step)
+			for (float x = p.x- radius-2; x <=p.x + radius+2; x++)
 			{
-				for (float z = p.z - radius-2; z <= p.z + radius+2; z += step)
+				for (float z = p.z - radius-2; z <= p.z + radius+2; z ++)
 				{
 					Vector2 pos = new Vector2(x, z);
 					if (Vector2.Distance(new Vector2(p.x, p.z), pos) <= radius)
 					{
 						uniquePoints.Add(pos);
+						
 					}
 				}
 			}	
@@ -84,38 +77,6 @@ public class EditTerrain : ActionWithWorld
 		
 	   
 	}
-	
 
-
-	
-	Vector3 GetTerrainRelativePosition(Vector3 worldPosition)
-	{
-		Vector3 terrainPosition = terrain.transform.position;
-		TerrainData terrainData = terrain.terrainData;
-
-		float relativeX = (worldPosition.x - terrainPosition.x) / terrainData.size.x * terrainData.heightmapResolution;
-		float relativeZ = (worldPosition.z - terrainPosition.z) / terrainData.size.z * terrainData.heightmapResolution;
-
-		return new Vector3(relativeX, 0, relativeZ);
-	}
-
-	public override void LeftClick()
-	{
-		AddPoint();
-		if(!Input.GetButton("hold")&&points.Count>=2)
-		{
-			ModifyTerrain();
-		}
-	}
-
-	public override void RightClick()
-	{
-		ModifyTerrain();
-	}
-
-	public override void Update()
-	{
-		throw new NotImplementedException();
-	}
 }
 

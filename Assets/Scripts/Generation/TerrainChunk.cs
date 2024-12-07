@@ -5,6 +5,7 @@ public class TerrainChunk
 	const float colliderGenerationDistanceThreshold = 5;
 	public event System.Action<TerrainChunk, bool> onVisibilityChanged;
 	public Vector2 coord;
+	public bool isChannged=false;
 
 	GameObject meshObject;
 	Vector2 sampleCentre;
@@ -42,6 +43,7 @@ public class TerrainChunk
 		bounds = new Bounds(position, Vector2.one * meshSettings.meshWorldSize);
 
 		meshObject = new GameObject("Terrain Chunk");
+		meshObject.tag="Ground";
 		meshRenderer = meshObject.AddComponent<MeshRenderer>();
 		meshFilter = meshObject.AddComponent<MeshFilter>();
 		meshCollider = meshObject.AddComponent<MeshCollider>();
@@ -65,14 +67,17 @@ public class TerrainChunk
 		maxViewDst = detailLevels[detailLevels.Length - 1].visibleDstThreshold;
 	}
 
-	public void Load(){
+	public void Load()
+	{
 		ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived);
+		
 	}
 
 	void OnHeightMapReceived(object heightMapObject)
 	{
 		this.heightMap = (HeightMap)heightMapObject;
 		heightMapReceived = true;
+		
 
 		UpdateTerrainChunk();
 	}
@@ -172,7 +177,12 @@ public class TerrainChunk
 	}
 	public float GetHeightInPos(Vector2Int position)
 	{
-		return heightMap.values[Mathf.Abs(242-position.x),Mathf.Abs(242-position.y)];
+		return heightMap.values[Mathf.Abs(position.x),Mathf.Abs(242-position.y)];
+	}
+	public void SetHeightInPos(Vector2Int position,float height)
+	{
+		heightMap.values[Mathf.Abs(position.x),Mathf.Abs(242-position.y)] = height;
+		isChannged=true;
 	}
 
 }

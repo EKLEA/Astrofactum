@@ -102,7 +102,7 @@ public class PlayerInput: MonoBehaviour
 			Vector3 worldDirection = transform.TransformDirection(localDirection);
 
 			transform.position += worldDirection * Time.deltaTime * moveSpeed;
-			transform.position=new Vector3(transform.position.x,GetGroundHeight(transform.position)+0.01f,transform.position.z);
+			transform.position=new Vector3(transform.position.x,GetGroundHeight(transform.position)+0.2f,transform.position.z);
 		}
 		float scroll = Input.GetAxis("Mouse ScrollWheel");
 		distanceToPlayer -= scroll * zoomSpeed;

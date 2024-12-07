@@ -48,16 +48,20 @@ public class EditWorldController : MonoBehaviour
 		if(type==ActionTypes.BuildFoundation)
 		{
 			action=new BuildStructure(id);
+			action.SetUpAction(1);
 			
 		}
 		else if(type==ActionTypes.EditTerrain)
 		{
 			action=new EditTerrain();
+			action.SetUpAction(2);
 		}
 		else 
 		{
 			action = new BaseAction();
+			action.SetUpAction(1);
 		}
+		
 		action.previewMaterial=previewMaterial;
 		action.endOfAction+=ClearAction;
 		currentLeftClickAction=action.LeftClick;

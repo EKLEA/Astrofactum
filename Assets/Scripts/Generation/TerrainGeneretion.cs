@@ -5,6 +5,7 @@ using System.Threading;
 using UnityEngine.UIElements;
 using Unity.Mathematics;
 using System;
+using System.Drawing;
 
 public class TerrainGeneretion : MonoBehaviour {
 
@@ -20,7 +21,7 @@ public class TerrainGeneretion : MonoBehaviour {
 
 	public Transform viewer;
 	public Material mapMaterial;
-
+	public static TerrainGeneretion Instance;
 	Vector2 viewerPosition;
 	Vector2 viewerPositionOld;
 	float meshWorldSize;
@@ -28,7 +29,17 @@ public class TerrainGeneretion : MonoBehaviour {
 
 	Dictionary<Vector2, TerrainChunk> terrainChunkDictionary = new Dictionary<Vector2, TerrainChunk>();
 	List<TerrainChunk> visibleTerrainChunks = new List<TerrainChunk>();
-
+	void Awake()
+	{
+		if (Instance != null && Instance != this)
+		{
+			Destroy(gameObject);
+		}
+		else
+		{
+			Instance = this;
+		}
+	}
 	void Start() {
 		textureSettings.ApplyToMaterial(mapMaterial);
 		textureSettings.UpdateMeshHeights(mapMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
@@ -94,6 +105,18 @@ public class TerrainGeneretion : MonoBehaviour {
 	{
 		Vector2Int chunkOrigin=GetChunkPosOrigin(position);
 		return terrainChunkDictionary[chunkOrigin].GetHeightInPos(GetPosInChunk(position,chunkOrigin));
+	}
+	public void EditTerrain(Vector2[] points,float targetHeight)
+	{
+		foreach(var point in points)
+		{
+			Vector2Int chunkOrigin=GetChunkPosOrigin(point);
+			terrainChunkDictionary[chunkOrigin].SetHeightInPos(GetPosInChunk(point,chunkOrigin),targetHeight);
+			terrainChunkDictionary[chunkOrigin].UpdateTerrainChunk();
+			
+		}
+		
+		
 	}
 	Vector2Int GetPosInChunk(Vector2 position,Vector2Int chunkOrigin)
 	{
