@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum ActionTypes 
 {
-		BuildFoundation,
+		BuildStructure,
+		BuildManyPointStructure,
 		EditTerrain,
-		BasicAction
+		BuildTerrainStructure,
 }

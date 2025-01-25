@@ -20,6 +20,10 @@ public class DataBase<TKey, TValue> where TValue : UnityEngine.Object
 			}
 		}
 	}
+	public DataBase(Dictionary<TKey, TValue> _dataBase )
+	{
+		dataBase=_dataBase;
+	}
 
 	public void Add(TKey key, TValue value)
 	{
@@ -36,5 +40,9 @@ public class DataBase<TKey, TValue> where TValue : UnityEngine.Object
 			return value;
 		}
 		return null;
+	}
+	public Dictionary<TKey, TValue> GetBase()
+	{
+		return dataBase;
 	}
 }

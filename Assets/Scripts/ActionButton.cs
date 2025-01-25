@@ -6,17 +6,15 @@ using UnityEngine.UI;
 
 public class ActionButton : Button
 {
-	public event Action<string, ActionTypes> OnActionButtonClicked;
+	public event Action<string> OnActionButtonClicked;
 	string _id;
-	ActionTypes _type;
-	public void SetUpButton(string id, ActionTypes type)
+	public void SetUpButton(string id)
 	{
 		_id=id;
-		_type = type;
 		onClick.AddListener(SetUpInfo);
 	}
 	public void SetUpInfo()
 	{
-		OnActionButtonClicked?.Invoke(_id,_type);
+		OnActionButtonClicked?.Invoke(_id);
 	}
 }

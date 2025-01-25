@@ -106,7 +106,7 @@ public class TerrainGeneretion : MonoBehaviour {
 		Vector2Int chunkOrigin=GetChunkPosOrigin(position);
 		return terrainChunkDictionary[chunkOrigin].GetHeightInPos(GetPosInChunk(position,chunkOrigin));
 	}
-	public void EditTerrain(Vector2[] points, float targetHeight)
+	public void EditTerrain(Vector3[] points)
 	{
 		// Используем HashSet для уникальности чанков
 		HashSet<Vector2Int> updatedChunks = new HashSet<Vector2Int>();
@@ -121,7 +121,7 @@ public class TerrainGeneretion : MonoBehaviour {
 			if (terrainChunkDictionary.ContainsKey(chunkOrigin))
 			{
 				// Устанавливаем новую высоту и помечаем чанк как обновленный
-				terrainChunkDictionary[chunkOrigin].SetHeightInPos(localPos, targetHeight);
+				terrainChunkDictionary[chunkOrigin].SetHeightInPos(localPos, point.z);
 				updatedChunks.Add(chunkOrigin);  // Добавляем чанк в список обновленных
 			}
 			else
@@ -139,14 +139,14 @@ public class TerrainGeneretion : MonoBehaviour {
 	}
 
 
-	Vector2Int GetPosInChunk(Vector2 position,Vector2Int chunkOrigin)
+	Vector2Int GetPosInChunk(Vector3 position,Vector2Int chunkOrigin)
 	{
 		Vector2 chunkPosInWorld =new Vector2(chunkOrigin.x*meshWorldSize,chunkOrigin.y*meshWorldSize);
 		int x =Mathf.FloorToInt(position.x-(chunkPosInWorld.x-(int)meshWorldSize/2));
 		int y =Mathf.FloorToInt(position.y-(chunkPosInWorld.y-(int)meshWorldSize/2));
 		return new Vector2Int(x,y);
 	}
-	Vector2Int GetChunkPosOrigin(Vector2 position)
+	Vector2Int GetChunkPosOrigin(Vector3 position)
 	{
 		int x = Mathf.RoundToInt(position.x/meshWorldSize);
 		int y = Mathf.RoundToInt(position.y/meshWorldSize);

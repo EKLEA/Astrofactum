@@ -11,8 +11,11 @@ public class ActionWithWorld
 	public int minCount;
 	public List<Vector3> points=new();
 	public bool canAction;
-	public virtual void AddPoint(){}
-	public virtual void Action(){}
+	protected Vector3 currentPos;
+	protected RaycastHit _hit;
+	public virtual void AddPoint()
+	{points.Add(currentPos);}
+	public virtual void ActionF(){}
 	public virtual void LeftClick()
 	{
 		if(canAction)
@@ -20,22 +23,38 @@ public class ActionWithWorld
 			AddPoint();
 			if(!Input.GetButton("hold")&&points.Count>=minCount)
 			{
-				Action();
+				
+				ActionF();
 				onActionEnded();
 			}
 		}
+	}
+	public virtual void RightClick()
+	{
+		if(points.Count>=minCount) ActionF();//добавить то, что при отмене действия, возвращается к поинт 0
+		else onActionEnded();
+		
 	}
 	public virtual void SetUpAction(int minCount)
 	{
 		this.minCount = minCount;
 	}
-	public virtual void RightClick()
+	public virtual void MouseWheelRotation(float Value)
 	{
-		if(points.Count>=minCount) Action();
-		else onActionEnded();
 		
 	}
-	public virtual void Update() {}
+	public void Update()
+	{
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		if (Physics.Raycast(ray, out RaycastHit hit))
+		{
+			_hit=hit;
+			UpdateFunc();
+		}
+		
+	}
+	public virtual void UpdateFunc(){}
+	public virtual bool ValidateBuild(Vector3 pos){ return false; }
 	protected virtual void onActionEnded()
 	{
 		endOfAction?.Invoke();

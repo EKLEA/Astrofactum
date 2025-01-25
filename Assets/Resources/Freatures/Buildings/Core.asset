@@ -10,11 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34820d5bc901fb44ea7cc1d806da3401, type: 3}
-  m_Name: Foundation
+  m_Name: Core
   m_EditorClassIdentifier: 
-  prefab: {fileID: 413961375616484843, guid: 266533ed9ce2f1842849daea0785aaa9, type: 3}
   icon: {fileID: 0}
-  id: foundation
+  id: core
   disctiption: 
-  normal: {x: 0, y: 0, z: 0}
-  buildingType: 5
+  actionType: 0
+  minPoints: 1
+  prefab: {fileID: 9160772032888254118, guid: da2deb774a2ae2944ad3ae0c3b5e9404, type: 3}
+  normal: {x: 1, y: 0, z: 0}
+  buildingType: 0

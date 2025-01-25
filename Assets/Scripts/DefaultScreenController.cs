@@ -10,11 +10,11 @@ public class DefaultScreenController : MonoBehaviour
 	void Start()
 	{
 			var gm =Instantiate(button,buttonsGrid.transform);
-			gm.SetUpButton("core",ActionTypes.EditTerrain);
+			gm.SetUpButton("ramp");
 			buttons.Add(gm);
 			
 			gm =Instantiate(button,buttonsGrid.transform);
-			gm.SetUpButton("foundation",ActionTypes.BuildFoundation);
+			gm.SetUpButton("foundation");
 			buttons.Add(gm);
 		
 		EditWorldController.Instance.SetUpController(buttons);

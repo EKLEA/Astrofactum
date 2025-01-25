@@ -65,12 +65,12 @@ public class PlayerInput: MonoBehaviour
 	}
 	void CameraRotation()
 	{
-		if (Input.GetMouseButtonDown(2))
+		if (Input.GetButtonDown("RotationCam"))
 		{
 			isRotating = true;
 			isMoving=false;
 		}
-		if (Input.GetMouseButtonUp(2))
+		if (Input.GetButtonUp("RotationCam"))
 		{
 			isRotating = false;
 			isMoving = true;
@@ -105,7 +105,12 @@ public class PlayerInput: MonoBehaviour
 			transform.position=new Vector3(transform.position.x,GetGroundHeight(transform.position)+0.2f,transform.position.z);
 		}
 		float scroll = Input.GetAxis("Mouse ScrollWheel");
-		distanceToPlayer -= scroll * zoomSpeed;
+		if(Input.GetButton("RotationFreature"))
+			EditWorldController.Instance.MouseWheelRotation(scroll);
+			
+		else
+			distanceToPlayer -= scroll * zoomSpeed;
+		
 	}
 	float GetGroundHeight( Vector3 position)
 	{

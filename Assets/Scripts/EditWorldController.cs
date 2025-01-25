@@ -7,6 +7,9 @@ public class EditWorldController : MonoBehaviour
 {
 	public static EditWorldController Instance;
 	public Material previewMaterial; 
+	Action currentLeftClickAction;
+	Action currentRightClickAction;
+	Action<float> currentMouseWheelRotAction;
 	
 	void Awake()
 	{
@@ -25,15 +28,14 @@ public class EditWorldController : MonoBehaviour
 	{
 		foreach (ActionButton button in buttons)
 		{
-			button.OnActionButtonClicked+=SetUpActions;
+			button.OnActionButtonClicked+=SetUpAction;
 		}
 	}
 	void Update()
 	{
 		action.Update();
 	}
-	Action currentLeftClickAction;
-	Action currentRightClickAction;
+	
 	public void LeftClick()
 	{
 		currentLeftClickAction?.Invoke();
@@ -42,35 +44,40 @@ public class EditWorldController : MonoBehaviour
 	{
 		currentRightClickAction?.Invoke();
 	}
-	ActionWithWorld action;
-	void SetUpActions(string id, ActionTypes type)
+	public void MouseWheelRotation(float value)
 	{
-		if(type==ActionTypes.BuildFoundation)
+		currentMouseWheelRotAction?.Invoke(value);
+	}
+	ActionWithWorld action;
+	void SetUpAction(string id)
+	{
+		
+		if (id== null) 
 		{
-			action=new BuildStructure(id);
-			action.SetUpAction(1);
-			
+			action= new BaseAction();
+			action.SetUpAction(0);
 		}
-		else if(type==ActionTypes.EditTerrain)
+		else
 		{
-			action=new EditTerrain();
-			action.SetUpAction(2);
-		}
-		else 
-		{
-			action = new BaseAction();
-			action.SetUpAction(1);
+			var obj = InfoDataBase.freaturesBase.GetInfo(id);
+			switch(obj.actionType)
+			{
+				case ActionTypes.BuildStructure: action= new BuildStructure(id); break;
+				case ActionTypes.EditTerrain: action = new EditTerrain(id); break;
+			}
+			action.SetUpAction(obj.minPoints);
 		}
 		
 		action.previewMaterial=previewMaterial;
 		action.endOfAction+=ClearAction;
 		currentLeftClickAction=action.LeftClick;
 		currentRightClickAction=action.RightClick;
+		currentMouseWheelRotAction=action.MouseWheelRotation;		
 	}
 	void ClearAction()
 	{
 		if (action!=null)action.endOfAction-=ClearAction;
-		SetUpActions(null,ActionTypes.BasicAction);
+		SetUpAction(null);
 	}
 	
 }
