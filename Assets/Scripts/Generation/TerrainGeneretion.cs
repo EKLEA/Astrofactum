@@ -106,18 +106,39 @@ public class TerrainGeneretion : MonoBehaviour {
 		Vector2Int chunkOrigin=GetChunkPosOrigin(position);
 		return terrainChunkDictionary[chunkOrigin].GetHeightInPos(GetPosInChunk(position,chunkOrigin));
 	}
-	public void EditTerrain(Vector2[] points,float targetHeight)
+	public void EditTerrain(Vector2[] points, float targetHeight)
 	{
-		foreach(var point in points)
+		// Используем HashSet для уникальности чанков
+		HashSet<Vector2Int> updatedChunks = new HashSet<Vector2Int>();
+
+		// Проходим по всем точкам
+		foreach (var point in points)
 		{
-			Vector2Int chunkOrigin=GetChunkPosOrigin(point);
-			terrainChunkDictionary[chunkOrigin].SetHeightInPos(GetPosInChunk(point,chunkOrigin),targetHeight);
-			terrainChunkDictionary[chunkOrigin].UpdateTerrainChunk();
-			
+			Vector2Int chunkOrigin = GetChunkPosOrigin(point);  // Находим чанк
+			Vector2Int localPos = GetPosInChunk(point, chunkOrigin);  // Находим локальную позицию в чанке
+
+			// Проверяем, существует ли чанк в словаре
+			if (terrainChunkDictionary.ContainsKey(chunkOrigin))
+			{
+				// Устанавливаем новую высоту и помечаем чанк как обновленный
+				terrainChunkDictionary[chunkOrigin].SetHeightInPos(localPos, targetHeight);
+				updatedChunks.Add(chunkOrigin);  // Добавляем чанк в список обновленных
+			}
+			else
+			{
+				Debug.LogWarning($"Chunk at {chunkOrigin} not found in the dictionary.");
+			}
 		}
-		
-		
+
+		// Обновляем только затронутые чанки
+		foreach (var chunkOrigin in updatedChunks)
+		{
+			// Обновляем каждый затронутый чанк
+			terrainChunkDictionary[chunkOrigin].UpdateTerrainChunk();
+		}
 	}
+
+
 	Vector2Int GetPosInChunk(Vector2 position,Vector2Int chunkOrigin)
 	{
 		Vector2 chunkPosInWorld =new Vector2(chunkOrigin.x*meshWorldSize,chunkOrigin.y*meshWorldSize);
