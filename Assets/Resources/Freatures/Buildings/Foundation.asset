@@ -17,6 +17,6 @@ MonoBehaviour:
   disctiption: 
   actionType: 0
   minPoints: 1
-  prefab: {fileID: 413961375616484843, guid: 266533ed9ce2f1842849daea0785aaa9, type: 3}
+  prefab: {fileID: 4471445265282206022, guid: 1b829c17e6d7d224f935740dc94ff115, type: 3}
   normal: {x: 0, y: 0, z: 0}
   buildingType: 5
