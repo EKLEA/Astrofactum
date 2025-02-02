@@ -2,78 +2,84 @@ using UnityEngine;
 
 public class TerrainChunk
 {
-	const float colliderGenerationDistanceThreshold = 5;
-	public event System.Action<TerrainChunk, bool> onVisibilityChanged;
-	public Vector2 coord;
-	public bool isChanged=false;
+    const float colliderGenerationDistanceThreshold = 5;
+    public event System.Action<TerrainChunk, bool> onVisibilityChanged;
+    public Vector2 coord;
+    public bool isChanged = false;
 
-	GameObject meshObject;
-	Vector2 sampleCentre;
-	Bounds bounds;
+    GameObject meshObject;
+    Vector2 sampleCentre;
+    Bounds bounds;
 
-	MeshRenderer meshRenderer;
-	MeshFilter meshFilter;
-	MeshCollider meshCollider;
+    MeshRenderer meshRenderer;
+    MeshFilter meshFilter;
+    MeshCollider meshCollider;
 
-	LODInfo[] detailLevels;
-	LODMesh[] lodMeshes;
-	int colliderLODIndex;
+    LODInfo[] detailLevels;
+    LODMesh[] lodMeshes;
+    int colliderLODIndex;
 
-	HeightMap heightMap;
-	bool heightMapReceived;
-	int previousLODIndex = -1;
-	bool hasSetCollider;
-	float maxViewDst;
+    HeightMap heightMap;
+    bool heightMapReceived;
+    int previousLODIndex = -1;
+    bool hasSetCollider;
+    float maxViewDst;
 
-	HeightMapSettings heightMapSettings;
-	MeshSettings meshSettings;
-	Transform viewer;
+    HeightMapSettings heightMapSettings;
+    MeshSettings meshSettings;
+    Transform viewer;
+    BiomeNoise biomeNoise; // Ссылка на систему биомов
 
-	public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer,Material material)
-	{
-		this.coord = coord;
-		this.detailLevels = detailLevels;
-		this.colliderLODIndex = colliderLODIndex;
-		this.heightMapSettings = heightMapSettings;
-		this.meshSettings = meshSettings;
-		this.viewer = viewer;
+    public TerrainChunk(Vector2 coord, HeightMapSettings heightMapSettings, MeshSettings meshSettings, LODInfo[] detailLevels, int colliderLODIndex, Transform parent, Transform viewer, Material material, BiomeNoise biomeNoise)
+    {
+        this.coord = coord;
+        this.detailLevels = detailLevels;
+        this.colliderLODIndex = colliderLODIndex;
+        this.heightMapSettings = heightMapSettings;
+        this.meshSettings = meshSettings;
+        this.viewer = viewer;
+        this.biomeNoise = biomeNoise;
 
-		sampleCentre = coord * meshSettings.meshWorldSize / meshSettings.meshScale;
-		Vector2 position = coord * meshSettings.meshWorldSize;
-		bounds = new Bounds(position, Vector2.one * meshSettings.meshWorldSize);
+        sampleCentre = coord * meshSettings.meshWorldSize / meshSettings.meshScale;
+        Vector2 position = coord * meshSettings.meshWorldSize;
+        bounds = new Bounds(position, Vector2.one * meshSettings.meshWorldSize);
 
-		meshObject = new GameObject("Terrain Chunk");
-		meshObject.tag="Ground";
-		meshRenderer = meshObject.AddComponent<MeshRenderer>();
-		meshFilter = meshObject.AddComponent<MeshFilter>();
-		meshCollider = meshObject.AddComponent<MeshCollider>();
-		meshRenderer.material = material;
+        meshObject = new GameObject("Terrain Chunk");
+        meshObject.tag = "Ground";
+        meshRenderer = meshObject.AddComponent<MeshRenderer>();
+        meshFilter = meshObject.AddComponent<MeshFilter>();
+        meshCollider = meshObject.AddComponent<MeshCollider>();
+        meshRenderer.material = material;
 
-		meshObject.transform.position = new Vector3(position.x, 0, position.y);
-		meshObject.transform.parent = parent;
-		SetVisible(false);
+        meshObject.transform.position = new Vector3(position.x, 0, position.y);
+        meshObject.transform.parent = parent;
+        SetVisible(false);
 
-		lodMeshes = new LODMesh[detailLevels.Length];
-		for (int i = 0; i < detailLevels.Length; i++)
-		{
-			lodMeshes[i] = new LODMesh(detailLevels[i].lod);
-			lodMeshes[i].updateCallback += UpdateTerrainChunk;
-			if (i == colliderLODIndex)
-			{
-				lodMeshes[i].updateCallback += UpdateCollisionMesh;
-			}
-		}
-		
-		maxViewDst = detailLevels[detailLevels.Length - 1].visibleDstThreshold;
-	}
+        lodMeshes = new LODMesh[detailLevels.Length];
+        for (int i = 0; i < detailLevels.Length; i++)
+        {
+            lodMeshes[i] = new LODMesh(detailLevels[i].lod);
+            lodMeshes[i].updateCallback += UpdateTerrainChunk;
+            if (i == colliderLODIndex)
+            {
+                lodMeshes[i].updateCallback += UpdateCollisionMesh;
+            }
+        }
 
-	public void Load()
-	{
-		ThreadedDataRequester.RequestData(() => HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre), OnHeightMapReceived);
-		
-	}
+        maxViewDst = detailLevels[detailLevels.Length - 1].visibleDstThreshold;
+    }
 
-	void OnHeightMapReceived(object heightMapObject)
+    public void Load()
+    {
+        // Здесь вызывается генерация высот с учётом биомов.
+        // Если ранее использовался HeightMapGenerator.GenerateHeightMap, то теперь заменяем его на новую функцию,
+        // которая принимает biomeNoise и модифицирует высоты согласно биомной системе.
+        ThreadedDataRequester.RequestData(() =>
+            HeightMapGenerator.GenerateHeightMap(meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, sampleCentre, biomeNoise),
+            OnHeightMapReceived);
+    }
+
+    void OnHeightMapReceived(object heightMapObject)
     {
         heightMap = (HeightMap)heightMapObject;
         heightMapReceived = true;
@@ -135,9 +141,7 @@ public class TerrainChunk
         }
     }
 
-
-	
-	public void UpdateCollisionMesh()
+    public void UpdateCollisionMesh()
     {
         if (hasSetCollider) return;
 
@@ -161,8 +165,7 @@ public class TerrainChunk
         }
     }
 
-
-	public void UpdateMesh()
+    public void UpdateMesh()
     {
         if (!heightMapReceived) return;
 
@@ -189,36 +192,31 @@ public class TerrainChunk
         heightMap.values[Mathf.Abs(position.x), Mathf.Abs(242 - position.y)] = height;
         isChanged = true;
     }
-
 }
 
 class LODMesh
 {
+    public Mesh mesh;
+    public bool hasRequestedMesh;
+    public bool hasMesh;
+    int lod;
+    public event System.Action updateCallback;
 
-	public Mesh mesh;
-	public bool hasRequestedMesh;
-	public bool hasMesh;
-	int lod;
-	public event System.Action updateCallback;
+    public LODMesh(int lod)
+    {
+        this.lod = lod;
+    }
 
-	public LODMesh(int lod)
-	{
-		this.lod = lod;
-	}
+    void OnMeshDataReceived(object meshDataObject)
+    {
+        mesh = ((MeshData)meshDataObject).CreateMesh();
+        hasMesh = true;
+        updateCallback();
+    }
 
-	void OnMeshDataReceived(object meshDataObject)
-	{
-		mesh = ((MeshData)meshDataObject).CreateMesh();
-		hasMesh = true;
-
-		updateCallback();
-	}
-
-	public void RequestMesh(HeightMap heightMap, MeshSettings meshSettings)
-	{
-		hasRequestedMesh = true;
-		// Передаём текущий heightMap.values
-		ThreadedDataRequester.RequestData(() => MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, lod), OnMeshDataReceived);
-	}
-
+    public void RequestMesh(HeightMap heightMap, MeshSettings meshSettings)
+    {
+        hasRequestedMesh = true;
+        ThreadedDataRequester.RequestData(() => MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, lod), OnMeshDataReceived);
+    }
 }

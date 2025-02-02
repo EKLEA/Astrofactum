@@ -7,49 +7,58 @@ public class MapPreview : MonoBehaviour
     public Renderer textureRender;
     public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
-	public enum DrawMode {NoiseMap, Mesh};
+    public enum DrawMode { NoiseMap, Mesh };
     public DrawMode drawMode;
 
     public MeshSettings meshSettings;
     public HeightMapSettings heightMapSettings;
     public TextureData textureData;
-
     public Material terrainMaterial;
-
-    [Range(0,MeshSettings.numSupportedLODs - 1)] public int editorLOD;
     
+    [Range(0, MeshSettings.numSupportedLODs - 1)]
+    public int editorLOD;
     
     public bool autoUpdate;
 
+    // Новое поле для системы биомов
+    public BiomeNoise biomeNoise;
+
     public void DrawMapInEditor() {
-		textureData.ApplyToMaterial(terrainMaterial);
-		textureData.UpdateMeshHeights (terrainMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
-		HeightMap heightMap = HeightMapGenerator.GenerateHeightMap (meshSettings.numVertsPerLine, meshSettings.numVertsPerLine, heightMapSettings, Vector2.zero);
+        textureData.ApplyToMaterial(terrainMaterial);
+        textureData.UpdateMeshHeights(terrainMaterial, heightMapSettings.minHeight, heightMapSettings.maxHeight);
+        
+        // Используем обновленную функцию генерации высот, которая учитывает биомы
+        HeightMap heightMap = HeightMapGenerator.GenerateHeightMap(
+            meshSettings.numVertsPerLine, 
+            meshSettings.numVertsPerLine, 
+            heightMapSettings, 
+            Vector2.zero, 
+            biomeNoise
+        );
 
-		if (drawMode == DrawMode.NoiseMap) {
-			DrawTexture (TextureGenerator.TextureFromHeightMap (heightMap));
-		} else if (drawMode == DrawMode.Mesh) {
-			DrawMesh (MeshGenerator.GenerateTerrainMesh (heightMap.values,meshSettings, editorLOD));
-		}
-	}
-
+        if (drawMode == DrawMode.NoiseMap) {
+            DrawTexture(TextureGenerator.TextureFromHeightMap(heightMap));
+        } else if (drawMode == DrawMode.Mesh) {
+            DrawMesh(MeshGenerator.GenerateTerrainMesh(heightMap.values, meshSettings, editorLOD));
+        }
+    }
 
     public void DrawTexture(Texture2D texture) {
-		textureRender.sharedMaterial.mainTexture = texture;
-		textureRender.transform.localScale = new Vector3 (texture.width, 1, texture.height) / 10f;
+        textureRender.sharedMaterial.mainTexture = texture;
+        textureRender.transform.localScale = new Vector3(texture.width, 1, texture.height) / 10f;
 
-		textureRender.gameObject.SetActive(true);
-		meshFilter.gameObject.SetActive(false);
-	}
+        textureRender.gameObject.SetActive(true);
+        meshFilter.gameObject.SetActive(false);
+    }
 
-	public void DrawMesh(MeshData meshData) {
-		meshFilter.sharedMesh = meshData.CreateMesh ();
+    public void DrawMesh(MeshData meshData) {
+        meshFilter.sharedMesh = meshData.CreateMesh();
 
-		textureRender.gameObject.SetActive(false);
-		meshFilter.gameObject.SetActive(true);
-	}
+        textureRender.gameObject.SetActive(false);
+        meshFilter.gameObject.SetActive(true);
+    }
 
-	void OnValuesUpdated(){
+    void OnValuesUpdated(){
         if(!Application.isPlaying){
             DrawMapInEditor();
         }
@@ -69,6 +78,6 @@ public class MapPreview : MonoBehaviour
         if(textureData != null){
             textureData.OnValuesUpdated -= OnValuesUpdated;
             textureData.OnValuesUpdated += OnValuesUpdated;
-        }       
+        }
     }
 }

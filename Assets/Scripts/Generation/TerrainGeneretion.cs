@@ -14,7 +14,7 @@ public class TerrainGeneretion : MonoBehaviour {
 
 	public int colliderLODIndex;
 	public LODInfo[] detailLevels;
-
+	public BiomeNoise biomeNoise;
 	public MeshSettings meshSettings;
 	public HeightMapSettings heightMapSettings;
 	public TextureData textureSettings;
@@ -67,32 +67,46 @@ public class TerrainGeneretion : MonoBehaviour {
 	}
 		
 	void UpdateVisibleChunks() {
-		HashSet<Vector2> alreadyUpdatedChunkCoords = new HashSet<Vector2> ();
-		for (int i = visibleTerrainChunks.Count-1; i >= 0; i--) {
-			alreadyUpdatedChunkCoords.Add (visibleTerrainChunks [i].coord);
-			visibleTerrainChunks [i].UpdateTerrainChunk ();
+    // Собираем координаты чанков, которые уже обновлены в этом кадре
+		HashSet<Vector2> alreadyUpdatedChunkCoords = new HashSet<Vector2>();
+		for (int i = visibleTerrainChunks.Count - 1; i >= 0; i--) {
+			alreadyUpdatedChunkCoords.Add(visibleTerrainChunks[i].coord);
+			visibleTerrainChunks[i].UpdateTerrainChunk();
 		}
-			
-		int currentChunkCoordX = Mathf.RoundToInt (viewerPosition.x / meshWorldSize);
-		int currentChunkCoordY = Mathf.RoundToInt (viewerPosition.y / meshWorldSize);
+		
+		// Определяем координаты текущего чанка, где находится игрок
+		int currentChunkCoordX = Mathf.RoundToInt(viewerPosition.x / meshWorldSize);
+		int currentChunkCoordY = Mathf.RoundToInt(viewerPosition.y / meshWorldSize);
 
+		// Проходим по всем чанкам в зоне видимости
 		for (int yOffset = -chunksVisibleInViewDst; yOffset <= chunksVisibleInViewDst; yOffset++) {
 			for (int xOffset = -chunksVisibleInViewDst; xOffset <= chunksVisibleInViewDst; xOffset++) {
-				Vector2 viewedChunkCoord = new Vector2 (currentChunkCoordX + xOffset, currentChunkCoordY + yOffset);
-				if (!alreadyUpdatedChunkCoords.Contains (viewedChunkCoord)) {
-					if (terrainChunkDictionary.ContainsKey (viewedChunkCoord)) {
-						terrainChunkDictionary [viewedChunkCoord].UpdateTerrainChunk ();
+				Vector2 viewedChunkCoord = new Vector2(currentChunkCoordX + xOffset, currentChunkCoordY + yOffset);
+				if (!alreadyUpdatedChunkCoords.Contains(viewedChunkCoord)) {
+					if (terrainChunkDictionary.ContainsKey(viewedChunkCoord)) {
+						terrainChunkDictionary[viewedChunkCoord].UpdateTerrainChunk();
 					} else {
-						TerrainChunk newChunk = new TerrainChunk (viewedChunkCoord, heightMapSettings, meshSettings, detailLevels, colliderLODIndex, transform, viewer, mapMaterial);
-						terrainChunkDictionary.Add (viewedChunkCoord, newChunk);
+						// Создаем новый чанк, передавая также ссылку на BiomeNoise для генерации высот с учетом биомов
+						TerrainChunk newChunk = new TerrainChunk(
+							viewedChunkCoord, 
+							heightMapSettings, 
+							meshSettings, 
+							detailLevels, 
+							colliderLODIndex, 
+							transform, 
+							viewer, 
+							mapMaterial,
+							biomeNoise   // новый параметр для генерации высот с биомами
+						);
+						terrainChunkDictionary.Add(viewedChunkCoord, newChunk);
 						newChunk.onVisibilityChanged += OnTerrainChunkVisibilityChanged;
 						newChunk.Load();
-
 					}
 				}
 			}
 		}
 	}
+
 
 	void OnTerrainChunkVisibilityChanged(TerrainChunk chunk, bool isVisible){
 		if(isVisible){
