@@ -16,6 +16,7 @@ public class EditTerrain : ActionWithWorld
 	{
 		curveX = InfoDataBase.terrainBase.GetInfo(id).curveX;
 		curveZ = InfoDataBase.terrainBase.GetInfo(id).curveZ;
+		canAction=true;
 	}
 
 	public TerrainGeneretion gameWorld => TerrainGeneretion.Instance;
@@ -43,7 +44,6 @@ public class EditTerrain : ActionWithWorld
 	public override void SetUpAction(int minCount)
 	{
 		base.SetUpAction(minCount);
-		canAction = true;
 	}
 
 	public override void MouseWheelRotation(float Value)
@@ -76,7 +76,7 @@ public class EditTerrain : ActionWithWorld
 			{
 				for (float z = p.z - radius - 2; z <= p.z + radius + 2; z++)
 				{
-					float evaluatedHeight =targetHeight* curveX.Evaluate(x / distance	) * curveZ.Evaluate(z /distance);
+					float evaluatedHeight =targetHeight* curveX.Evaluate(x / distance>0?distance:1	) * curveZ.Evaluate(z /distance>0?distance:1);
 					Vector3 pos = new Vector3(x, z, evaluatedHeight);
 
 					if (Vector2.Distance(new Vector2(p.x, p.z), new Vector2(pos.x, pos.y)) <= radius)
@@ -87,6 +87,7 @@ public class EditTerrain : ActionWithWorld
 			}
 			p += direction * radius;
 			t += radius;
+			
 		}
 	}
 }
