@@ -13,7 +13,7 @@ public class PlayerInput: MonoBehaviour
 	public Camera cam;
 	public GameObject camObj;
 	public GameObject point;
-	public TerrainGeneretion gameWorld;//переделать
+	//public TerrainGeneretion gameWorld;//переделать
 	
 	float _disToPlayer;
 	bool isRotating = false;
@@ -114,6 +114,13 @@ public class PlayerInput: MonoBehaviour
 	}
 	float GetGroundHeight( Vector3 position)
 	{
-		return gameWorld.GetHeight(new Vector2(position.x,position.z));
+		//return gameWorld.GetHeight(new Vector2(position.x,position.z));
+		position=position+100*Vector3.up;
+		Ray ray = new Ray(position,Vector3.down);
+		if (Physics.Raycast(ray, out RaycastHit hit))
+		{
+			return hit.point.y;
+		}
+		return 0;
 	}
 }

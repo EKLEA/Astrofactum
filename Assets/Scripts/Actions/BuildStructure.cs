@@ -50,6 +50,12 @@ public class BuildStructure : ActionWithWorld
 		
 		MonoBehaviour.DestroyImmediate(renderPoint);
 	}
+	public override void AddPoint()
+	{	
+		canAction=ValidateBuild(currentPos);
+		if(canAction)
+			base.AddPoint();
+	}
 
 	public override void MouseWheelRotation(float Value)
 	{
