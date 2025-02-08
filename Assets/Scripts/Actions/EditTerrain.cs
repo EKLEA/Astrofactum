@@ -19,7 +19,7 @@ public class EditTerrain : ActionWithWorld
 		canAction=true;
 	}
 
-	public TerrainGeneretion gameWorld => TerrainGeneretion.Instance;
+	//public TerrainGeneretion gameWorld => TerrainGeneretion.Instance;
 
 	public override void UpdateFunc()
 	{
@@ -33,7 +33,7 @@ public class EditTerrain : ActionWithWorld
 		{
 			if (!isTargetHeightSet && points.Count == 0)
 			{
-				targetHeight = gameWorld.GetHeight(new Vector2(_hit.point.x, _hit.point.z));
+				//targetHeight = gameWorld.GetHeight(new Vector2(_hit.point.x, _hit.point.z));
 				isTargetHeightSet = true;
 				
 			}
@@ -59,7 +59,7 @@ public class EditTerrain : ActionWithWorld
 		for (int i = 0; i < points.Count - 1; i++)
 			AddPoints(points[i], points[i + 1]);
 		
-		gameWorld.EditTerrain(uniquePoints.ToArray());
+		//gameWorld.EditTerrain(uniquePoints.ToArray());
 		
 	}
 
