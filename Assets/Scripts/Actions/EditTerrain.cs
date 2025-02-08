@@ -23,17 +23,21 @@ public class EditTerrain : ActionWithWorld
 
 	public override void UpdateFunc()
 	{
-		currentPos=_hit.point;
+		currentPos=hit.point;
 		
 	}
 	public override void AddPoint()
 	{
 		
-		if (_hit.collider.gameObject.tag == "Ground")
+		if (hit.collider.gameObject.tag == "Ground")
 		{
 			if (!isTargetHeightSet && points.Count == 0)
 			{
+<<<<<<< Updated upstream
 				//targetHeight = gameWorld.GetHeight(new Vector2(_hit.point.x, _hit.point.z));
+=======
+				targetHeight = gameWorld.GetHeight(new Vector2(hit.point.x, hit.point.z));
+>>>>>>> Stashed changes
 				isTargetHeightSet = true;
 				
 			}

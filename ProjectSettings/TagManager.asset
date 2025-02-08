@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Building
   - Ground
+  - In
+  - Out
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Building
   - Ground
   - Player
-  - 
+  - Phantom
   - 
   - 
   - 

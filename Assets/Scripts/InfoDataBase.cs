@@ -22,6 +22,5 @@ public static class InfoDataBase
 		.Where(f=>f.Value.actionType==ActionTypes.EditTerrain)
 		.ToDictionary(f => f.Key, f => f.Value as TerrainInfo));
 		
-		structuresBase= new DataBase<string,BuildingStructure>("Structures", building=>building.idStructure);
 	}
 }

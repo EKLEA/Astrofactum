@@ -10,7 +10,7 @@ public class DefaultScreenController : MonoBehaviour
 	void Start()
 	{
 			var gm =Instantiate(button,buttonsGrid.transform);
-			gm.SetUpButton("ramp");
+			gm.SetUpButton("core");
 			buttons.Add(gm);
 			
 			gm =Instantiate(button,buttonsGrid.transform);

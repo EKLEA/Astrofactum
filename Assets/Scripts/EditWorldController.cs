@@ -6,7 +6,7 @@ using UnityEngine;
 public class EditWorldController : MonoBehaviour
 {
 	public static EditWorldController Instance;
-	public Material previewMaterial; 
+	public PhantomObject Object;
 	Action currentLeftClickAction;
 	Action currentRightClickAction;
 	Action<float> currentMouseWheelRotAction;
@@ -62,13 +62,13 @@ public class EditWorldController : MonoBehaviour
 			var obj = InfoDataBase.freaturesBase.GetInfo(id);
 			switch(obj.actionType)
 			{
-				case ActionTypes.BuildStructure: action= new BuildStructure(id); break;
+				case ActionTypes.BuildStructure: action= new BuildConstruction(id);action.SetPhantomPoint(Object); break;
 				case ActionTypes.EditTerrain: action = new EditTerrain(id); break;
 			}
 			action.SetUpAction(obj.minPoints);
+			
 		}
 		
-		action.previewMaterial=previewMaterial;
 		action.endOfAction+=ClearAction;
 		currentLeftClickAction=action.LeftClick;
 		currentRightClickAction=action.RightClick;

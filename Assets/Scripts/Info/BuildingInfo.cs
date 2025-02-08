@@ -4,8 +4,9 @@ using UnityEngine;
 public class BuildingInfo : FreatureInfo
 {
 	public GameObject prefab;
-	public Vector3 normal;
 	public BuildingsTypes buildingType;
+	public int tier;
+	public float weight;
 }
 public enum BuildingsTypes
 {

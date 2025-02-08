@@ -1,0 +1,41 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
+
+public class BuildingStructure : MonoBehaviour, IAmSctructure
+{
+	public int countOfReqDrones { get {return _currentDrones;}}//Придумать формулу для расчётов дронов
+
+	public float timeOfBuild => throw new NotImplementedException();//считать через дронов
+
+	public float currentTimeOfBuild => throw new NotImplementedException();//считать через дронов
+
+	public bool isEnouhtItems {get{ return itemsToBuild.Count == currentItemsToBuild.Count &&
+	itemsToBuild.All(kv => 
+		currentItemsToBuild.TryGetValue(kv.Key, out int count) && count == kv.Value);}} 
+
+	public IAmDronNetworkPart closestDronNetworkPart { get => throw new NotImplementedException();  }
+
+	public int maxCountOfDrones => throw new NotImplementedException();//считать через постройки
+
+	public Dictionary<Item, int> itemsToBuild {get{return _itemsToBuild;}}
+
+	public Dictionary<Item, int> currentItemsToBuild {get{return _currentItemsToBuild;}}
+
+	public event Action endOfBuildingStructure;
+	public event Action endOfColItems;
+	private int _currentDrones;
+	Dictionary<Item, int> _itemsToBuild;
+
+	Dictionary<Item, int> _currentItemsToBuild;
+	Dictionary<Vector3,(float,string)> _buildings;
+	public void Init(List<Vector3> Points,List<(float,string)> buildings)
+	{
+		for (int i = 0;i < Points.Count; i++)
+		{
+			_buildings.Add(Points[i],buildings[i]);
+		}
+	}
+	
+}

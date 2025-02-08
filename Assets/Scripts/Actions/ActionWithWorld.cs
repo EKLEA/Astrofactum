@@ -6,15 +6,19 @@ using UnityEngine;
 
 public class ActionWithWorld
 {
-	public event Action endOfAction;
-	public Material previewMaterial; 
-	public int minCount;
+	public event Action endOfAction;	public int minCount;
 	public List<Vector3> points=new();
 	public bool canAction;
 	protected Vector3 currentPos;
-	protected RaycastHit _hit;
+	protected RaycastHit hit;
+	protected float currentRot;
+	protected PhantomObject phantomObject;
+	
 	public virtual void AddPoint()
-	{points.Add(currentPos);}
+	{
+		points.Add(currentPos);
+	}
+	public virtual void SetPhantomPoint(PhantomObject obj){ phantomObject=obj; }
 	public virtual void ActionF(){}
 	public virtual void LeftClick()
 	{
@@ -46,9 +50,8 @@ public class ActionWithWorld
 	public void Update()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out RaycastHit hit))
+		if (Physics.Raycast(ray, out hit))
 		{
-			_hit=hit;
 			UpdateFunc();
 		}
 		
