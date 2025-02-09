@@ -15,15 +15,15 @@ public class PhantomObject : MonoBehaviour,IAmBuilding
 
 	public GameObject[] OutPorts => throw new NotImplementedException();
 	private string _id;
-
-	public void Init(BuildingInfo info)
+	
+	public void Init(string id)
 	{
-		buildingInfo = info;
-		_id = buildingInfo.id;
+		_id = id;
+		buildingInfo = InfoDataBase.buildingBase.GetInfo(id);
 		_phantomParentObject = this.gameObject; 
+		gameObject.gameObject.layer=LayerMask.NameToLayer("Phantom");
 		SetUpMeshes();
 	}
-
 
    
 	public void ChangeColor(bool canAction)
@@ -55,9 +55,10 @@ public class PhantomObject : MonoBehaviour,IAmBuilding
 	}
 	void SetUpMeshes()
 	{
-		Debug.Log("Вщту");
 		var gm =buildingInfo.prefab;
 		var s = _phantomParentObject.AddComponent<BoxCollider>();
+		_phantomParentObject.transform.localScale= gm.gameObject.transform.localScale;
+		
 		s.size=gm.GetComponent<BoxCollider>().size;
 		s.center=gm.GetComponent<BoxCollider>().center;
 		
@@ -74,7 +75,7 @@ public class PhantomObject : MonoBehaviour,IAmBuilding
 					phantomObject.transform.parent=_phantomParentObject.transform;
 					phantomObject.transform.rotation=child.rotation;
 					phantomObject.transform.localPosition=Vector3.zero;
-					phantomObject.transform.localScale= child.localScale;
+					phantomObject.transform.localScale= Vector3.one;
 
 					
 					MeshFilter newMeshFilter = phantomObject.AddComponent<MeshFilter>();
@@ -82,6 +83,7 @@ public class PhantomObject : MonoBehaviour,IAmBuilding
 
 				
 					newMeshFilter.sharedMesh = mesh;
+					newMeshRenderer.material = previewMaterialTrue;
 					
 				}
 			}
@@ -96,7 +98,7 @@ public class PhantomObject : MonoBehaviour,IAmBuilding
 				phantomObject.transform.parent=_phantomParentObject.transform;
 				
 				phantomObject.transform.localPosition=Vector3.zero;
-				phantomObject.transform.localScale= gm.transform.localScale;
+				phantomObject.transform.localScale= Vector3.one;
 
 				
 				MeshFilter newMeshFilter = phantomObject.AddComponent<MeshFilter>();
@@ -104,6 +106,7 @@ public class PhantomObject : MonoBehaviour,IAmBuilding
 
 			
 				newMeshFilter.sharedMesh = mesh;
+				newMeshRenderer.material = previewMaterialTrue;
 			}
 			
 		}
@@ -116,6 +119,6 @@ public class PhantomObject : MonoBehaviour,IAmBuilding
 		s.transform.position=transform.position;
 		s.transform.rotation=transform.rotation;
 		s.GetComponent<BuildingLogicBase>().Init(buildingInfo.id);
-		DestroyImmediate(this);
+		DestroyImmediate(this.gameObject);
 	}
 }

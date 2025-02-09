@@ -7,25 +7,24 @@ using UnityEngine;
 public class ActionWithWorld
 {
 	public event Action endOfAction;	public int minCount;
-	public List<Vector3> points=new();
 	public bool canAction;
 	protected Vector3 currentPos;
 	protected RaycastHit hit;
 	protected float currentRot;
 	protected PhantomObject phantomObject;
+	protected int pointCount;
 	
 	public virtual void AddPoint()
 	{
-		points.Add(currentPos);
+		pointCount++;
 	}
-	public virtual void SetPhantomPoint(PhantomObject obj){ phantomObject=obj; }
-	public virtual void ActionF(){}
+	public virtual void ActionF(){ onActionEnded();}
 	public virtual void LeftClick()
 	{
 		if(canAction)
 		{
 			AddPoint();
-			if(!Input.GetButton("hold")&&points.Count>=minCount)
+			if(!Input.GetButton("hold")&&pointCount>=minCount)
 			{
 				
 				ActionF();
@@ -35,7 +34,7 @@ public class ActionWithWorld
 	}
 	public virtual void RightClick()
 	{
-		if(points.Count>=minCount) ActionF();//добавить то, что при отмене действия, возвращается к поинт 0
+		if(pointCount>=minCount) ActionF();//добавить то, что при отмене действия, возвращается к поинт 0
 		else onActionEnded();
 		
 	}

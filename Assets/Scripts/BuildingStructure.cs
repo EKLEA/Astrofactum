@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Unity.Mathematics;
 
 public class BuildingStructure : MonoBehaviour, IAmSctructure
 {
@@ -29,13 +30,30 @@ public class BuildingStructure : MonoBehaviour, IAmSctructure
 	Dictionary<Item, int> _itemsToBuild;
 
 	Dictionary<Item, int> _currentItemsToBuild;
-	Dictionary<Vector3,(float,string)> _buildings;
-	public void Init(List<Vector3> Points,List<(float,string)> buildings)
+	List<PhantomObject> _buildings = new();
+	public void Init()
 	{
-		for (int i = 0;i < Points.Count; i++)
+		gameObject.layer=LayerMask.NameToLayer("Phantom");
+		gameObject.tag="Structure";
+
+	}
+	public void AddPoint(Vector3 pos, (float,string) info)
+	{
+		
+		var s =Instantiate(EditWorldController.Instance.phantomObject,pos,Quaternion.Euler(0,info.Item1,0),transform);
+		s.GetComponent<PhantomObject>().Init(info.Item2);
+		_buildings.Add(s);
+
+	}
+	void Update()
+	{
+		if(Input.GetKeyDown(KeyCode.P))
 		{
-			_buildings.Add(Points[i],buildings[i]);
+			foreach (var s in _buildings)
+				s.UnPhantom();
+			DestroyImmediate(gameObject);
 		}
+		
 	}
 	
 }

@@ -16,6 +16,7 @@ public interface IAmSctructure
    public Dictionary<Item,int> currentItemsToBuild{ get; }
    public virtual void StructureBuild(){}
    public virtual void RednderStucture(float currentTimeOfBuild){}
-   public virtual void AddPoint(Vector3 pos,params string[] buildigns){}
-   public virtual void AddPoints(List<Vector3> points,params string[] buildigns){}
+   public virtual void AddPoint(Vector3 pos,(float,string) buildigns){}
+   public virtual void AddPoint(Vector3 pos){}
+   public virtual void AddPoints(List<Vector3> points,params (float,string)[] buildigns){}
 }

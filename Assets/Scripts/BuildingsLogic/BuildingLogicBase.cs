@@ -7,7 +7,7 @@ public class BuildingLogicBase : MonoBehaviour, IAmBuilding
 	public GameObject[] inPorts => GameObject.FindGameObjectsWithTag("In");
 	public  GameObject[] OutPorts => GameObject.FindGameObjectsWithTag("Out");
 
-	public string id {get {return id;}}
+	public string id {get {return _id;}}
 	string _id;
 	public virtual void Init(string id)
 	{

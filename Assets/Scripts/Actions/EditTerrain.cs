@@ -31,16 +31,12 @@ public class EditTerrain : ActionWithWorld
 		
 		if (hit.collider.gameObject.tag == "Ground")
 		{
-			if (!isTargetHeightSet && points.Count == 0)
+			/*if (!isTargetHeightSet && points.Count == 0)
 			{
-<<<<<<< Updated upstream
-				//targetHeight = gameWorld.GetHeight(new Vector2(_hit.point.x, _hit.point.z));
-=======
-				targetHeight = gameWorld.GetHeight(new Vector2(hit.point.x, hit.point.z));
->>>>>>> Stashed changes
+				//targetHeight = gameWorld.GetHeight(new Vector2(hit.point.x, hit.point.z));
 				isTargetHeightSet = true;
 				
-			}
+			}*/
 		}
 		base.AddPoint();
 	}
@@ -59,12 +55,12 @@ public class EditTerrain : ActionWithWorld
 	HashSet<Vector3> uniquePoints = new HashSet<Vector3>();
 
 	public override void ActionF()
-	{
+	{/*
 		for (int i = 0; i < points.Count - 1; i++)
 			AddPoints(points[i], points[i + 1]);
 		
 		//gameWorld.EditTerrain(uniquePoints.ToArray());
-		
+		*/
 	}
 
 	void AddPoints(Vector3 point1, Vector3 point2)
