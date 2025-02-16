@@ -1,34 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(Planet))]
-public class PlanetEditor : Editor {
+public class PlanetEditor : Editor
+{
 
-    Planet planet;
     Editor shapeEditor;
-    Editor colourEditor;
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
 
-	public override void OnInspectorGUI()
-	{
-        using (var check = new EditorGUI.ChangeCheckScope())
+        Planet planet = (Planet)target;
+
+        if (GUILayout.Button("Generate Entire Planet"))
         {
-            base.OnInspectorGUI();
-            if (check.changed)
-            {
-                planet.GeneratePlanet();
+            if(RequireQuadTemplate()) {
+                planet.distanceToPlayer = planet.Size + 100;
+                planet.distanceToPlayerPow2 = planet.distanceToPlayer * planet.distanceToPlayer;
+                planet.position = planet.transform.position;
+                planet.Initialize();
+                planet.GenerateMesh();
+                //planet.GenerateTexture();
+                //planet.UpdateShaders();
+                planet.CachedPlanet = planet.CachePlanet();
             }
         }
 
-        if (GUILayout.Button("Generate Planet"))
-        {
-            planet.GeneratePlanet();
+        /// <summary>
+        /// Returns true if quad templates have been generated and false if they have not, along with logging a warning.
+        /// </summary>
+        bool RequireQuadTemplate() {
+            if(!Presets.Generated) {
+                foreach (GameObject obj in Object.FindObjectsOfType(typeof(GameObject)))
+                {
+                    if(obj.GetComponent<Presets>() != null) { 
+                        Debug.LogWarning("QUAD TEMPLATE MISSING. Generate one by pressing the button on the Presets component.");
+                        EditorGUIUtility.PingObject(obj);
+                        break;
+                    };
+                }
+            }
+
+            return Presets.Generated;
         }
 
-        DrawSettingsEditor(planet.shapeSettings, planet.OnShapeSettingsUpdated, ref planet.shapeSettingsFoldout, ref shapeEditor);
-        DrawSettingsEditor(planet.colorSettings, planet.OnColorSettingsUpdated, ref planet.colorSettingsFoldout, ref colourEditor);
-	}
+        DrawSettingsEditor(planet.shapeConfig, planet.OnShapeSettingsUpdated, ref planet.shapeSettingsFoldout, ref shapeEditor);
+    }
 
     void DrawSettingsEditor(Object settings, System.Action onSettingsUpdated, ref bool foldout, ref Editor editor)
     {
@@ -53,9 +70,4 @@ public class PlanetEditor : Editor {
             }
         }
     }
-
-	private void OnEnable()
-	{
-        planet = (Planet)target;
-	}
 }

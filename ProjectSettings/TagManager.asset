@@ -9,6 +9,7 @@ TagManager:
   - In
   - Out
   - Structure
+  - PlanetFace
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Ground
   - Player
   - Phantom
-  - 
+  - Planet
   - 
   - 
   - 
