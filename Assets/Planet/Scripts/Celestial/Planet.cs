@@ -21,7 +21,7 @@ public class Planet : MonoBehaviour
     [HideInInspector]
     public bool colorSettingsFoldout;
 
-    public TerrainConfig shapeConfig;
+    public EarthShape shapeConfig;
     public float Size = 10000;
     public bool CullingEnabled = true;
     public float CullingMinAngle = 1.45f;
@@ -52,7 +52,7 @@ public class Planet : MonoBehaviour
         StartCoroutine(PlanetGenerationLoop());
     }
 
-    private void Update()
+    public void Update()
     {
         ExecuteActionQueue();
         distanceToPlayer = Vector3.Distance(transform.position, player.position);
@@ -93,7 +93,7 @@ public class Planet : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(5.5f);
             GenerateMesh(true);
         }
     }

@@ -15,7 +15,7 @@ public class PlanetEditor : Editor
         if (GUILayout.Button("Generate Entire Planet"))
         {
             if(RequireQuadTemplate()) {
-                planet.distanceToPlayer = planet.Size + 100;
+                planet.distanceToPlayer = planet.Size;
                 planet.distanceToPlayerPow2 = planet.distanceToPlayer * planet.distanceToPlayer;
                 planet.position = planet.transform.position;
                 planet.Initialize();
@@ -23,6 +23,7 @@ public class PlanetEditor : Editor
                 //planet.GenerateTexture();
                 //planet.UpdateShaders();
                 planet.CachedPlanet = planet.CachePlanet();
+                planet.Update();
             }
         }
 

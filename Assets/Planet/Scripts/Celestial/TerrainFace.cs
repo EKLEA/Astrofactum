@@ -125,14 +125,8 @@ public class TerrainFace
         mesh.RecalculateBounds();
     }
 
-    public static float GetElevation(TerrainConfig config, Vector3 pointOnUnitSphere) {
-        float elevation = 0;
-
-        for(int i = 0; i < config.NoiseFilters.Length; i++) {
-            elevation += config.NoiseFilters[i].Evaluate(pointOnUnitSphere);
-        }
-
-        return elevation;
+    public static float GetElevation(EarthShape config, Vector3 pointOnUnitSphere, int seed = 0) {
+        return config.CalculateHeight(pointOnUnitSphere, seed);
     }
 
     public static double GetElevationD(TerrainConfig config, Vector3 pointOnUnitSphere) {

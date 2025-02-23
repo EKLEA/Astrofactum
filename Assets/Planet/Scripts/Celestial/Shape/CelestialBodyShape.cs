@@ -2,50 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class CelestialBodyShape : ScriptableObject {
+public abstract class CelestialBodyShape : ScriptableObject
+{
+    public bool randomize;
+    public int seed;
 
-	public bool randomize;
-	public int seed;
-	public ComputeShader heightMapCompute;
+    public bool perturbVertices;
+    [Range(0, 1)]
+    public float perturbStrength = 0.7f;
 
-	public bool perturbVertices;
-	public ComputeShader perturbCompute;
-	[Range (0, 1)]
-	public float perturbStrength = 0.7f;
+    public event System.Action OnSettingChanged;
 
-	public event System.Action OnSettingChanged;
+    public virtual float[] CalculateHeights(Vector3[] vertices)
+    {
+        SetShapeData();
+        float[] heights = new float[vertices.Length];
 
-	ComputeBuffer heightBuffer;
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            heights[i] = (float)CalculateHeight(vertices[i]);
+        }
 
-	public virtual float[] CalculateHeights (ComputeBuffer vertexBuffer) {
-		//Debug.Log (System.Environment.StackTrace);
-		// Set data
-		SetShapeData ();
-		heightMapCompute.SetInt ("numVertices", vertexBuffer.count);
-		heightMapCompute.SetBuffer (0, "vertices", vertexBuffer);
-		ComputeHelper.CreateAndSetBuffer<float> (ref heightBuffer, vertexBuffer.count, heightMapCompute, "heights");
+        return heights;
+    }
 
-		// Run
-		ComputeHelper.Run (heightMapCompute, vertexBuffer.count);
+    protected abstract double CalculateHeight(Vector3 position);
 
-		// Get heights
-		var heights = new float[vertexBuffer.count];
-		heightBuffer.GetData (heights);
-		return heights;
-	}
+    protected virtual void SetShapeData() { }
 
-	public virtual void ReleaseBuffers () {
-		ComputeHelper.Release (heightBuffer);
-	}
-
-	protected virtual void SetShapeData () {
-
-	}
-
-	protected virtual void OnValidate () {
-		if (OnSettingChanged != null) {
-			OnSettingChanged ();
-		}
-	}
-
+    protected virtual void OnValidate()
+    {
+        if (OnSettingChanged != null)
+        {
+            OnSettingChanged();
+        }
+    }
 }
