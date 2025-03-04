@@ -11,6 +11,7 @@ public class BuildConstruction : ActionWithWorld
 {
 	protected BuildingInfo buildingInfo;
 	protected BuildingStructure buildingStructure;
+	PhantomObject phantomObject;
 	
 	public override void UpdateFunc()
 	{
@@ -26,7 +27,7 @@ public class BuildConstruction : ActionWithWorld
 	public BuildConstruction(string id)
 	{
 		buildingInfo=InfoDataBase.buildingBase.GetInfo(id);
-		phantomObject=PhantomObjCreater.CreatePhantomObject(id,EditWorldController.Instance.transform,currentPos,currentRot);
+		phantomObject=PhantomCreater.CreatePhantomObject(id,quaternion.identity,currentPos);
 	}
 	public override void AddPoint()
 	{
@@ -40,16 +41,14 @@ public class BuildConstruction : ActionWithWorld
 				buildingStructure = obj.AddComponent<BuildingStructure>();
 			}
 		}
-		buildingStructure.AddPoint((buildingInfo.id,currentPos,currentRot));
+		buildingStructure.AddPoint(PhantomCreater.CreatePhantomObject(buildingInfo.id,phantomObject.transform.rotation,phantomObject.transform.position));
 		base.AddPoint();
 		
 	}
 	public override void ActionF()
 	{
 		buildingStructure.Init();
-		
 		MonoBehaviour.DestroyImmediate(phantomObject.gameObject);
-		MonoBehaviour.DestroyImmediate(phantomObject);
 		phantomObject=null;
 		base.ActionF();
 		

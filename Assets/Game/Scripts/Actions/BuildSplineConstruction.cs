@@ -1,29 +1,15 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class BuildSplineConstruction : BuildConstruction
+public class BuildSplineConstruction :ActionWithWorld
 {
-	protected PhantomObjParent splineHandler;
-	public BuildSplineConstruction(string id) : base(id){}
-
-	public override void UpdateFunc()
-	{
-		base.UpdateFunc();
-	}
-	public override void AddPoint()
-	{
-		if(buildingStructure==null)
-		{
-			if(hit.collider.transform.parent!=null && hit.collider.transform.parent.tag=="Structure")
-				buildingStructure=hit.collider.transform.parent.gameObject.GetComponent<BuildingStructure>();
-			else
-			{
-				GameObject obj = new GameObject("BuildingStructure");
-				buildingStructure = obj.AddComponent<BuildingStructure>();
-			}
-		}
-		buildingStructure.AddPoint((buildingInfo.id,currentPos,currentRot));
-		base.AddPoint();
-		
-	}
+	protected BuildingInfo buildingInfo;
+	protected BuildingStructure buildingStructure;
+	
 }

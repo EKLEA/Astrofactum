@@ -30,18 +30,17 @@ public class BuildingStructure : MonoBehaviour, IAmSctructure
 	Dictionary<Item, int> _itemsToBuild;
 
 	Dictionary<Item, int> _currentItemsToBuild;
-	List<PhantomObjParent> _buildings = new();
+	List<PhantomParent> _buildings = new();
 	public void Init()
 	{
 		gameObject.layer=LayerMask.NameToLayer("Phantom");
 		gameObject.tag="Structure";
 
 	}
-	public void AddPoint((string,Vector3,float) info)
+	public void AddPoint(PhantomParent phantom)
 	{
-		var s = PhantomObjCreater.CreatePhantomObject(info.Item1,this.transform,info.Item2,info.Item3);
-		_buildings.Add(s);
-
+		phantom.transform.parent=this.transform;
+		_buildings.Add(phantom);
 	}
 	void Update()
 	{

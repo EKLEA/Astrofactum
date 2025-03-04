@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class SplineHolder : BuildingLogicBase, IHavePorts
+public class SplineHandler : BuildingLogicBase, IHavePorts
 {
     public Port[] inPorts {get{return _inPorts;}}
     public Port[] OutPorts {get{return _outPorts;}}
@@ -9,8 +9,6 @@ public class SplineHolder : BuildingLogicBase, IHavePorts
     [SerializeField] Port[] _outPorts;
     public void Awake()
     {
-
-        
     }
     public virtual void AddItemToBuilding(Item item)
     {

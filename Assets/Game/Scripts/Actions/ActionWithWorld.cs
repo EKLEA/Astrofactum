@@ -11,7 +11,6 @@ public class ActionWithWorld
 	protected Vector3 currentPos;
 	protected RaycastHit hit;
 	protected float currentRot;
-	protected PhantomObjParent phantomObject;
 	protected int pointCount;
 	
 	public virtual void AddPoint()
