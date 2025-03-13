@@ -7,5 +7,6 @@ public class EnteryPoint : MonoBehaviour
 	void Awake()
 	{
 		InfoDataBase.InitBases();
+		UIManager.Instance.Init();
 	}
 }

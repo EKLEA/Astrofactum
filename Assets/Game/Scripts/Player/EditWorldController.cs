@@ -23,13 +23,6 @@ public class EditWorldController : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 		ClearAction();
 	}
-	public void SetUpController(List<ActionButton> buttons)
-	{
-		foreach (ActionButton button in buttons)
-		{
-			button.OnActionButtonClicked+=SetUpAction;
-		}
-	}
 	void Update()
 	{
 		action.Update();
@@ -48,7 +41,7 @@ public class EditWorldController : MonoBehaviour
 		currentMouseWheelRotAction?.Invoke(value);
 	}
 	ActionWithWorld action;
-	void SetUpAction(string id)
+	public void SetUpAction(string id)
 	{
 		
 		if (id== null) 
