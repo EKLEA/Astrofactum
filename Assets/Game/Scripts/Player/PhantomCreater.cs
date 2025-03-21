@@ -7,7 +7,7 @@ public class PhantomCreater
     {
         var info= InfoDataBase.buildingBase.GetInfo(id);
         var phantomObject=MonoBehaviour.Instantiate(info.prefab);
-        phantomObject.GetComponent<BuildingLogicBase>().Init(id);
+        phantomObject.GetComponent<BuildingLogicBase>()?.Init(id);
         phantomObject.transform.rotation=rot;
         phantomObject.transform.position=pos;
         var ph =phantomObject.AddComponent<PhantomObject>();
@@ -15,11 +15,13 @@ public class PhantomCreater
         return ph;
         
     }
-     public static PhantomSpline CreatePhantomSplne(string id,Port p1,Port p2)
+     public static PhantomSpline CreatePhantomSplne(string id,Port p1,Port p2,SplineType type)
     {
-        var info= (InfoDataBase.buildingBase.GetInfo(id) as SplineInfo);
+        var info= InfoDataBase.buildingBase.GetInfo(id) as SplineInfo;
         var phantomObject=MonoBehaviour.Instantiate(info.splineLogic);
-        phantomObject.GetComponent<SplineParent>().CreateSpline(p1,p2);
+        phantomObject.transform.position=(p1.transform.position+p2.transform.position)/2;
+        phantomObject.GetComponent<SplineParent>().Init(id);
+        phantomObject.GetComponent<SplineParent>().CreateSpline(p1,p2,type);
         var ph = phantomObject.AddComponent<PhantomSpline>();;
         ph.Init(id);
         return ph;

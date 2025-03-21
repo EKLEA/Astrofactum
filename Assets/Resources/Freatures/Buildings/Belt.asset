@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   id: Belt
-  disctiption: 
+  discription: 
   actionType: 1
   minPoints: 2
-  prefab: {fileID: 0}
+  prefab: {fileID: 4266796604745474449, guid: 5b17b79937aa6674793916b46a0af13d, type: 3}
   buildingType: 3
   tier: 0
   weight: 0
-  splineHandler: {fileID: 11400000, guid: 60953c5a640a22c43aaa222b3c557b75, type: 2}
+  splineHandler: {fileID: 7479501382392876449, guid: 476e61f967c018e4f9c6409dfcd6bd6f, type: 3}
+  splineLogic: {fileID: 3810861317322125142, guid: 90b3b6101abcc974383d9c0e3498f490, type: 3}

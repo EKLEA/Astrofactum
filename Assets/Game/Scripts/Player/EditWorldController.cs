@@ -57,6 +57,9 @@ public class EditWorldController : MonoBehaviour
 				case ActionTypes.BuildStructure: 
 					action= new BuildConstruction(id);
 					break;
+				case ActionTypes.BuildManyPointStructure:
+					action= new BuildSplineConstruction(id);
+					break;
 				case ActionTypes.EditTerrain: action = new EditTerrain(id); break;
 			}
 			action.SetUpAction(obj.minPoints);

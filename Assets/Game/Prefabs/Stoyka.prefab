@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2421441092239634245}
   - component: {fileID: 7070649103690270363}
+  - component: {fileID: 1350584508700248047}
   m_Layer: 0
   m_Name: InPart
   m_TagString: Untagged
@@ -53,6 +54,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1350584508700248047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 371089934264256147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1059f22647fc874281e6317e76a4051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spline: {fileID: 0}
+  _portDir: 0
+  _portType: 0
 --- !u!1 &1345464113050681966
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,6 +79,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8110924724818145378}
   - component: {fileID: 6715869941029539671}
+  - component: {fileID: 880645447378954615}
   m_Layer: 0
   m_Name: OutPart
   m_TagString: Untagged
@@ -106,6 +123,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &880645447378954615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1345464113050681966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1059f22647fc874281e6317e76a4051, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spline: {fileID: 0}
+  _portDir: 1
+  _portType: 0
 --- !u!1 &7479501382392876449
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +150,7 @@ GameObject:
   - component: {fileID: 4987908316333436460}
   - component: {fileID: 3047215453622798911}
   - component: {fileID: 7646191446659472893}
-  - component: {fileID: 8147210145350617956}
+  - component: {fileID: 1123630439103316221}
   m_Layer: 0
   m_Name: Stoyka
   m_TagString: Untagged
@@ -174,7 +206,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 09d787a4264eec34bbbc722b3db59125, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -217,7 +249,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8147210145350617956
+--- !u!114 &1123630439103316221
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -226,8 +258,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7479501382392876449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f86121a189eb80945aaea636e378cdc2, type: 3}
+  m_Script: {fileID: 11500000, guid: 46cb0d6d415261a4d92f697b0a6e5732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: BeltSup
-  buildingType: 3
+  _inPorts:
+  - {fileID: 1350584508700248047}
+  _outPorts:
+  - {fileID: 880645447378954615}

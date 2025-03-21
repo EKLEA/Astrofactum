@@ -11,7 +11,7 @@ public class BuildConstruction : ActionWithWorld
 {
 	protected BuildingInfo buildingInfo;
 	protected BuildingStructure buildingStructure;
-	PhantomObject phantomObject;
+	protected PhantomObject phantomObject;
 	
 	public override void UpdateFunc()
 	{
@@ -24,6 +24,7 @@ public class BuildConstruction : ActionWithWorld
 		phantomObject.transform.rotation=Quaternion.Euler(phantomObject.transform.rotation.x,currentRot,phantomObject.transform.rotation.z);
 		
 	}
+	public BuildConstruction():this("Core"){}
 	public BuildConstruction(string id)
 	{
 		buildingInfo=InfoDataBase.buildingBase.GetInfo(id);
@@ -75,9 +76,6 @@ public class BuildConstruction : ActionWithWorld
 		
 		return true;
 	}
-	
-
-	
 	protected void ChangePos(Vector3 pos, Collider collider)
 	{
 		var amBuilding= collider.GetComponent<IAmBuilding>();

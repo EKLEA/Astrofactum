@@ -14,7 +14,7 @@ public class PhantomObject : PhantomParent
 	{
 		_id = id;
 		logic = GetComponent<BuildingLogicBase>();
-		logic.enabled = false;
+		if (logic!=null)logic.enabled = false;
 		meshRenderers.AddRange(GetComponentsInChildren<MeshRenderer>(true));
 		
 		foreach (MeshRenderer mr in meshRenderers)

@@ -15,15 +15,15 @@ public class BeltSpline : SplineParent
     public event Action OnItemOnEnd;
     public override void Init(string tid)
     {
-        countOfSegments=(int)spline.GetLength()/50;;
-        splineItems = new LimetedList<SplineItem>(countOfSegments);
-        splineItems.OnItemInListOnEnd+=InvokeEvent;
+//        countOfSegments=(int)spline.GetLength()/50;;
+        //splineItems = new LimetedList<SplineItem>(countOfSegments);
+       // splineItems.OnItemInListOnEnd+=InvokeEvent;
         base.Init(tid);
     }
     public override void SetUpToVisual(bool b)
     {
         base.SetUpToVisual(b);
-        if (b) splineItems.OnItemMoved+=UpdateVisual; else splineItems.OnItemMoved-=UpdateVisual;
+        //if (b) splineItems.OnItemMoved+=UpdateVisual; else splineItems.OnItemMoved-=UpdateVisual;
     }
     public override bool AddToSpline(SplineItem item)
     {

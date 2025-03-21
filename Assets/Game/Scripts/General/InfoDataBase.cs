@@ -17,7 +17,7 @@ public static class InfoDataBase
 		materialBase= new DataBase<string,Material>("Materials", material=>material.name);
 		
 		buildingBase= new DataBase<string,BuildingInfo>(freaturesBase.GetBase()
-		.Where(f=>f.Value.actionType==ActionTypes.BuildStructure)
+		.Where(f=>f.Value.actionType==ActionTypes.BuildStructure||f.Value.actionType==ActionTypes.BuildManyPointStructure)
 		.ToDictionary(f => f.Key, f => f.Value as BuildingInfo));
 		
 		terrainBase= new DataBase<string,TerrainInfo>(freaturesBase.GetBase()
