@@ -11,8 +11,14 @@ public class BuildConstruction : ActionWithWorld
 {
 	protected BuildingInfo buildingInfo;
 	protected BuildingStructure buildingStructure;
-	protected PhantomObject phantomObject;
+	protected PhantomParent phantomObject;
 	
+	
+	public BuildConstruction(string id)
+	{
+		buildingInfo=InfoDataBase.buildingBase.GetInfo(id);
+		phantomObject=PhantomCreater.CreatePhantomObject(BuildingFactory.Create(buildingInfo,currentPos,Quaternion.Euler(0,currentRot,0)));
+	}
 	public override void UpdateFunc()
 	{
 		phantomObject.gameObject.layer=LayerMask.NameToLayer("Ignore Raycast");
@@ -24,14 +30,9 @@ public class BuildConstruction : ActionWithWorld
 		phantomObject.transform.rotation=Quaternion.Euler(phantomObject.transform.rotation.x,currentRot,phantomObject.transform.rotation.z);
 		
 	}
-	public BuildConstruction():this("Core"){}
-	public BuildConstruction(string id)
-	{
-		buildingInfo=InfoDataBase.buildingBase.GetInfo(id);
-		phantomObject=PhantomCreater.CreatePhantomObject(id,quaternion.identity,currentPos);
-	}
 	public override void AddPoint()
 	{
+		PhantomParent ph =PhantomCreater.CreatePhantomObject(BuildingFactory.Create(buildingInfo,phantomObject.transform.position,phantomObject.transform.rotation,buildingStructure.transform));
 		if(buildingStructure==null)
 		{
 			if(hit.collider.transform.parent!=null && hit.collider.transform.parent.tag=="Structure")
@@ -42,7 +43,7 @@ public class BuildConstruction : ActionWithWorld
 				buildingStructure = obj.AddComponent<BuildingStructure>();
 			}
 		}
-		buildingStructure.AddPoint(PhantomCreater.CreatePhantomObject(buildingInfo.id,phantomObject.transform.rotation,phantomObject.transform.position));
+		buildingStructure.AddPoint(ph);
 		base.AddPoint();
 		
 	}
@@ -78,13 +79,13 @@ public class BuildConstruction : ActionWithWorld
 	}
 	protected void ChangePos(Vector3 pos, Collider collider)
 	{
-		var amBuilding= collider.GetComponent<IAmBuilding>();
+		var amBuilding= collider.GetComponent<BuildingLogicBase>();
 		var obj=collider.gameObject;
 		var bx = collider as BoxCollider;
 		if (amBuilding!=null)
 		{
-			var buildingLogic=InfoDataBase.buildingBase.GetInfo(amBuilding.id).prefab.GetComponent<IAmBuilding>();
-			var tempBuilding = buildingInfo.prefab.GetComponent<IAmBuilding>();
+			var buildingLogic=InfoDataBase.buildingBase.GetInfo(amBuilding.id).prefab.GetComponent<BuildingLogicBase>();
+			var tempBuilding = buildingInfo.prefab.GetComponent<BuildingLogicBase>();
 			if (buildingLogic is FoundationLogic)
 			{
 				currentPos=SnapToGrid(pos);

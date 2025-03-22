@@ -17,7 +17,7 @@ public class LimetedList<T>
     {
         get { return _curCount; }
     }
-    public event Action OnItemInListOnEnd;
+    public event Action<T> OnItemInListOnEnd;
     public event Action OnItemMoved;
     public List<T> Values{get { return Values; } }
     List<T> values;
@@ -53,7 +53,7 @@ public class LimetedList<T>
             values.RemoveAt(values.FindLastIndex(default));
             values.Insert(0,default);
             OnItemMoved?.Invoke();
-            if(!values[values.Count-1].Equals(default)) OnItemInListOnEnd?.Invoke();
+            if(!values[values.Count-1].Equals(default)) OnItemInListOnEnd?.Invoke(values[values.Count-1]);
             return true;
         }
         catch (Exception e)

@@ -8,34 +8,20 @@ using UnityEngine.Splines;
 
 public class BeltSpline : SplineParent
 {
+
     LimetedList<SplineItem> splineItems;
     int countOfSegments;
     bool canMove;
-    
-    public event Action OnItemOnEnd;
     public override void Init(string tid)
     {
-//        countOfSegments=(int)spline.GetLength()/50;;
-        //splineItems = new LimetedList<SplineItem>(countOfSegments);
-       // splineItems.OnItemInListOnEnd+=InvokeEvent;
         base.Init(tid);
+        splineItems=new LimetedList<SplineItem>((int)spline.GetLength()/50);
+        splineItems.OnItemInListOnEnd+=InvokeMethod;
+        
     }
     public override void SetUpToVisual(bool b)
     {
         base.SetUpToVisual(b);
-        //if (b) splineItems.OnItemMoved+=UpdateVisual; else splineItems.OnItemMoved-=UpdateVisual;
-    }
-    public override bool AddToSpline(SplineItem item)
-    {
-        var b= splineItems.Add(item);
-        _isWork=b;
-        if(!_isWork)
-        {
-            StartCoroutine(ProccessingCoroutine());
-            canMove=true;
-            _isWork=true;
-        }
-        return b;
     }
     public override void Proccessing()
     {
@@ -65,9 +51,10 @@ public class BeltSpline : SplineParent
             yield return null; 
         }
     }
-    void InvokeEvent()
+    void InvokeMethod(SplineItem splineItem)
     {
-        OnItemOnEnd?.Invoke();
+        InvokeCanRemoved(splineItem.slot);
+        InvokeCanAdded(splineItem.slot);
     }
     void UpdateVisual()
     {

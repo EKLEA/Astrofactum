@@ -4,7 +4,7 @@ public class FreatureInfo : ScriptableObject
 {
 	public Sprite icon;
 	public string id;
-	public string discription;
+	public string description;
 	public ActionTypes actionType;
-	public int minPoints;
 }
+

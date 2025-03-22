@@ -12,24 +12,18 @@ public class BuildingStructure : MonoBehaviour, IAmSctructure
 
 	public float currentTimeOfBuild => throw new NotImplementedException();//считать через дронов
 
-	public bool isEnouhtItems {get{ return itemsToBuild.Count == currentItemsToBuild.Count &&
-	itemsToBuild.All(kv => 
-		currentItemsToBuild.TryGetValue(kv.Key, out int count) && count == kv.Value);}} 
-
+	public bool isEnouhtItems { get {return _currentItemsToBuild.All(x=>x.IsFull);}}
 	public IAmDronNetworkPart closestDronNetworkPart { get => throw new NotImplementedException();  }
 
 	public int maxCountOfDrones => throw new NotImplementedException();//считать через постройки
 
-	public Dictionary<Item, int> itemsToBuild {get{return _itemsToBuild;}}
 
-	public Dictionary<Item, int> currentItemsToBuild {get{return _currentItemsToBuild;}}
+	public List<Slot> currentItemsToBuild {get{return _currentItemsToBuild;}}
 
 	public event Action endOfBuildingStructure;
 	public event Action endOfColItems;
 	private int _currentDrones;
-	Dictionary<Item, int> _itemsToBuild;
-
-	Dictionary<Item, int> _currentItemsToBuild;
+	List<Slot> _currentItemsToBuild;
 	List<PhantomParent> _buildings = new();
 	public void Init()
 	{
@@ -39,7 +33,6 @@ public class BuildingStructure : MonoBehaviour, IAmSctructure
 	}
 	public void AddPoint(PhantomParent phantom)
 	{
-		phantom.transform.parent=this.transform;
 		_buildings.Add(phantom);
 	}
 	void Update()

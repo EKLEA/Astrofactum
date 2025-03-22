@@ -37,15 +37,15 @@ public class ActionWithWorld
 		else onActionEnded();
 		
 	}
-	public virtual void SetUpAction(int minCount)
+	public virtual void SetUpAction(ActionTypes action)
 	{
-		this.minCount = minCount;
+		this.minCount = action.GetMinPoints();
 	}
 	public virtual void MouseWheelRotation(float Value)
 	{
 		
 	}
-	public void Update()
+	public void FixedUpdate()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out hit))

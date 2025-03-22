@@ -10,9 +10,8 @@ public class PhantomObject : PhantomParent
 {	
 	List<MeshRenderer> meshRenderers=new();
 	List<Material[]> Materials=new();
-	public override void Init(string id)
+	public override void Init()
 	{
-		_id = id;
 		logic = GetComponent<BuildingLogicBase>();
 		if (logic!=null)logic.enabled = false;
 		meshRenderers.AddRange(GetComponentsInChildren<MeshRenderer>(true));

@@ -23,9 +23,9 @@ public class EditWorldController : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 		ClearAction();
 	}
-	void Update()
+	void FixedUpdate()
 	{
-		action.Update();
+		action.FixedUpdate();
 	}
 	
 	public void LeftClick()
@@ -62,7 +62,7 @@ public class EditWorldController : MonoBehaviour
 					break;
 				case ActionTypes.EditTerrain: action = new EditTerrain(id); break;
 			}
-			action.SetUpAction(obj.minPoints);
+			action.SetUpAction(obj.actionType);
 			
 		}
 		

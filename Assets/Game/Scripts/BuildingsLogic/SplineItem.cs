@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class SplineItem : MonoBehaviour
 {
-    public Item _item;
-    public SplineItem(Item item)
+    public Slot slot;
+    public SplineItem(Slot _slot)
     {
-        _item=item;
+        slot = _slot;
+        ///отрисвка тут
     }
 }

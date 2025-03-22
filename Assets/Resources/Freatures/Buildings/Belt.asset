@@ -9,17 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b52131b195a14e4b90b2d449252ec56, type: 3}
+  m_Script: {fileID: 11500000, guid: 34820d5bc901fb44ea7cc1d806da3401, type: 3}
   m_Name: Belt
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  id: Belt
-  discription: 
+  id: belt
+  description: 
   actionType: 1
-  minPoints: 2
-  prefab: {fileID: 4266796604745474449, guid: 5b17b79937aa6674793916b46a0af13d, type: 3}
+  prefab: {fileID: 6745777963357741553, guid: 5b17b79937aa6674793916b46a0af13d, type: 3}
   buildingType: 3
-  tier: 0
-  weight: 0
-  splineHandler: {fileID: 7479501382392876449, guid: 476e61f967c018e4f9c6409dfcd6bd6f, type: 3}
-  splineLogic: {fileID: 3810861317322125142, guid: 90b3b6101abcc974383d9c0e3498f490, type: 3}
+  tier: 1
+  weight: 1

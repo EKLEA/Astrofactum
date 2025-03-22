@@ -1,27 +1,36 @@
+using SplineMeshTools.Core;
 using UnityEngine;
 using UnityEngine.Splines;
 
 public class PhantomSpline : PhantomParent
 {
-    SplineInstantiate spInst=>GetComponent<SplineInstantiate>();
-    MeshRenderer mesh;
-    public override void Init(string id)
+    MeshRenderer meshRenderer=>GetComponent<MeshRenderer>();
+    Material[] originMat;
+    Material[] newMat;
+    string namee;
+    public override void Init()
 	{
-		_id = id;
+		namee=gameObject.name;
+		originMat=meshRenderer.materials;
+		newMat=new Material[originMat.Length];
+		ChangeColor(true);
 		logic = GetComponent<BuildingLogicBase>();
-		logic.enabled = false;
-		prefab=spInst.itemsToInstantiate[0].Prefab;
-		mesh=spInst.itemsToInstantiate[0].Prefab.GetComponent<MeshRenderer>();
+		gameObject.name="Phantom";
+		//logic.enabled = false;
 	}
 	public override void ChangeColor(bool canAction)
 	{
 		Material newMaterial = canAction ? previewMaterialTrue : previewMaterialFalse;
-		mesh.material=newMaterial;
+		
+		for(int i=0;i<meshRenderer.materials.Length;i++)
+			newMat[i]=newMaterial;
+		meshRenderer.materials=newMat;
 	}
 	public override void UnPhantom()
 	{
 		logic.enabled=true;
-		spInst.itemsToInstantiate[0].Prefab=prefab;
+		gameObject.name=namee;
+		meshRenderer.materials=originMat;
 		DestroyImmediate(this);
 	}
 }

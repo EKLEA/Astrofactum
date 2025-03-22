@@ -41,10 +41,6 @@ public class EditTerrain : ActionWithWorld
 		base.AddPoint();
 	}
 
-	public override void SetUpAction(int minCount)
-	{
-		base.SetUpAction(minCount);
-	}
 
 	public override void MouseWheelRotation(float Value)
 	{
