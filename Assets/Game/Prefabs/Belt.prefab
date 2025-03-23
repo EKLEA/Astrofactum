@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1701982210877724156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8348976773141637233}
+  m_Layer: 0
+  m_Name: BizerPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8348976773141637233
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701982210877724156}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5898195873379216271}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4241657375629805530
 GameObject:
   m_ObjectHideFlags: 0
@@ -26,13 +57,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4241657375629805530}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1.25, z: -0.25}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.75, z: -0.05}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6315607243513008576}
   m_Father: {fileID: 4408631074726886804}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7906934374067090129
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -52,7 +84,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 0.5, z: 0.5}
+  m_Size: {x: 2, y: 1.25, z: 0.25}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8432834368353915483
 MonoBehaviour:
@@ -66,8 +98,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1059f22647fc874281e6317e76a4051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  point: {fileID: 6315607243513008576}
   _portDir: 0
   _portType: 0
+--- !u!1 &4376229868055734108
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6315607243513008576}
+  m_Layer: 0
+  m_Name: BizerPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6315607243513008576
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4376229868055734108}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4385857828725771189}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6745777963357741553
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,7 +376,7 @@ MonoBehaviour:
   uniformUVs: 0
   uvResolutions:
   - 8
-  positionAdjustment: {x: 0, y: 0, z: 0}
+  positionAdjustment: {x: 0, y: -0.5, z: 0}
   rotationAdjustment: {x: 0.70710677, y: 0, z: 0, w: 0.70710677}
   scaleAdjustment: {x: 1, y: 1, z: 1}
   meshResolution: 0c000000
@@ -394,7 +458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 2
   height: 0.5
-  offset: {x: 0, y: 1.25, z: 0}
+  offset: {x: 0, y: 0.75, z: 0}
   resolution: 10
 --- !u!1 &8820771649260488242
 GameObject:
@@ -423,10 +487,11 @@ Transform:
   m_GameObject: {fileID: 8820771649260488242}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.25, z: 1.25}
+  m_LocalPosition: {x: 0, y: 0.75, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8348976773141637233}
   m_Father: {fileID: 4408631074726886804}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &3442848639024354500
@@ -448,7 +513,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 0.5, z: 0.5}
+  m_Size: {x: 2, y: 1.25, z: 0.25}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2696359439032995502
 MonoBehaviour:
@@ -462,5 +527,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1059f22647fc874281e6317e76a4051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  point: {fileID: 8348976773141637233}
   _portDir: 1
   _portType: 0

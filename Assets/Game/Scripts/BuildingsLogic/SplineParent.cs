@@ -2,13 +2,9 @@ using System;
 using System.Collections;
 using SplineMeshTools.Colliders;
 using SplineMeshTools.Core;
-using SplineMeshTools;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
-using SplineMeshTools.Editor;
-using Unity.Mathematics;
-using UnityEngine.UIElements;
-
 [RequireComponent (typeof (SplineMeshResolution), typeof(SplineBoxColliderGenerator))]
 public class SplineParent : BuildingWithPorts
 {
@@ -39,9 +35,8 @@ public class SplineParent : BuildingWithPorts
         spline[0]=new BezierKnot(localPos1,Vector3.zero,Vector3.zero,p1.Item3);
         inPort.transform.localPosition=new Vector3(spline.EvaluatePosition(0f).x,inPort.transform.localPosition.y,spline.EvaluatePosition(0f).z);
     }
-    public virtual void SecondPointSpline((Port,Vector3,Quaternion) p2,SplineType type)
+    public virtual void SecondPointSpline((Port,Vector3,Quaternion) p2,SplineType type,SplineState state)
     {
-       Debug.Log(p2.Item3.eulerAngles);
         
         if(p2.Item1!=null)
         {
@@ -55,14 +50,16 @@ public class SplineParent : BuildingWithPorts
         switch(type)
         {
             case SplineType.StraightAngle:
-                tIn= localPos1.x<localPos2.x? new Vector3(-(Math.Abs(localPos1.x)+Math.Abs(localPos2.x)),0,0):
-                new Vector3((Math.Abs(localPos1.x)+Math.Abs(localPos2.x)),0,0);
+                tIn= localPos1.x>localPos2.x? new Vector3(-(Math.Abs(localPos1.x)+Math.Abs(localPos2.x)),0,0):
+                new Vector3(Math.Abs(localPos1.x)+Math.Abs(localPos2.x),0,0);
                 
                 tOut= localPos1.z<localPos2.z? new Vector3(0,0,Math.Abs(localPos1.z)+Math.Abs(localPos2.z)):
                 new Vector3(0,0,-(Math.Abs(localPos1.z)+Math.Abs(localPos2.z)));
+                
                 break;
+                
             default:
-                tIn= localPos1.x<localPos2.x? new Vector3(-(Math.Abs(localPos1.x)+Math.Abs(localPos2.x))/2,0,0):
+                tIn= localPos1.x>localPos2.x? new Vector3(-(Math.Abs(localPos1.x)+Math.Abs(localPos2.x))/2,0,0):
                 new Vector3((Math.Abs(localPos1.x)+Math.Abs(localPos2.x))/2,0,0);
                 
                 tOut= localPos1.z<localPos2.z? new Vector3(0,0,(Math.Abs(localPos1.z)+Math.Abs(localPos2.z))/2):
@@ -70,11 +67,11 @@ public class SplineParent : BuildingWithPorts
                 break;
 
         }
-        
         spline[0]=new BezierKnot( spline[0].Position ,Vector3.zero,tOut);
-        spline[1]=new BezierKnot(localPos2,tIn,Vector3.zero,p2.Item3);
-        outPort.transform.localPosition=new Vector3(spline.EvaluatePosition(0f).x,outPort.transform.localPosition.y,spline.EvaluatePosition(0f).z);
-        splineBoxColliderGenerator.resolution=(int)(spline.GetLength()/5);
+        spline[1] = new BezierKnot(localPos2, p2.Item3 * tIn, p2.Item3 * tOut, p2.Item3);
+        outPort.transform.localPosition=new Vector3(spline.EvaluatePosition(1f).x,outPort.transform.localPosition.y,spline.EvaluatePosition(1f).z);
+        
+        resolution.meshResolution[0]=  state==SplineState.Active? 2:(int)(spline.GetLength()/5);
         splineBoxColliderGenerator.GenerateBoxColliderMesh();
         resolution.GenerateMeshAlongSpline();
     }
@@ -98,4 +95,9 @@ public enum SplineType
 {
     StraightAngle,
     Directly,
+}
+public enum SplineState
+{
+    Active,
+    Passive
 }

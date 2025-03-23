@@ -45,7 +45,7 @@ public class ActionWithWorld
 	{
 		
 	}
-	public void FixedUpdate()
+	public void Update()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		if (Physics.Raycast(ray, out hit))

@@ -23,9 +23,9 @@ public class EditWorldController : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 		ClearAction();
 	}
-	void FixedUpdate()
+	void Update()
 	{
-		action.FixedUpdate();
+		action.Update();
 	}
 	
 	public void LeftClick()

@@ -32,7 +32,7 @@ public class BuildConstruction : ActionWithWorld
 	}
 	public override void AddPoint()
 	{
-		PhantomParent ph =PhantomCreater.CreatePhantomObject(BuildingFactory.Create(buildingInfo,phantomObject.transform.position,phantomObject.transform.rotation,buildingStructure.transform));
+		
 		if(buildingStructure==null)
 		{
 			if(hit.collider.transform.parent!=null && hit.collider.transform.parent.tag=="Structure")
@@ -43,6 +43,7 @@ public class BuildConstruction : ActionWithWorld
 				buildingStructure = obj.AddComponent<BuildingStructure>();
 			}
 		}
+		PhantomParent ph =PhantomCreater.CreatePhantomObject(BuildingFactory.Create(buildingInfo,phantomObject.transform.position,phantomObject.transform.rotation,buildingStructure.transform));
 		buildingStructure.AddPoint(ph);
 		base.AddPoint();
 		

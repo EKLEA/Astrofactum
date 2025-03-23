@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   id: foundation
-  disctiption: 
+  description: 
   actionType: 0
-  minPoints: 1
   prefab: {fileID: 4471445265282206022, guid: 1b829c17e6d7d224f935740dc94ff115, type: 3}
-  normal: {x: 0, y: 0, z: 0}
+  phantomPrefab: {fileID: 4471445265282206022, guid: 1b829c17e6d7d224f935740dc94ff115, type: 3}
   buildingType: 5
+  tier: 0
+  weight: 0

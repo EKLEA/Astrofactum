@@ -121,6 +121,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+  textMeshPro: {fileID: 0}
 --- !u!1 &8882914834442624480
 GameObject:
   m_ObjectHideFlags: 0

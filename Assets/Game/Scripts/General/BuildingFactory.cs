@@ -1,3 +1,5 @@
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public static class BuildingFactory 
@@ -14,4 +16,14 @@ public static class BuildingFactory
        return Create(data, position,rotation,null);
     }
     
+}
+public class PhantomCreater
+{
+    public static PhantomParent CreatePhantomObject(BuildingLogicBase building)
+    {
+        PhantomParent ph = InfoDataBase.freaturesBase.GetInfo(building.id).actionType==ActionTypes.BuildManyPointStructure?
+        building.AddComponent<PhantomSpline>():building.AddComponent<PhantomObject>();
+        ph.Init();
+        return ph;
+    }
 }

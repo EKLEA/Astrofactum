@@ -16,6 +16,7 @@ public class PhantomSpline : PhantomParent
 		ChangeColor(true);
 		logic = GetComponent<BuildingLogicBase>();
 		gameObject.name="Phantom";
+		(logic as SplineParent).resolution.GenerateMeshAlongSpline();
 		//logic.enabled = false;
 	}
 	public override void ChangeColor(bool canAction)
@@ -28,9 +29,9 @@ public class PhantomSpline : PhantomParent
 	}
 	public override void UnPhantom()
 	{
-		logic.enabled=true;
 		gameObject.name=namee;
 		meshRenderer.materials=originMat;
+		gameObject.transform.parent=transform.parent.parent;
 		DestroyImmediate(this);
 	}
 }

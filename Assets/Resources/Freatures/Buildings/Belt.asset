@@ -17,6 +17,7 @@ MonoBehaviour:
   description: 
   actionType: 1
   prefab: {fileID: 6745777963357741553, guid: 5b17b79937aa6674793916b46a0af13d, type: 3}
+  phantomPrefab: {fileID: 6745777963357741553, guid: 025e5221e65dab244a4bd5220f98c368, type: 3}
   buildingType: 3
   tier: 1
   weight: 1
