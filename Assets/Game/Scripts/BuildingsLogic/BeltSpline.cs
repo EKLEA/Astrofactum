@@ -87,8 +87,6 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
     }
     bool Move(float deltaTime)
     {
-       
-        Debug.Log(deltaTime);
         OnMove?.Invoke(deltaTime);
 
         
@@ -113,7 +111,7 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
         
     public SlotTransferArgs AddToBuilding(string id, int amount)
     {
-        
+        if(amount==0) return null;
         int max=InfoDataBase.itemInfoBase.GetInfo(id).maxCountInPack;
         int res=0;
         if(splineItemsQueue.Count>0)

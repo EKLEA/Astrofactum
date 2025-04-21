@@ -87,18 +87,13 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
         else
         {
             _isProcessed=true;
-            _currentTime+=deltaTime;
             if(_currentTime>=recipe.Duration)
             {
                 GeneratorSlot.AddItem(recipe.Outputs[0].amount);
                 _currentTime=0;
+                InvokeCanRemoved(GeneratorSlot.Id);
             }
-            
-        }
-        if(GeneratorSlot.Count>0)
-        {
-           
-            InvokeCanRemoved(GeneratorSlot.Id);
+            else _currentTime+=deltaTime;
         }
     }
     public void ResetAddEvent(){OnItemsCanAdded=null;}

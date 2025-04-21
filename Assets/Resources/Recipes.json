@@ -19,7 +19,7 @@
     {
       "id": "generate_iron_ore",
       "tag": "Generator",
-      "duration": 0.5,
+      "duration": 5,
       "inputs": [],
       "outputs": [
         {
