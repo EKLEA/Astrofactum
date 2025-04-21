@@ -32,7 +32,12 @@ public class BuildingStructure : MonoBehaviour, IAmSctructure
 
 	}
 	public void AddPoint(PhantomParent phantom)
-	{
+	{	
+		phantom.transform.parent=transform;
+		foreach (var s in phantom.transform.GetComponentsInChildren<Transform>())
+		{
+		    s.gameObject.layer=LayerMask.NameToLayer("Phantom");
+		}
 		_buildings.Add(phantom);
 	}
 	void Update()

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingLogicBase : MonoBehaviour
+public class Building : MonoBehaviour
 {
 	public string id {get {return _id;}}
 
@@ -13,13 +13,4 @@ public class BuildingLogicBase : MonoBehaviour
 	{
 		_id=id;
 	}
-
-    public virtual void Proccessing()
-    {
-    }
-
-    public virtual IEnumerator ProccessingCoroutine()
-    {
-        return null;
-    }
 }

@@ -33,7 +33,7 @@ public class ActionWithWorld
 	}
 	public virtual void RightClick()
 	{
-		if(pointCount>=minCount) ActionF();//добавить то, что при отмене действия, возвращается к поинт 0
+		if(pointCount>=minCount) ActionF();
 		else onActionEnded();
 		
 	}

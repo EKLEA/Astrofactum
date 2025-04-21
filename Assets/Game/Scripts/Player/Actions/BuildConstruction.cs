@@ -80,13 +80,13 @@ public class BuildConstruction : ActionWithWorld
 	}
 	protected void ChangePos(Vector3 pos, Collider collider)
 	{
-		var amBuilding= collider.GetComponent<BuildingLogicBase>();
+		var amBuilding= collider.GetComponent<Building>();
 		var obj=collider.gameObject;
 		var bx = collider as BoxCollider;
 		if (amBuilding!=null)
 		{
-			var buildingLogic=InfoDataBase.buildingBase.GetInfo(amBuilding.id).prefab.GetComponent<BuildingLogicBase>();
-			var tempBuilding = buildingInfo.prefab.GetComponent<BuildingLogicBase>();
+			var buildingLogic=InfoDataBase.buildingBase.GetInfo(amBuilding.id).prefab.GetComponent<Building>();
+			var tempBuilding = buildingInfo.prefab.GetComponent<Building>();
 			if (buildingLogic is FoundationLogic)
 			{
 				currentPos=SnapToGrid(pos);

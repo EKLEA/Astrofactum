@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4128e9a3918cb2b498001db86c30d848, type: 3}
+  m_Name: Iron_ore
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  id: iron_ore
+  description: 
+  FreatureType: 1
+  prefab: {fileID: 8322929590856609948, guid: 3237cde695e08af44be8072115fcb856, type: 3}
+  maxCountInPack: 1

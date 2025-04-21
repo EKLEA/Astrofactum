@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Astrofactum/BuildingInfo")]
-public class BuildingInfo : FreatureInfo
+[CreateAssetMenu(menuName = "Astrofactum/Actions/BuildingInfo")]
+public class BuildingInfo : ActionInfo
 {
 	public GameObject prefab;
 	public BuildingsTypes buildingType;

@@ -1,0 +1,31 @@
+[
+    {
+      "id": "iron_ingot",
+      "tag": "Smelting",
+      "duration": 5.0,
+      "inputs": [
+        {
+          "itemID": "iron_ore",
+          "amount": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemID": "iron_ingot",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "generate_iron_ore",
+      "tag": "Generator",
+      "duration": 0.5,
+      "inputs": [],
+      "outputs": [
+        {
+          "itemID": "iron_ore",
+          "amount": 1
+        }
+      ]
+    }
+  ]

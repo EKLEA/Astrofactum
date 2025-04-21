@@ -1,48 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+	using System.Collections;
+	using System.Collections.Generic;
+	using UnityEngine;
 
 
-public class DataBase<TKey, TValue> where TValue : UnityEngine.Object
-{
-	private Dictionary<TKey, TValue> dataBase = new Dictionary<TKey, TValue>();
-
-	public DataBase(string resourcePath, System.Func<TValue, TKey> keySelector)
+	public class DataBase<TKey, TValue> where TValue : UnityEngine.Object
 	{
-		dataBase.Clear();
-		TValue[] assets = Resources.LoadAll<TValue>(resourcePath);
-		foreach (TValue obj in assets)
+		private Dictionary<TKey, TValue> dataBase = new Dictionary<TKey, TValue>();
+
+		public DataBase(string resourcePath, System.Func<TValue, TKey> keySelector)
 		{
-			TKey key = keySelector(obj);
-			if (!dataBase.ContainsKey(key))
+			dataBase.Clear();
+			TValue[] assets = Resources.LoadAll<TValue>(resourcePath);
+			foreach (TValue obj in assets)
 			{
-				dataBase.Add(key, obj);
+				TKey key = keySelector(obj);
+				if (!dataBase.ContainsKey(key))
+				{
+					dataBase.Add(key, obj);
+				}
 			}
 		}
-	}
-	public DataBase(Dictionary<TKey, TValue> _dataBase )
-	{
-		dataBase=_dataBase;
-	}
-
-	public void Add(TKey key, TValue value)
-	{
-		if (!dataBase.ContainsKey(key))
+		public DataBase(Dictionary<TKey, TValue> _dataBase )
 		{
-			dataBase.Add(key, value);
+			dataBase=_dataBase;
+		}
+
+		public void Add(TKey key, TValue value)
+		{
+			if (!dataBase.ContainsKey(key))
+			{
+				dataBase.Add(key, value);
+			}
+		}
+
+		public TValue GetInfo(TKey key)
+		{
+			if (dataBase.TryGetValue(key, out var value))
+			{
+				return value;
+			}
+			return null;
+		}
+		public IReadOnlyDictionary<TKey, TValue> GetBase()
+		{
+			return dataBase;
 		}
 	}
-
-	public TValue GetInfo(TKey key)
-	{
-		if (dataBase.TryGetValue(key, out var value))
-		{
-			return value;
-		}
-		return null;
-	}
-	public Dictionary<TKey, TValue> GetBase()
-	{
-		return dataBase;
-	}
-}

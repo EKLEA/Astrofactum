@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class FoundationLogic : BuildingLogicBase
+public class FoundationLogic:Building
 {
 	float maxWeight;
 	float currWeight;

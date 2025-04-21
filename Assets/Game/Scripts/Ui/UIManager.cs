@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
 		{
 			Instance = this;
 		}
+		Init();
     }
     public void Init()
     {

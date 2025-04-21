@@ -61,6 +61,8 @@ public class PlayerInput: MonoBehaviour
 		cam.transform.LookAt(transform.position);
 		if(Input.GetButtonDown("Fire1"))  EditWorldController.Instance.LeftClick();
 		if(Input.GetButtonDown("Fire2"))  EditWorldController.Instance.RightClick();
+		if(Input.GetKeyDown(KeyCode.N)) TickManager.Instance.StartTick();
+		if(Input.GetKeyDown(KeyCode.M)) TickManager.Instance.StopTick();
 		
 	}
 	void CameraRotation()

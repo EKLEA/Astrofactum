@@ -14,10 +14,9 @@ public class PhantomSpline : PhantomParent
 		originMat=meshRenderer.materials;
 		newMat=new Material[originMat.Length];
 		ChangeColor(true);
-		logic = GetComponent<BuildingLogicBase>();
 		gameObject.name="Phantom";
-		(logic as SplineParent).resolution.GenerateMeshAlongSpline();
-		//logic.enabled = false;
+		(logic as SplineParent)?.resolution.GenerateMeshAlongSpline();
+		base.Init();
 	}
 	public override void ChangeColor(bool canAction)
 	{
@@ -32,6 +31,8 @@ public class PhantomSpline : PhantomParent
 		gameObject.name=namee;
 		meshRenderer.materials=originMat;
 		gameObject.transform.parent=transform.parent.parent;
-		DestroyImmediate(this);
+		
+		base.UnPhantom();
+		
 	}
 }

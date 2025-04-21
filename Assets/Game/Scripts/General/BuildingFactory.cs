@@ -4,14 +4,14 @@ using UnityEngine;
 
 public static class BuildingFactory 
 {
-    public static BuildingLogicBase Create(BuildingInfo data, Vector3 position,Quaternion rotation,Transform parent)
+    public static Building Create(BuildingInfo data, Vector3 position,Quaternion rotation,Transform parent)
     {
         GameObject obj = GameObject.Instantiate(data.prefab, position, rotation, parent);
-        BuildingLogicBase building = obj.GetComponent<BuildingLogicBase>();
+        Building building = obj.GetComponent<Building>();
         building.Init(data.id);
         return building;
     }
-    public static BuildingLogicBase Create(BuildingInfo data, Vector3 position,Quaternion rotation)
+    public static Building Create(BuildingInfo data, Vector3 position,Quaternion rotation)
     {
        return Create(data, position,rotation,null);
     }
@@ -19,9 +19,9 @@ public static class BuildingFactory
 }
 public class PhantomCreater
 {
-    public static PhantomParent CreatePhantomObject(BuildingLogicBase building)
+    public static PhantomParent CreatePhantomObject(Building building)
     {
-        PhantomParent ph = InfoDataBase.freaturesBase.GetInfo(building.id).actionType==ActionTypes.BuildManyPointStructure?
+        PhantomParent ph = InfoDataBase.actionsBase.GetInfo(building.id).actionType==ActionTypes.BuildManyPointStructure?
         building.AddComponent<PhantomSpline>():building.AddComponent<PhantomObject>();
         ph.Init();
         return ph;

@@ -51,7 +51,7 @@ public class EditWorldController : MonoBehaviour
 		}
 		else
 		{
-			var obj = InfoDataBase.freaturesBase.GetInfo(id);
+			var obj = InfoDataBase.actionsBase.GetInfo(id);
 			switch(obj.actionType)
 			{
 				case ActionTypes.BuildStructure: 

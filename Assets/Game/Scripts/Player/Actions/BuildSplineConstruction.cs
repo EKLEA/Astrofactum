@@ -5,6 +5,7 @@ using NUnit.Framework.Constraints;
 using Unity.Burst.Intrinsics;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,21 +15,19 @@ public class BuildSplineConstruction : ActionWithWorld
     BuildingStructure buildingStructure;
 	SplineParent splineParent;
 	PhantomParent phantomObject; 
-    Port p1, p2;
-    Vector3 pos1, pos2;
     Quaternion q1,q2;
+    Port port,firstport;
     SplineType splineType=>SplineType.StraightAngle;
     string _id;
     public BuildSplineConstruction(string id)
 	{
-		
 	    _id=id;
-		newPhantom();
+		buildingInfo=InfoDataBase.buildingBase.GetInfo(_id);
+		NewPhantom();
 		canAction=true;
 	}    
-	void newPhantom()
+	void NewPhantom()
 	{
-	    buildingInfo=InfoDataBase.buildingBase.GetInfo(_id);
 		splineParent=BuildingFactory.Create(buildingInfo,currentPos,Quaternion.Euler(0,currentRot,0)) as SplineParent;
 		splineParent.resolution.GenerateMeshAlongSpline();
 		phantomObject=PhantomCreater.CreatePhantomObject(splineParent);
@@ -42,32 +41,31 @@ public class BuildSplineConstruction : ActionWithWorld
 		
 		ChangePos(hit.point,hit.collider);
 		//canAction=ValidateBuild(currentPos);
-		
+		port= hit.collider.GetComponent<Port>();
 		phantomObject.ChangeColor(canAction);
 		CheckPoint();
-		
 	}
 	public override void RightClick()
 	{
-		if(pointCount==1)
+		if (pointCount==1)
 		{
-		    MonoBehaviour.DestroyImmediate(phantomObject.gameObject);
-			phantomObject=null;
-			newPhantom();
+			pointCount=0;
+			splineParent.Reset();
 		}
-		else if(pointCount>1)
+		else if(pointCount==0)
 		{
+			
+			MonoBehaviour.DestroyImmediate(phantomObject.gameObject);
 		    ActionF();
 		}
-		else onActionEnded();
 		
 	}
 	public override void AddPoint()
 	{
         if(buildingStructure==null)
          {
-            if(hit.collider.transform.parent!=null && hit.collider.transform.parent.tag=="Structure")
-                buildingStructure=hit.collider.transform.parent.gameObject.GetComponent<BuildingStructure>();
+            if(hit.collider.transform.GetComponentInParent<BuildingStructure>()!=null && hit.collider.transform.GetComponentInParent<BuildingStructure>().gameObject.tag=="Structure")
+                buildingStructure=hit.collider.transform.GetComponentInParent<BuildingStructure>();
             else
             {
                 GameObject obj = new GameObject("BuildingStructure");
@@ -75,74 +73,101 @@ public class BuildSplineConstruction : ActionWithWorld
             }
         }
         
-        Port port = hit.collider.GetComponent<Port>();
+        
         if(pointCount==0)
         {
-            if(port!=null)
-            {
-                p1 =port;
-                p1.PortUpdateTo(splineParent);
-            }
-            pos1=currentPos;
-            q1=Quaternion.Euler(phantomObject.transform.rotation.x,currentRot,phantomObject.transform.rotation.z);
-            splineParent.FirstPointSpline((p1,pos1,q1));
+        	q1=Quaternion.Euler(Vector3.zero);
+            if(port==null)q1= Quaternion.Euler(0,currentRot,0);
+            var args = (port, currentPos, q1);
+            
+            if(port==null)
+				splineParent.SetFirstPointSpline(args);
+			else
+			{
+				if(port.portDir==PortDir.Out) splineParent.SetFirstPointSpline(args);
+				
+				else splineParent.SetSecondPointSpline(args);
+			}
+			
+			firstport=port;
+			
         }
         else if(pointCount==1)
         {
-            if(port!=null)
-            {
-                p2 =port;
-                p2.PortUpdateFrom(splineParent);
-            }
-            pos2=currentPos;
-            q2=Quaternion.Euler(phantomObject.transform.rotation.x,
-            q1.eulerAngles.y+(splineType==SplineType.StraightAngle? (int)(currentRot/45)*45:currentRot),
-            phantomObject.transform.rotation.z);
-            
-            splineParent.SecondPointSpline((p2,pos2,q1),splineType,SplineState.Active);
-            
-           
-            var newSplineParent=BuildingFactory.Create(buildingInfo,currentPos,q1) as SplineParent;
-            
-            newSplineParent.FirstPointSpline((p1,pos1,q1));
-            newSplineParent.SecondPointSpline((p2,pos2,q2),splineType,SplineState.Passive);
-            
-		    PhantomParent newphantomObject=PhantomCreater.CreatePhantomObject(newSplineParent);
-		    newphantomObject.transform.parent=buildingStructure.transform;
-		    buildingStructure.AddPoint(newphantomObject);
+        	q2=Quaternion.Euler(Vector3.zero);
+			if(port==null) q2 = Quaternion.Euler(0,splineType==SplineType.StraightAngle? (int)(currentRot/45)*45:currentRot,0);
+			var args = (port, currentPos, q2);
+			
+			if(firstport==null)
+			{
+			    if(port==null||port.portDir==PortDir.In)
+			    	splineParent.SetSecondPointSpline(args);
+			}
+			else
+			{
+				if(firstport.portDir==PortDir.Out)
+				{
+				    if(port==null||port.portDir==PortDir.In)
+				    	splineParent.SetSecondPointSpline(args);
+				}
+				else
+				{
+				    if(port==null|| port.portDir==PortDir.Out)
+				    	splineParent.SetFirstPointSpline(args);
+				}
+			}
+			
+			
+			splineParent.DrawSpline(splineType,SplineState.Passive);
+			buildingStructure.AddPoint(phantomObject);
         }
-        /*else
-        {
-			p1=p2;
-			p1.PortUpdateTo(splineParent);
-            if(port!=null)
-            {
-                p2 =port;
-                p2.PortUpdateFrom(splineParent);
-            }
-        }*/
+		else
+		{
+		    
+		}
         base.AddPoint();
         
 	}
 	
 	public void CheckPoint()
 	{
-	    if(pointCount==0)
-	    {
-	        phantomObject.transform.position=currentPos;
-		    phantomObject.transform.rotation=Quaternion.Euler(phantomObject.transform.rotation.x,currentRot,phantomObject.transform.rotation.z);
-		    
-	    }
-	    else if(pointCount>0)
-	    {
-	        splineParent.SecondPointSpline((p2,currentPos,Quaternion.Euler(phantomObject.transform.rotation.x,q1.eulerAngles.y+(splineType==SplineType.StraightAngle? (int)(currentRot/45)*45:currentRot),phantomObject.transform.rotation.z)),splineType,SplineState.Active);
-	    }
+		if (pointCount == 0)
+		{
+			phantomObject.transform.position = currentPos;
+			phantomObject.transform.rotation = Quaternion.Euler(0, currentRot, 0);
+		}
+		else if (pointCount > 0)
+		{
+			Quaternion rot=Quaternion.Euler(Vector3.zero);
+			if(port==null) rot = Quaternion.Euler(0,splineType==SplineType.StraightAngle? (int)(currentRot/45)*45:currentRot,0);
+
+			var args = (port, currentPos, rot);
+			
+			if(firstport==null)
+			{
+			    if(port==null||port.portDir==PortDir.In)
+			    	splineParent.SetSecondPointSpline(args);
+			}
+			else
+			{
+				if(firstport.portDir==PortDir.Out)
+				{
+				    if(port==null||port.portDir==PortDir.In)
+				    	splineParent.SetSecondPointSpline(args);
+				}
+				else
+				{
+				    if(port==null|| port.portDir==PortDir.Out)
+				    	splineParent.SetFirstPointSpline(args);
+				}
+			}
+			
+			splineParent.DrawSpline(splineType, SplineState.Active);
+		}
 	}
 	public override void ActionF()
 	{
-		buildingStructure.Init();
-		MonoBehaviour.DestroyImmediate(phantomObject.gameObject);
-		phantomObject=null;
+		buildingStructure?.Init();
 		base.ActionF();
 		
 	}
@@ -164,32 +189,16 @@ public class BuildSplineConstruction : ActionWithWorld
 	}
 	protected void ChangePos(Vector3 pos, Collider collider)
 	{
-		var amBuilding= collider.GetComponent<BuildingLogicBase>();
+		var amBuilding= collider.GetComponent<Building>();
 		var obj=collider.gameObject;
 		var bx = collider as BoxCollider;
 		if (amBuilding!=null)
 		{
-			var buildingLogic=InfoDataBase.buildingBase.GetInfo(amBuilding.id).prefab.GetComponent<BuildingLogicBase>();
-			var tempBuilding = buildingInfo.prefab.GetComponent<BuildingLogicBase>();
+			var buildingLogic=InfoDataBase.buildingBase.GetInfo(amBuilding.id).prefab.GetComponent<Building>();
 			if (buildingLogic is FoundationLogic)
 			{
 				currentPos=SnapToGrid(pos);
-				if(tempBuilding is FoundationLogic)
-				{
-					if(Math.Abs(pos.x-obj.transform.position.x)>=Math.Abs(bx.size.x/2-4)&&Math.Abs(pos.x-obj.transform.position.x)<=Math.Abs(bx.size.x/2)) 
-					{
-						Vector3 right = obj.transform.rotation * Vector3.right;
-						currentPos = obj.transform.position + bx.size.x * right * Mathf.Sign(pos.x - obj.transform.position.x);
-						currentRot=obj.transform.rotation.eulerAngles.y;
-					}
-					else if(Math.Abs(pos.z-obj.transform.position.z)>=Math.Abs(bx.size.z/2-4) &&Math.Abs(pos.z-obj.transform.position.z)<=Math.Abs(bx.size.z/2))
-					{
-						Vector3 forward = obj.transform.rotation * Vector3.forward;
-						currentPos = obj.transform.position + bx.size.z * forward * Mathf.Sign(pos.z - obj.transform.position.z);
-						currentRot=obj.transform.rotation.eulerAngles.y;	
-					}
-					
-				}
+				
 				
 				if(Math.Abs(pos.x-obj.transform.position.x)<=4&&Math.Abs(pos.x-obj.transform.position.x)>=0
 				&& Math.Abs(pos.z-obj.transform.position.z)<=4&&Math.Abs(pos.z-obj.transform.position.z)>=0)
@@ -201,8 +210,11 @@ public class BuildSplineConstruction : ActionWithWorld
 		}
 		else
 		{	
-			Port port=collider.GetComponent<Port>();
-			if(port!=null) currentPos=port.point.position;
+			if(port!=null&&firstport?.portDir!=port.portDir) 
+			{
+			    currentPos=port.point.position;
+			    currentRot=port.point.rotation.eulerAngles.y;
+			}
 			else currentPos=pos;
 		}
 	}

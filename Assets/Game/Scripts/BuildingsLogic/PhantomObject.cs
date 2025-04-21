@@ -12,8 +12,6 @@ public class PhantomObject : PhantomParent
 	List<Material[]> Materials=new();
 	public override void Init()
 	{
-		logic = GetComponent<BuildingLogicBase>();
-		if (logic!=null)logic.enabled = false;
 		meshRenderers.AddRange(GetComponentsInChildren<MeshRenderer>(true));
 		
 		foreach (MeshRenderer mr in meshRenderers)
@@ -29,6 +27,7 @@ public class PhantomObject : PhantomParent
 			mr.materials = mats;
 			Materials.Add(matsCopy);
 		}
+		base.Init();
 	}
 	public override void ChangeColor(bool canAction)
 	{
@@ -49,8 +48,7 @@ public class PhantomObject : PhantomParent
 		{
 			meshRenderers[i].materials=Materials[i];
 		}
-		logic.enabled=true;
 		this.gameObject.transform.parent=transform.parent.parent;
-		DestroyImmediate(this);
+		base.UnPhantom();
 	}
 }

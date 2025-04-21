@@ -1,10 +1,14 @@
 using UnityEngine;
 
-public class FreatureInfo : ScriptableObject
+public abstract class FreatureInfo : ScriptableObject
 {
 	public Sprite icon;
 	public string id;
 	public string description;
-	public ActionTypes actionType;
+	public FreatureType FreatureType;
 }
-
+public enum FreatureType
+{
+    Action,
+    item,
+}
