@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
   id: flat
-  disctiption: 
-  actionType: 2
-  minPoints: 2
+  description: 
+  FreatureType: 0
+  actionType: 4
   curveX:
     serializedVersion: 2
     m_Curve:

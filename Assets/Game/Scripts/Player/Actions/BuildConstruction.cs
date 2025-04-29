@@ -48,14 +48,19 @@ public class BuildConstruction : ActionWithWorld
 		base.AddPoint();
 		
 	}
-	public override void ActionF()
+	public override void ActionL()
 	{
 		buildingStructure.Init();
-		MonoBehaviour.DestroyImmediate(phantomObject.gameObject);
+		MonoBehaviour.DestroyImmediate(phantomObject.gameObject.gameObject);
 		phantomObject=null;
-		base.ActionF();
+		base.ActionL();
 		
 	}
+    public override void ActionR()
+    {
+		MonoBehaviour.DestroyImmediate(phantomObject.gameObject.gameObject);
+        base.ActionR();
+    }
 	public override void MouseWheelRotation(float Value)
 	{
 		currentRot=MathF.Round(Value*30+currentRot);

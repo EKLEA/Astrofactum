@@ -5,16 +5,14 @@ using UnityEngine;
 public interface IWorkWithItems
 {
     public bool CanAdd{get;}
+    public bool IsRemovedNow{get;set;}
     public bool IAmSetUped{get;}
-    public event Action<string> OnItemsCanAdded;
     public event Action<string> OnItemsCanRemoved;
     public List<Slot> inSlots{get;}
     public List<Slot> outSlots{get;}
     public SlotTransferArgs AddToBuilding(string id,int amount);
     public SlotTransferArgs RemoveFromBuilding(string id,int amount);
-    public void InvokeCanAdded(string id);
     public void InvokeCanRemoved(string id);
-    public void ResetAddEvent(){}
     public void ResetRemoveEvent(){}
     public void Ping(){}
 }

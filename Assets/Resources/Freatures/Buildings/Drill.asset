@@ -16,7 +16,7 @@ MonoBehaviour:
   id: Drill
   description: 
   FreatureType: 0
-  actionType: 0
+  actionType: 1
   prefab: {fileID: 7006561426078854917, guid: 5c3d00bed5caf9c40a410af8f2d0f8b2, type: 3}
   buildingType: 1
   tier: 1

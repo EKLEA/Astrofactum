@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum ActionTypes 
 {
+    BaseAction,
 	BuildStructure,
 	BuildManyPointStructure,
 	EditTerrain,
@@ -15,6 +16,7 @@ public static class BuildModeExtensions
     {
         return type switch
         {
+            //ActionTypes.BaseAction=>0,
             ActionTypes.BuildStructure => 1,
             ActionTypes.BuildManyPointStructure => 2,
             ActionTypes.EditTerrain => 2,

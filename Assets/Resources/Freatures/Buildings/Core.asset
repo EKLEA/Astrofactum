@@ -15,9 +15,9 @@ MonoBehaviour:
   icon: {fileID: 0}
   id: core
   description: 
-  actionType: 0
+  FreatureType: 0
+  actionType: 1
   prefab: {fileID: 9160772032888254118, guid: da2deb774a2ae2944ad3ae0c3b5e9404, type: 3}
-  phantomPrefab: {fileID: 9160772032888254118, guid: da2deb774a2ae2944ad3ae0c3b5e9404, type: 3}
   buildingType: 0
   tier: 0
   weight: 0

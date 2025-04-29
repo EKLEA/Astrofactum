@@ -15,9 +15,9 @@ MonoBehaviour:
   icon: {fileID: 0}
   id: foundation
   description: 
-  actionType: 0
+  FreatureType: 0
+  actionType: 1
   prefab: {fileID: 4471445265282206022, guid: 1b829c17e6d7d224f935740dc94ff115, type: 3}
-  phantomPrefab: {fileID: 4471445265282206022, guid: 1b829c17e6d7d224f935740dc94ff115, type: 3}
   buildingType: 5
   tier: 0
   weight: 0

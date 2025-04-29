@@ -25,4 +25,4 @@ public class PhantomParent : MonoBehaviour
 		}
     }
     public virtual void ChangeColor(bool canAction){}
-}
+}	

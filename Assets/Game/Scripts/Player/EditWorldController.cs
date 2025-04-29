@@ -6,6 +6,7 @@ using UnityEngine;
 public class EditWorldController : MonoBehaviour
 {
 	public static EditWorldController Instance;
+	//public BuildingInfoController BuildingInfoController;
 	Action currentLeftClickAction;
 	Action currentRightClickAction;
 	Action<float> currentMouseWheelRotAction;
@@ -43,11 +44,18 @@ public class EditWorldController : MonoBehaviour
 	ActionWithWorld action;
 	public void SetUpAction(string id)
 	{
-		
+		/*if(action!=null&&action is BaseAction)
+		{
+		    BuildingInfoController.ResetEvents();
+		    (action as BaseAction).Reset();
+		}
+		*/
 		if (id== null) 
 		{
 			action= new BaseAction();
-			action.SetUpAction(0);
+//			action.SetUpAction(ActionTypes.BaseAction);
+			//(action as BaseAction).OnUIOpen+=BuildingInfoController.Init;
+			//BuildingInfoController.OnUIClose+=(action as BaseAction).Reset;
 		}
 		else
 		{

@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class ActionWithWorld
 {
-	public event Action endOfAction;	public int minCount;
+	public event Action endOfAction;	
+	public int minCount;
 	public bool canAction;
 	protected Vector3 currentPos;
 	protected RaycastHit hit;
@@ -17,7 +18,8 @@ public class ActionWithWorld
 	{
 		pointCount++;
 	}
-	public virtual void ActionF(){ onActionEnded();}
+	public virtual void ActionL(){ onActionEnded();}
+	public virtual void ActionR(){ onActionEnded();}
 	public virtual void LeftClick()
 	{
 		if(canAction)
@@ -25,16 +27,14 @@ public class ActionWithWorld
 			AddPoint();
 			if(!Input.GetButton("hold")&&pointCount>=minCount)
 			{
-				
-				ActionF();
-				onActionEnded();
+				ActionL();
 			}
 		}
 	}
 	public virtual void RightClick()
 	{
-		if(pointCount>=minCount) ActionF();
-		else onActionEnded();
+		if(pointCount>=minCount) ActionL();
+		else ActionR();
 		
 	}
 	public virtual void SetUpAction(ActionTypes action)

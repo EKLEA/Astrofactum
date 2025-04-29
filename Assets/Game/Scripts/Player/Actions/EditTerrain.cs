@@ -50,7 +50,7 @@ public class EditTerrain : ActionWithWorld
 
 	HashSet<Vector3> uniquePoints = new HashSet<Vector3>();
 
-	public override void ActionF()
+	public override void ActionL()
 	{/*
 		for (int i = 0; i < points.Count - 1; i++)
 			AddPoints(points[i], points[i + 1]);

@@ -26,7 +26,8 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
 
     public float CurrentProcent => throw new NotImplementedException();
 
-    public bool CanAdd {get{return splineItems.Count == 0 || splineItemsQueue.Count>0&&splineItems.Last().value > (1f / countOfSegments);}}
+    public bool CanAdd {
+    get{return splineItems.Count == 0 || splineItemsQueue.Count>0&&splineItems.Last().value > (1f / (float)countOfSegments);}}
 
     [SerializeField] SplineItem prefab;
     
@@ -34,7 +35,6 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
     int countOfSegments;
     bool canMove;
     bool isWisible;
-    public event Action<string> OnItemsCanAdded;
     public event Action<string> OnItemsCanRemoved;
     event Action<float> OnMove;
     event Action OnVisualUpdate;
@@ -42,6 +42,7 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
     Queue<SplineItem> splineItemsQueue=new();
     public bool IAmSetUped {get{return _isAmSetUped;}}
     bool _isAmSetUped;
+    public bool IsRemovedNow{get;set;}
     public override void Init(string tid)
     {
         base.Init(tid);
@@ -49,12 +50,10 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
     }
     public void Ping()
     {
-        if(splineItems.Count==0) return;    
-        if(splineItems[0]!=null&&splineItems[0].value==splineItems[0].target&&splineItems[0].target==1) InvokeCanRemoved(splineItems[0].slot.Id);
-        if(splineItems.Last().value>(1/countOfSegments)||splineItemsQueue.Count!=0)
-        {
-            InvokeCanAdded(null);
-        }
+       
+        if(splineItems.Count == 0 || splineItemsQueue.Count>0&&splineItems.Last().value > (1f / (float)countOfSegments)) return;    
+        if(splineItems.Count > 0 && splineItems[0].value == 1) InvokeCanRemoved(splineItems[0].slot.Id);
+        
     }
     
     public void SetUpLogic()
@@ -74,22 +73,35 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
         _isWork = true;
         canMove = true;
         isWisible=true;
+        IsRemovedNow=false;
         Ping();
+    }
+    public override void SetUpInPort(Port inPort)
+    {
+        base.SetUpInPort(inPort);
+        LogicInPort[0].toBuilding=this;
+        LogicInPort[0].PortUpdate();
+    }
+    public override void SetUpOutPort(Port outPort)
+    {
+        base.SetUpOutPort(outPort);
+        LogicOutPort[0].fromBuilding=this;
+        LogicOutPort[0].PortUpdate();
     }
     void Update()
     {
         OnVisualUpdate?.Invoke();
+        //Debug.Log(LogicInPort[0].transform.parent.name+"     "+LogicInPort[0]+"         "+LogicInPort[0]._toBuilding+"      "+LogicInPort[0]._fromBuilding);
     }
     public void Tick(float deltaTime)
     {
        
-       canMove=Move(deltaTime);
+       canMove=Move(deltaTime/countOfSegments*speed);
     }
     bool Move(float deltaTime)
     {
         OnMove?.Invoke(deltaTime);
 
-        
         if (splineItems.Count > 0 && splineItems[0].value == 1)
         {
             InvokeCanRemoved(splineItems[0].slot.Id);
@@ -98,20 +110,11 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
         
         if (splineItemsQueue.Count == 0)
             return false;
-
-       
-        if (splineItems.Count == 0 || splineItemsQueue.Count>0&&splineItems.Last().value > (1f / countOfSegments))
-        {
-            InvokeCanAdded(null);
-            return true;
-        }
-
         return false;
     }
         
     public SlotTransferArgs AddToBuilding(string id, int amount)
     {
-        if(amount==0) return null;
         int max=InfoDataBase.itemInfoBase.GetInfo(id).maxCountInPack;
         int res=0;
         if(splineItemsQueue.Count>0)
@@ -140,11 +143,10 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
 
     public SlotTransferArgs RemoveFromBuilding(string id, int amount)
     {
-        int max=InfoDataBase.itemInfoBase.GetInfo(id).maxCountInPack;
         int res=0;
-        if(splineItems.Count>0&&splineItems[0].slot.Id==id&&splineItems[0].value>=1)
+        if(splineItems.Count>0&&splineItems[0].slot.Id==id)
         {
-           res=splineItems[0].slot.RemoveItem(amount);
+            res=splineItems[0].slot.RemoveItem(amount);
             if(splineItems[0].slot.Count==0)
             {
                 splineItems[0].slot=null;
@@ -161,23 +163,24 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
         }
         return new SlotTransferArgs(id,res);
     }
-    
-
-    public void InvokeCanAdded(string id)
+    public override bool ValidateSpline()
     {
-        OnItemsCanAdded?.Invoke(id);
-    }
+        if (!CheckSplineCurvature(180,countOfSegments))
+        {
+            Debug.Log("Слишком резкие повороты");
+            return false;
+        }
 
+        if (CheckSelfIntersections())
+        {
+            Debug.Log("Обнаружены самопересечения");
+            return false;
+        }
+
+        return true;
+    }
     public void InvokeCanRemoved(string id)
     {
-        OnItemsCanRemoved?.Invoke(id);
-    }
-    public override void UpdateInPort(Port port)
-    {
-        port.PortUpdateTo(this);
-    }
-    public override void UpdateOutPort(Port port)
-    {
-        port.PortUpdateFrom(this);
+       OnItemsCanRemoved?.Invoke(id);
     }
 }

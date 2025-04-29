@@ -101,6 +101,8 @@ MonoBehaviour:
   point: {fileID: 4557386196153496121}
   _portDir: 1
   _portType: 0
+  inbelt: {fileID: 0}
+  Outbelt: {fileID: 0}
 --- !u!1 &7006561426078854917
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +116,7 @@ GameObject:
   - component: {fileID: 2473231407622192098}
   m_Layer: 0
   m_Name: Drill
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -170,7 +172,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 15, y: 30, z: 15}
+  m_Size: {x: 14, y: 30, z: 14}
   m_Center: {x: 0, y: 15, z: 0}
 --- !u!1001 &4151948807960352993
 PrefabInstance:

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using SplineMeshTools.Colliders;
 using SplineMeshTools.Core;
 using Unity.Mathematics;
@@ -10,11 +11,11 @@ public class SplineParent : Building,IHavePorts
 {
    
     protected Spline spline;
-    [SerializeField] SplineInstantiate splineInstantiate;
-    [SerializeField] SplineContainer splineContainer;
+    [SerializeField] protected SplineInstantiate splineInstantiate;
+    [SerializeField] protected SplineContainer splineContainer;
     public SplineMeshResolution resolution;
-    [SerializeField] SplineBoxColliderGenerator splineBoxColliderGenerator;
-    
+    [SerializeField] protected SplineBoxColliderGenerator splineBoxColliderGenerator;
+    public float maxLenght;
     [SerializeField] protected Port[] _inPortsGM;
     public Port[] OutPorts => LogicOutPort;
 
@@ -23,62 +24,58 @@ public class SplineParent : Building,IHavePorts
     [SerializeField] protected Port[]_outPortsGM;
     protected Port[] LogicInPort;
     protected Port[] LogicOutPort;
-
     public override void Init(string tid)
     {
         base.Init(tid);
         spline=splineContainer[0];
         SetUpToVisual(true );
         splineBoxColliderGenerator.GenerateAndAssignMesh();
-        LogicInPort=_inPortsGM;
-        LogicOutPort=_outPortsGM;
+        
+        
+        SetUpInPort(null);
+        SetUpOutPort(null);
         
     }
-    public void SetFirstPointSpline((Port port, Vector3 pos, quaternion rot) args)
+    public float GetLenght()
     {
-        Vector3 localPos;
-        Quaternion rot=Quaternion.Euler(Vector3.zero);
-        if (args.port != null)
+        return spline.GetLength();
+    }
+    public void SetFirstPointSpline(Vector3 pos, Quaternion rot)
+    {   
+        Vector3 localPos = splineContainer.transform.InverseTransformPoint(pos);
+        Quaternion localRot = Quaternion.Inverse(splineContainer.transform.rotation) * rot;
+        
+        spline[0] = new BezierKnot(localPos, Vector3.zero, Vector3.zero, localRot);
+    }
+
+    public void SetSecondPointSpline(Vector3 pos, Quaternion rot)
+    {
+        Vector3 localPos = splineContainer.transform.InverseTransformPoint(pos);
+        Quaternion localRot = Quaternion.Inverse(splineContainer.transform.rotation) * rot;
+        
+        spline[1] = new BezierKnot(localPos, Vector3.zero, Vector3.zero, localRot);
+    }
+    public virtual void SetUpInPort(Port inPort)
+    {
+        if(inPort==null)
         {
-            _inPortsGM[0].gameObject.SetActive(false);
-            LogicInPort=new Port[]{args.port};
-            localPos = splineContainer.transform.InverseTransformPoint(args.port.point.position);
-        }
-        else
-        {
-            localPos = splineContainer.transform.InverseTransformPoint(args.pos);
-            rot = args.rot;
             LogicInPort=_inPortsGM;
-            _inPortsGM[0].transform.localPosition = new Vector3(spline.EvaluatePosition(0f).x, 
-                                                    _inPortsGM[0].transform.localPosition.y, 
-                                                    spline.EvaluatePosition(0f).z);
-        }
-        
-        UpdateInPort(LogicInPort[0]);
-        spline[0] = new BezierKnot(localPos,Vector3.zero,Vector3.zero,rot);
-       
-    }
-   public void SetSecondPointSpline((Port port, Vector3 pos, Quaternion rot) args)
-    {
-        Vector3 localPos;
-        Quaternion rot=Quaternion.Euler(Vector3.zero);
-        if (args.port != null)
-        {
-            _outPortsGM[0].gameObject.SetActive(false);
-            LogicOutPort=new Port[]{args.port};
-            UpdateOutPort(args.port);
-            localPos = splineContainer.transform.InverseTransformPoint(args.port.point.position);
         }
         else
         {
-            localPos = splineContainer.transform.InverseTransformPoint(args.pos);
-            rot = args.rot;
-            LogicInPort=_outPortsGM;
+            LogicInPort = new Port[]{inPort};
+            _inPortsGM[0].gameObject.SetActive(false);
         }
-        
-        UpdateOutPort(LogicOutPort[0]);
-        spline[1] = new BezierKnot(localPos,Vector3.zero,Vector3.zero,rot);
-        
+    }
+    public virtual void SetUpOutPort(Port outPort)
+    {
+        if(outPort==null) 
+            LogicOutPort=_outPortsGM;
+        else 
+        {
+            LogicOutPort = new Port[]{outPort};
+            _outPortsGM[0].gameObject.SetActive(false);
+        }
     }
     public void UpdateTangents(SplineType type)
     {
@@ -128,41 +125,130 @@ public class SplineParent : Building,IHavePorts
     public virtual void DrawSpline(SplineType type, SplineState state)
     {
         UpdateTangents(type);
-
+        
         _outPortsGM[0].transform.localPosition = new Vector3(spline.EvaluatePosition(1f).x, _outPortsGM[0].transform.localPosition.y, spline.EvaluatePosition(1f).z);
         
         resolution.meshResolution[0] = state.GetResolution(spline);
-        _inPortsGM[0].transform.rotation=spline[0].Rotation;
         
-        _inPortsGM[0].transform.rotation = splineContainer.transform.rotation * spline[0].Rotation;
-    
+        _inPortsGM[0].transform.rotation =splineContainer.transform.rotation*spline[0].Rotation;
+
     // Поворачиваем выходной порт согласно rotation последней точки Безье
-        _outPortsGM[0].transform.rotation = splineContainer.transform.rotation * spline[spline.Count - 1].Rotation;
-        
+        _outPortsGM[0].transform.rotation =splineContainer.transform.rotation*spline[spline.Count - 1].Rotation;
         resolution.GenerateMeshAlongSpline();
         splineBoxColliderGenerator.GenerateAndAssignMesh();
     }
     public void Reset()
     {
+        
+        
+        LogicInPort=_inPortsGM;
+        LogicOutPort=_outPortsGM;
         _inPortsGM[0].gameObject.SetActive(true);
         _outPortsGM[0].gameObject.SetActive(true);
+        
         spline[0] = new BezierKnot(Vector3.zero,Vector3.zero,Vector3.zero);
         spline[1] = new BezierKnot(Vector3.forward,Vector3.zero,Vector3.zero);
         
         resolution.GenerateMeshAlongSpline();
         splineBoxColliderGenerator.GenerateAndAssignMesh();
     }
+    
+    public Collider[] GetAllCollisionsAlongSpline(float checkStep = 1.0f, float checkRadius = 0.3f)
+    {
+        List<Collider> result = new List<Collider>();
+        
+        if (spline == null || splineContainer == null || spline.GetLength() <= 0)
+            return result.ToArray();
+
+        int steps = Mathf.Max(1, Mathf.CeilToInt(spline.GetLength() / checkStep));
+        
+        for (int i = 0; i <= steps; i++)
+        {
+            Vector3 point = splineContainer.EvaluatePosition(i / (float)steps);
+            Collider[] colliders = Physics.OverlapSphere(point, checkRadius);
+            
+            foreach (var collider in colliders)
+            {
+                if (collider.transform != this.transform && 
+                    !collider.transform.IsChildOf(this.transform) &&
+                    !result.Contains(collider))
+                {
+                    result.Add(collider);
+                }
+            }
+        }
+        
+        return result.ToArray();
+    }
+    public virtual bool ValidateSpline()
+    {
+       return false;
+    }
+    public bool CheckSelfIntersections(float checkStep = 0.05f)
+    {
+        List<Vector3> points = new List<Vector3>();
+        
+        for (float t = 0; t <= 1f; t += checkStep)
+        {
+            points.Add(splineContainer.EvaluatePosition(t));
+        }
+
+        for (int i = 0; i < points.Count - 3; i++)
+        {
+            for (int j = i + 2; j < points.Count - 1; j++)
+            {
+                if (LineSegmentsIntersect(
+                    points[i], points[i+1],
+                    points[j], points[j+1]))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public bool CheckSplineCurvature(float maxAngle,int segments)
+    {
+        float step = 1f / segments;
+
+        for (int i = 0; i < segments - 1; i++)
+        {
+            float t1 = i * step;
+            float t2 = (i + 1) * step;
+
+            Vector3 dir1 = splineContainer.EvaluateTangent(t1);
+            dir1.Normalize(); 
+            
+            Vector3 dir2 = splineContainer.EvaluateTangent(t2);
+            dir2.Normalize();
+
+            float angle = Vector3.Angle(dir1, dir2);
+            
+            if (angle > maxAngle)
+                return false;
+        }
+        return true;
+    }
+    protected bool LineSegmentsIntersect(Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4)
+    {
+        Vector3 a = p2 - p1;
+        Vector3 b = p3 - p4;
+        Vector3 c = p1 - p3;
+
+        float alphaNumerator = Vector3.Dot(b, c);
+        float denominator = Vector3.Dot(a, b);
+
+        if (denominator == 0) 
+            return false;
+
+        float alpha = alphaNumerator / denominator;
+        float beta = Vector3.Dot(a, c) / denominator;
+
+        return (alpha > 0 && alpha < 1) && (beta > 0 && beta < 1);
+    }
     public virtual void SetUpToVisual(bool b)
     {
         splineInstantiate.enabled = b;
-    }
-    public virtual void UpdateOutPort(Port port)
-    {
-       //
-    }
-    public virtual void UpdateInPort(Port port)
-    {
-       //
     }
 }
 public static class SplineExtensons

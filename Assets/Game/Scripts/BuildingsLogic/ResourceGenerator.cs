@@ -32,6 +32,10 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     public bool CanAdd => throw new NotImplementedException();
 
     public bool IAmSetUped {get{return _isAmSetUped;}}
+
+    public bool IsRemovedNow {get{return _isRemovedNow;}set{_isRemovedNow = value;}}
+    bool _isRemovedNow;
+
     bool _isAmSetUped;
 
     private List<Slot> _outSlots=new();
@@ -40,30 +44,22 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     public override void Init(string id)
     {
         base.Init(id);
-        _outPorts[0].PortUpdateFrom(this);
+        
         SetUpReciepe(null);
        
     }
     public void SetUpLogic()
     {
         TickManager.Instance.Subscribe(this);
+        _outPorts[0].fromBuilding=this;
+        _outPorts[0].PortUpdate();
         _isAmSetUped=true;
-    }
-    
-    public SlotTransferArgs AddToBuilding(string id, int amount)
-    {
-        return null;
     }
 
     public SlotTransferArgs RemoveFromBuilding(string id, int amount)
     {
-       var removedItems =GeneratorSlot.RemoveItem(amount);
+        var removedItems =GeneratorSlot.RemoveItem(amount);
         return new SlotTransferArgs(id, removedItems);
-    }
-
-    public void InvokeCanAdded(string id)
-    {
-        //
     }
 
     public void InvokeCanRemoved(string id)
@@ -99,4 +95,8 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     public void ResetAddEvent(){OnItemsCanAdded=null;}
     public void ResetRemoveEvent(){OnItemsCanRemoved=null;}
 
+    public SlotTransferArgs AddToBuilding(string id, int amount)
+    {
+        throw new NotImplementedException();
+    }
 }
