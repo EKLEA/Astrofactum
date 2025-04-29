@@ -43,7 +43,7 @@ public class BuildSplineConstruction : ActionWithWorld
 		crossColliders=splineParent.GetAllCollisionsAlongSpline();
 		canAction=ValidateBuild(currentPos);
 		port= hit.collider.GetComponent<Port>();
-		phantomObject.ChangeColor(canAction);
+		phantomObject?.ChangeColor(canAction);
 		CheckPoint();
 	}
 	public override void RightClick()
@@ -53,11 +53,10 @@ public class BuildSplineConstruction : ActionWithWorld
 			pointCount=0;
 			firstport=null;
 			splineParent.Reset();
-		}
-		else if(pointCount==0)
-		{
 			
-			MonoBehaviour.DestroyImmediate(phantomObject.gameObject);
+		}
+		else 
+		{
 		    ActionL();
 		}
 		
@@ -111,25 +110,26 @@ public class BuildSplineConstruction : ActionWithWorld
 			    secondport=port;
 			    splineParent.DrawSpline(splineType,SplineState.Passive);
 			    buildingStructure.AddPoint(phantomObject);
-			    prevSpline=splineParent;
-			    NewPhantom();
-			    if(firstport==null)
-			    {
-			        firstport=prevSpline.OutPorts[0];
-			    }
-			    else
-			    {
-			        if(firstport.portDir==PortDir.Out)
-			        {
-			            firstport=prevSpline.OutPorts[0];
-			            splineParent.SetUpInPort(firstport);
-			        }
-			        else
-			        {
-			            firstport=prevSpline.InPorts[0];
-			        	splineParent.SetUpOutPort(firstport);
-			        }
-			    }
+				prevSpline=splineParent;
+				NewPhantom();
+				if(secondport!=null) ActionL();
+				if(firstport==null)
+				{
+					firstport=prevSpline.OutPorts[0];
+				}
+				else
+				{
+					if(firstport.portDir==PortDir.Out)
+					{
+						firstport=prevSpline.OutPorts[0];
+						splineParent.SetUpInPort(firstport);
+					}
+					else
+					{
+						firstport=prevSpline.InPorts[0];
+						splineParent.SetUpOutPort(firstport);
+					}
+				}
 			}
 			
         }
@@ -156,7 +156,13 @@ public class BuildSplineConstruction : ActionWithWorld
 	public override void ActionL()
 	{
 		if(phantomObject!=null) MonoBehaviour.DestroyImmediate(phantomObject.gameObject);
-		buildingStructure?.Init();
+		phantomObject=null;
+		if(buildingStructure._buildings.Count==0)
+		{
+			MonoBehaviour.DestroyImmediate(buildingStructure.gameObject);
+			buildingStructure=null;
+		}
+		if(buildingStructure!=null) buildingStructure.Init();
 		base.ActionL();
 		
 	}

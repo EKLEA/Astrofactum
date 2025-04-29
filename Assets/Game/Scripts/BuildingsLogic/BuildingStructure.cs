@@ -24,7 +24,7 @@ public class BuildingStructure : MonoBehaviour, IAmSctructure
 	public event Action endOfColItems;
 	private int _currentDrones;
 	List<Slot> _currentItemsToBuild;
-	List<PhantomParent> _buildings = new();
+	public List<PhantomParent> _buildings = new();
 	public void Init()
 	{
 		gameObject.layer=LayerMask.NameToLayer("Phantom");
