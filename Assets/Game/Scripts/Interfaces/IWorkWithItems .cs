@@ -7,14 +7,11 @@ public interface IWorkWithItems
     public bool CanAdd{get;}
     public bool IsRemovedNow{get;set;}
     public bool IAmSetUped{get;}
-    public event Action<string> OnItemsCanRemoved;
     public List<Slot> inSlots{get;}
     public List<Slot> outSlots{get;}
     public SlotTransferArgs AddToBuilding(string id,int amount);
-    public SlotTransferArgs RemoveFromBuilding(string id,int amount);
-    public void InvokeCanRemoved(string id);
-    public void ResetRemoveEvent(){}
-    public void Ping(){}
+    public virtual void Ping(){}
+    public bool CanAddM(string id){return true;}
 }
 public class SlotTransferArgs:EventArgs
 {

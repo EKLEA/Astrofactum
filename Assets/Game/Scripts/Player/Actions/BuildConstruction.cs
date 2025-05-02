@@ -12,16 +12,20 @@ public class BuildConstruction : ActionWithWorld
 	protected BuildingInfo buildingInfo;
 	protected BuildingStructure buildingStructure;
 	protected PhantomParent phantomObject;
-	
+	protected BoxCollider boxCollider;
 	
 	public BuildConstruction(string id)
 	{
 		buildingInfo=InfoDataBase.buildingBase.GetInfo(id);
 		phantomObject=PhantomCreater.CreatePhantomObject(BuildingFactory.Create(buildingInfo,currentPos,Quaternion.Euler(0,currentRot,0)));
+		boxCollider=phantomObject.GetComponent<BoxCollider>();
 	}
 	public override void UpdateFunc()
 	{
-		phantomObject.gameObject.layer=LayerMask.NameToLayer("Ignore Raycast");
+		foreach (var s in phantomObject.transform.GetComponentsInChildren<Transform>())
+		{
+		    s.gameObject.layer=LayerMask.NameToLayer("Ignore Raycast");
+		}
 		ChangePos(hit.point,hit.collider);
 		canAction=ValidateBuild(currentPos);
 		phantomObject.ChangeColor(canAction);

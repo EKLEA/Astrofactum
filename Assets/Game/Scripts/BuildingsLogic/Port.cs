@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Port : MonoBehaviour
 {
@@ -13,44 +14,58 @@ public class Port : MonoBehaviour
 	
 	public IWorkWithItems  fromBuilding;
 	public IWorkWithItems  toBuilding;
-	
-	public BeltSpline inbelt;
-	public BeltSpline Outbelt;
-	
-	public void PortUpdate()
+	public Action<Port> onItemRemovedFromSlot;
+	public Slot transferSlot
 	{
-		
-		fromBuilding?.ResetRemoveEvent();
-	    if(fromBuilding!=null) fromBuilding.OnItemsCanRemoved+=GetItemFromBuilding;
+	    get {return _slot;}
+	    set
+	    {
+	    	if(value!=null&& _slot==null)
+	    	{
+	    	    _slot = value;
+	    	    GetItemFromBuilding();
+	    	}
+	    }
 	}
+	Slot _slot;
 	public void Ping()
 	{
-		fromBuilding?.Ping();
-	    toBuilding?.Ping();
+		GetItemFromBuilding();
 	}
-	public void GetItemFromBuilding(string id)
-	{
-	
+	public void GetItemFromBuilding()
+	{	
 		if (fromBuilding == null || toBuilding == null)
 			return;
 		if(fromBuilding.IAmSetUped==false||toBuilding.IAmSetUped==false) return;
-		
-		if(!toBuilding.CanAdd) return;
+		if(!toBuilding.CanAdd) return;	
 		if(fromBuilding.IsRemovedNow)  return;
-		
+		if(_slot==null) return;
 		else
 		{
-			SlotTransferArgs transferSlot;
-			int max = InfoDataBase.itemInfoBase.GetInfo(id).maxCountInPack;
-			transferSlot = fromBuilding.RemoveFromBuilding(id, max);
+			if(!toBuilding.CanAddM(_slot.Id)) return;
+			
 			fromBuilding.IsRemovedNow=true;
-			toBuilding.AddToBuilding(transferSlot.Id, transferSlot.Amount);
+			var t= _slot.RemoveItem(_slot.MaxInPack);
+			if(t==0)
+			{
+				
+			    fromBuilding.IsRemovedNow=false;
+			    return;
+			}
+			
+			toBuilding.AddToBuilding(_slot.Id, t);
+			if(_slot.Count==0)
+			{
+				onItemRemovedFromSlot?.Invoke(this);
+				_slot=null;
+			}
+		
 			fromBuilding.IsRemovedNow=false;
 		}
-		
 	}
-	
+		
 }
+	
 public enum PortType
 {
 	solid,

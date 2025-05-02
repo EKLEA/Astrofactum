@@ -17,13 +17,13 @@ public class SplineParent : Building,IHavePorts
     [SerializeField] protected SplineBoxColliderGenerator splineBoxColliderGenerator;
     public float maxLenght;
     [SerializeField] protected Port[] _inPortsGM;
-    public Port[] OutPorts => LogicOutPort;
+    public Port[] OutPorts => new Port[] {LogicOutPort};
 
-    public Port[] InPorts => LogicInPort;
+    public Port[] InPorts => new Port[] {LogicInPort};
 
     [SerializeField] protected Port[]_outPortsGM;
-    protected Port[] LogicInPort;
-    protected Port[] LogicOutPort;
+    protected Port LogicInPort;
+    protected Port LogicOutPort;
     public override void Init(string tid)
     {
         base.Init(tid);
@@ -59,21 +59,24 @@ public class SplineParent : Building,IHavePorts
     {
         if(inPort==null)
         {
-            LogicInPort=_inPortsGM;
+            LogicInPort=_inPortsGM[0];
         }
         else
         {
-            LogicInPort = new Port[]{inPort};
+            
+            LogicInPort = inPort;
+            
             _inPortsGM[0].gameObject.SetActive(false);
         }
     }
     public virtual void SetUpOutPort(Port outPort)
     {
         if(outPort==null) 
-            LogicOutPort=_outPortsGM;
+            LogicOutPort=_outPortsGM[0];
         else 
         {
-            LogicOutPort = new Port[]{outPort};
+            LogicOutPort = outPort;
+            Debug.Log(_outPortsGM[0]);
             _outPortsGM[0].gameObject.SetActive(false);
         }
     }
@@ -127,6 +130,7 @@ public class SplineParent : Building,IHavePorts
         UpdateTangents(type);
         
         _outPortsGM[0].transform.localPosition = new Vector3(spline.EvaluatePosition(1f).x, _outPortsGM[0].transform.localPosition.y, spline.EvaluatePosition(1f).z);
+        _inPortsGM[0].transform.localPosition = new Vector3(spline.EvaluatePosition(0f).x, _inPortsGM[0].transform.localPosition.y, spline.EvaluatePosition(0f).z);
         
         resolution.meshResolution[0] = state.GetResolution(spline);
         
@@ -141,8 +145,8 @@ public class SplineParent : Building,IHavePorts
     {
         
         
-        LogicInPort=_inPortsGM;
-        LogicOutPort=_outPortsGM;
+        LogicInPort=_inPortsGM[0];
+        LogicOutPort=_outPortsGM[0];
         _inPortsGM[0].gameObject.SetActive(true);
         _outPortsGM[0].gameObject.SetActive(true);
         

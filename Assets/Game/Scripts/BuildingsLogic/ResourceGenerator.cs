@@ -17,9 +17,6 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
 
     public Port[] OutPorts => _outPorts;
     [SerializeField] Port[] _outPorts;
-
-    public event Action<string> OnItemsCanAdded;
-    public event Action<string> OnItemsCanRemoved;
     private Slot GeneratorSlot;
     public bool IsProcessed {get{return _isProcessed;}}
 
@@ -37,6 +34,7 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     bool _isRemovedNow;
 
     bool _isAmSetUped;
+    int max;
 
     private List<Slot> _outSlots=new();
     protected float _currentTime;
@@ -46,28 +44,15 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
         base.Init(id);
         
         SetUpReciepe(null);
+        max=InfoDataBase.itemInfoBase.GetInfo(GeneratorSlot.Id).maxCountInPack;
        
     }
     public void SetUpLogic()
     {
         TickManager.Instance.Subscribe(this);
         _outPorts[0].fromBuilding=this;
-        _outPorts[0].PortUpdate();
         _isAmSetUped=true;
     }
-
-    public SlotTransferArgs RemoveFromBuilding(string id, int amount)
-    {
-        var removedItems =GeneratorSlot.RemoveItem(amount);
-        return new SlotTransferArgs(id, removedItems);
-    }
-
-    public void InvokeCanRemoved(string id)
-    {
-       OnItemsCanRemoved?.Invoke(id);
-    }
-
-   
     public void SetUpReciepe(string id)
     {
         recipe=InfoDataBase.recipeBase["generate_iron_ore"];
@@ -87,13 +72,13 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
             {
                 GeneratorSlot.AddItem(recipe.Outputs[0].amount);
                 _currentTime=0;
-                InvokeCanRemoved(GeneratorSlot.Id);
+                if(_outPorts[0].transferSlot==null) _outPorts[0].transferSlot=new Slot(GeneratorSlot.Id,999,GeneratorSlot.RemoveItem(max));
+                else _outPorts[0].transferSlot.AddItem(GeneratorSlot.RemoveItem(max));
+                
             }
             else _currentTime+=deltaTime;
         }
     }
-    public void ResetAddEvent(){OnItemsCanAdded=null;}
-    public void ResetRemoveEvent(){OnItemsCanRemoved=null;}
 
     public SlotTransferArgs AddToBuilding(string id, int amount)
     {

@@ -18,7 +18,7 @@ public class ActionWithWorld
 	{
 		pointCount++;
 	}
-	public virtual void ActionL(){ onActionEnded(); Debug.Log("sss");}
+	public virtual void ActionL(){ onActionEnded(); }
 	public virtual void ActionR(){ onActionEnded();}
 	public virtual void LeftClick()
 	{

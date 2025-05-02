@@ -14,6 +14,7 @@ public class BuildingGrid : UIController
         Dictionary<string,BuildingInfo> infos = new Dictionary<string,BuildingInfo>(InfoDataBase.buildingBase.GetBase()
         .Where(f=>f.Value.buildingType==(BuildingsTypes)Enum.Parse(typeof(BuildingsTypes), type))
 		.ToDictionary(f => f.Key, f => f.Value as BuildingInfo));
+		
         foreach (var en in infos)
         {
             ActionButton s =Instantiate(UIManager.Instance.actionButtonExample,transform);

@@ -20,22 +20,22 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
     {
         get
         {
-            return splineItems.Where(f=>f.value>=1).Select(f=>f.slot).ToList();
+            return new List<Slot>(){OutTransferSlot};
         }
     }
 
     public float CurrentProcent => throw new NotImplementedException();
 
     public bool CanAdd {
-    get{return splineItems.Count == 0 || splineItemsQueue.Count>0&&splineItems.Last().value > (1f / (float)countOfSegments);}}
+    get{return (splineItems.Count == 0 || splineItemsQueue.Count>0&&splineItems.Last().value > (1f / (float)countOfSegments))&&_isAmSetUped;}}
 
     [SerializeField] SplineItem prefab;
     
+    Slot OutTransferSlot;
     
     int countOfSegments;
     bool canMove;
     bool isWisible;
-    public event Action<string> OnItemsCanRemoved;
     event Action<float> OnMove;
     event Action OnVisualUpdate;
     List<SplineItem> splineItems=new();
@@ -48,14 +48,6 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
         base.Init(tid);
         _isWork = false;
     }
-    public void Ping()
-    {
-       
-        if(splineItems.Count == 0 || splineItemsQueue.Count>0&&splineItems.Last().value > (1f / (float)countOfSegments)) return;    
-        if(splineItems.Count > 0 && splineItems[0].value == 1) InvokeCanRemoved(splineItems[0].slot.Id);
-        
-    }
-    
     public void SetUpLogic()
     {
         TickManager.Instance.Subscribe(this);
@@ -74,19 +66,26 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
         canMove = true;
         isWisible=true;
         IsRemovedNow=false;
-        Ping();
+        //Ping();
+    }
+    public void Ping()
+    {
+        LogicInPort.Ping();
+        LogicOutPort.Ping();
     }
     public override void SetUpInPort(Port inPort)
     {
         base.SetUpInPort(inPort);
-        LogicInPort[0].toBuilding=this;
-        LogicInPort[0].PortUpdate();
+        LogicInPort.toBuilding=this;
+        
     }
     public override void SetUpOutPort(Port outPort)
     {
+        if(LogicOutPort!=null)LogicOutPort.onItemRemovedFromSlot=null;
         base.SetUpOutPort(outPort);
-        LogicOutPort[0].fromBuilding=this;
-        LogicOutPort[0].PortUpdate();
+        LogicOutPort.fromBuilding=this;
+        LogicOutPort.onItemRemovedFromSlot+=RemoveItem;
+        
     }
     void Update()
     {
@@ -101,10 +100,12 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
     bool Move(float deltaTime)
     {
         OnMove?.Invoke(deltaTime);
-
+        LogicOutPort.Ping();
+        LogicInPort.Ping();
         if (splineItems.Count > 0 && splineItems[0].value == 1)
         {
-            InvokeCanRemoved(splineItems[0].slot.Id);
+            OutTransferSlot=splineItems[0].slot;
+            LogicOutPort.transferSlot=OutTransferSlot;
         }
 
         
@@ -141,12 +142,10 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
        return new SlotTransferArgs(id,res);
     }
 
-    public SlotTransferArgs RemoveFromBuilding(string id, int amount)
+    public void RemoveItem(Port port)
     {
-        int res=0;
-        if(splineItems.Count>0&&splineItems[0].slot.Id==id)
+        if(splineItems.Count>0&&OutTransferSlot!=null)
         {
-            res=splineItems[0].slot.RemoveItem(amount);
             if(splineItems[0].slot.Count==0)
             {
                 splineItems[0].slot=null;
@@ -161,7 +160,6 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
                 }
             }
         }
-        return new SlotTransferArgs(id,res);
     }
     public override bool ValidateSpline()
     {
@@ -178,9 +176,5 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
         }
 
         return true;
-    }
-    public void InvokeCanRemoved(string id)
-    {
-       OnItemsCanRemoved?.Invoke(id);
     }
 }

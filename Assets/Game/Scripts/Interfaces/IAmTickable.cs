@@ -10,7 +10,7 @@ public interface IAmTickable
 	}    
 	public bool IsProcessed{get;}
 	public float CurrentProcent{get;}
-    public void Tick(float deltaTime)
+    public virtual void Tick(float deltaTime)
     {
     
     }

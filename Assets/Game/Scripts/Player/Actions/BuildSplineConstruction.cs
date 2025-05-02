@@ -90,7 +90,11 @@ public class BuildSplineConstruction : ActionWithWorld
             	    splineParent.SetSecondPointSpline(currentPos,Quaternion.Euler(0,currentRot,0));
             	}
             }
-            else splineParent.SetFirstPointSpline(currentPos,Quaternion.Euler(0,currentRot,0));
+            else
+            {
+				splineParent.SetFirstPointSpline(currentPos,Quaternion.Euler(0,currentRot,0));
+            }
+            
 			firstport=port;
 			
         }
@@ -106,8 +110,8 @@ public class BuildSplineConstruction : ActionWithWorld
 			    {
 			        if(firstport!=null&&firstport.portDir==PortDir.Out) splineParent.SetUpOutPort(port);
 			    	else splineParent.SetUpInPort(port);
+			    	secondport=port;
 			    }
-			    secondport=port;
 			    splineParent.DrawSpline(splineType,SplineState.Passive);
 			    buildingStructure.AddPoint(phantomObject);
 				prevSpline=splineParent;
@@ -155,16 +159,24 @@ public class BuildSplineConstruction : ActionWithWorld
 	}
 	public override void ActionL()
 	{
-		if(phantomObject!=null) MonoBehaviour.DestroyImmediate(phantomObject.gameObject);
-		phantomObject=null;
-		if(buildingStructure._buildings.Count==0)
+		if (phantomObject != null) 
+			MonoBehaviour.DestroyImmediate(phantomObject.gameObject);
+		
+		phantomObject = null;
+		port = null;          // <- Обнуляем port
+		firstport = null;     // <- Обнуляем firstport
+		secondport = null;    // <- Обнуляем secondport
+		
+		if (buildingStructure != null && buildingStructure._buildings.Count == 0)
 		{
 			MonoBehaviour.DestroyImmediate(buildingStructure.gameObject);
-			buildingStructure=null;
+			buildingStructure = null;
 		}
-		if(buildingStructure!=null) buildingStructure.Init();
-		base.ActionL();
 		
+		if (buildingStructure != null) 
+			buildingStructure.Init();
+		
+		base.ActionL();
 	}
 	public override void MouseWheelRotation(float Value)
 	{

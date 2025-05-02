@@ -101,8 +101,6 @@ MonoBehaviour:
   point: {fileID: 4557386196153496121}
   _portDir: 1
   _portType: 0
-  inbelt: {fileID: 0}
-  Outbelt: {fileID: 0}
 --- !u!1 &7006561426078854917
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +112,7 @@ GameObject:
   - component: {fileID: 4539173057916147574}
   - component: {fileID: 4094178698204949389}
   - component: {fileID: 2473231407622192098}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Drill
   m_TagString: Building
   m_Icon: {fileID: 0}
@@ -130,7 +128,7 @@ Transform:
   m_GameObject: {fileID: 7006561426078854917}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.32, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -234,9 +232,45 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 3b3916c9266f8f548972176ccc45d2d1, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8223878551821059779, guid: 3b3916c9266f8f548972176ccc45d2d1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: -3133498875991405556, guid: 3b3916c9266f8f548972176ccc45d2d1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 892154889232542836, guid: 3b3916c9266f8f548972176ccc45d2d1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 3b3916c9266f8f548972176ccc45d2d1, type: 3}
       propertyPath: m_Name
       value: Drill_T1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3b3916c9266f8f548972176ccc45d2d1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3b3916c9266f8f548972176ccc45d2d1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1912592571411243778, guid: 3b3916c9266f8f548972176ccc45d2d1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177624639326338443, guid: 3b3916c9266f8f548972176ccc45d2d1, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6066626448153898784, guid: 3b3916c9266f8f548972176ccc45d2d1, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

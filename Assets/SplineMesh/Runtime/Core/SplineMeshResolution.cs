@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections.Generic;
+using Unity.Mathematics;
 
 namespace SplineMeshTools.Core
 {
@@ -73,10 +74,12 @@ namespace SplineMeshTools.Core
                     foreach (var vertex in normalizedSegmentMesh.vertices)
                     {
                         float point = (i / (float)meshResolution[splineCounter]) + (vertexRatios[counter] * (1 / (float)meshResolution[splineCounter]));
-                        var tangent = spline.EvaluateTangent(point);
+                        Vector3 tangent = spline.EvaluateTangent(point);
                         Vector3 splinePosition = spline.EvaluatePosition(point);
 
-                        var splineRotation = Quaternion.LookRotation(tangent, Vector3.up);
+                       Quaternion splineRotation;
+                       if(tangent!=Vector3.zero)splineRotation = Quaternion.LookRotation(tangent, Vector3.up);
+                       else splineRotation = Quaternion.identity;
                         var transformedPosition = splinePosition + splineRotation * vertexOffsets[counter];
 
                         vertices.Add(transformedPosition + positionAdjustment);
@@ -89,8 +92,10 @@ namespace SplineMeshTools.Core
                         var normal = normalizedSegmentMesh.normals[j];
                         float point = (i / (float)meshResolution[splineCounter]) + (vertexRatios[j] * (1 / (float)meshResolution[splineCounter]));
 
-                        var tangent = spline.EvaluateTangent(point);
-                        var splineRotation = Quaternion.LookRotation(tangent, Vector3.up);
+                        Vector3 tangent = spline.EvaluateTangent(point);
+                        Quaternion splineRotation;
+                        if(tangent!= Vector3.zero)  splineRotation= Quaternion.LookRotation(tangent, Vector3.up);
+                        else splineRotation=Quaternion.identity;
                         var transformedNormal = splineRotation * normal;
 
                         normals.Add(transformedNormal);

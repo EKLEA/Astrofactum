@@ -101,8 +101,6 @@ MonoBehaviour:
   point: {fileID: 6315607243513008576}
   _portDir: 0
   _portType: 0
-  inbelt: {fileID: 0}
-  Outbelt: {fileID: 0}
 --- !u!1 &4376229868055734108
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,5 +538,3 @@ MonoBehaviour:
   point: {fileID: 8348976773141637233}
   _portDir: 1
   _portType: 0
-  inbelt: {fileID: 0}
-  Outbelt: {fileID: 0}
