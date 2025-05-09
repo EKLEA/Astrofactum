@@ -331,10 +331,10 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 04606de2cd770d741a703e64d8cb3970, type: 2}
-  - {fileID: 2100000, guid: 4acf29895169f9d42838ca9edbc4cfe0, type: 2}
+  - {fileID: 2100000, guid: c1def8c379061cc42939743ff9bf3027, type: 2}
+  - {fileID: 2100000, guid: 1c004a8bd9a24204285c794042a174b1, type: 2}
   - {fileID: 2100000, guid: 13f301246c9c4204ba79f0eeb3cac097, type: 2}
-  - {fileID: 2100000, guid: d5829fc68aaf87a4c960bc0e2069eaf2, type: 2}
+  - {fileID: 2100000, guid: 60b08cda7c3334248bb9caa5e87ee437, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -369,7 +369,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoGenerateMesh: 0
-  segmentMesh: {fileID: -7681513528253052755, guid: ae8bd3cf31dd2fc4685d53b91c078488, type: 3}
+  segmentMesh: {fileID: -7681513528253052755, guid: dac00520e779c224997c397b439eff34, type: 3}
   meshName: 
   forwardAxis: 0
   uvAxis: 0

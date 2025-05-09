@@ -9,6 +9,7 @@ public class TickManager : MonoBehaviour
     Action<float> Ontick;
     HashSet<IAmTickable> tickableOjects=new();
     public static TickManager Instance;
+    public StateColorSettings stateColorSettings;
     Coroutine coroutine;
     void Awake()
     {
@@ -32,7 +33,7 @@ public class TickManager : MonoBehaviour
     {
         if(tickableOjects.Add(building)) Ontick+=building.Tick;
     }
-    public void Unsubscibe(IAmTickable building)
+    public void Unsubscribe(IAmTickable building)
     {
         if(tickableOjects.Contains(building)) Ontick-=building.Tick;
     }
@@ -41,7 +42,7 @@ public class TickManager : MonoBehaviour
     {
         while (true)
         {
-            Ontick(1/tickPerSecond);
+            Ontick?.Invoke(1/tickPerSecond);
             yield return new WaitForSeconds(1/tickPerSecond);
         }
     }

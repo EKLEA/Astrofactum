@@ -60,6 +60,7 @@ public class SplineParent : Building,IHavePorts
         if(inPort==null)
         {
             LogicInPort=_inPortsGM[0];
+            LogicInPort.gameObject.SetActive(true);
         }
         else
         {
@@ -72,11 +73,13 @@ public class SplineParent : Building,IHavePorts
     public virtual void SetUpOutPort(Port outPort)
     {
         if(outPort==null) 
+        {
             LogicOutPort=_outPortsGM[0];
+            LogicOutPort.gameObject.SetActive(true);
+        }
         else 
         {
             LogicOutPort = outPort;
-            Debug.Log(_outPortsGM[0]);
             _outPortsGM[0].gameObject.SetActive(false);
         }
     }

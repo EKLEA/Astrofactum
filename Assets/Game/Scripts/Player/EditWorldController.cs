@@ -6,7 +6,8 @@ using UnityEngine;
 public class EditWorldController : MonoBehaviour
 {
 	public static EditWorldController Instance;
-	//public BuildingInfoController BuildingInfoController;
+	public BuildingController buildingController;
+	public ActionsGrid actionsGrid;
 	Action currentLeftClickAction;
 	Action currentRightClickAction;
 	Action<float> currentMouseWheelRotAction;
@@ -44,18 +45,19 @@ public class EditWorldController : MonoBehaviour
 	ActionWithWorld action;
 	public void SetUpAction(string id)
 	{
-		/*if(action!=null&&action is BaseAction)
+		if(action!=null&&action is BaseAction)
 		{
-		    BuildingInfoController.ResetEvents();
+		    buildingController.ResetEvents();
 		    (action as BaseAction).Reset();
 		}
-		*/
+		
 		if (id== null) 
 		{
+			actionsGrid.Enable();
 			action= new BaseAction();
-//			action.SetUpAction(ActionTypes.BaseAction);
-			//(action as BaseAction).OnUIOpen+=BuildingInfoController.Init;
-			//BuildingInfoController.OnUIClose+=(action as BaseAction).Reset;
+			action.SetUpAction(ActionTypes.BaseAction);
+			(action as BaseAction).OnUIOpen+=buildingController.Init;
+			(action as BaseAction).endOfAction+=buildingController.OnUIClosedInvoke;
 		}
 		else
 		{
@@ -70,6 +72,7 @@ public class EditWorldController : MonoBehaviour
 					break;
 				case ActionTypes.EditTerrain: action = new EditTerrain(id); break;
 			}
+			actionsGrid.Disable();
 			action.SetUpAction(obj.actionType);
 			
 		}
@@ -84,6 +87,7 @@ public class EditWorldController : MonoBehaviour
 		if (action!=null)action.endOfAction-=ClearAction;
 		action=null;
 		SetUpAction(null);
+		actionsGrid.Enable();
 	}
 	
 }

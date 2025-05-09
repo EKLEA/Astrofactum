@@ -30,8 +30,14 @@ public class Port : MonoBehaviour
 	Slot _slot;
 	public void Ping()
 	{
-		GetItemFromBuilding();
+		if (fromBuilding != null && toBuilding != null) GetItemFromBuilding();
+		else
+		{
+		    fromBuilding?.UpdateBuilding();
+		    toBuilding?.UpdateBuilding();
+		}
 	}
+	
 	public void GetItemFromBuilding()
 	{	
 		if (fromBuilding == null || toBuilding == null)

@@ -2,8 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics;
-using Unity.VisualScripting;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Splines;
 using Zenject;
@@ -11,9 +10,6 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
 {   
     
     [SerializeField] float speed;
-
-    public bool IsProcessed => IsProcessed;
-    private bool _isProcessed;
     public List<Slot> inSlots=>null;
 
     public List<Slot> outSlots
@@ -27,7 +23,10 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
     public float CurrentProcent => throw new NotImplementedException();
 
     public bool CanAdd {
-    get{return (splineItems.Count == 0 || splineItemsQueue.Count>0&&splineItems.Last().value > (1f / (float)countOfSegments))&&_isAmSetUped;}}
+    get
+    {
+        return (splineItems.Count == 0 || splineItemsQueue.Count>0&&splineItems.Last().value > (1f / (float)countOfSegments))&&_isAmSetUped;
+    }}
 
     [SerializeField] SplineItem prefab;
     
@@ -38,15 +37,19 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
     bool isWisible;
     event Action<float> OnMove;
     event Action OnVisualUpdate;
+    public event Action<ProcessionState> onStateChanged;
+
     List<SplineItem> splineItems=new();
     Queue<SplineItem> splineItemsQueue=new();
     public bool IAmSetUped {get{return _isAmSetUped;}}
     bool _isAmSetUped;
     public bool IsRemovedNow{get;set;}
+
+    public ProcessionState state{get;private set;}
+    int t;
     public override void Init(string tid)
     {
         base.Init(tid);
-        _isWork = false;
     }
     public void SetUpLogic()
     {
@@ -62,16 +65,16 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
             Vector3 pos = spline.EvaluatePosition(0);
             item.transform.localPosition = new Vector3(pos.x, item.transform.localPosition.y+1f, pos.z);
         }
-        _isWork = true;
         canMove = true;
         isWisible=true;
         IsRemovedNow=false;
+        //state=ProcessionState.AwaitForInput;
         //Ping();
     }
-    public void Ping()
-    {
-        LogicInPort.Ping();
-        LogicOutPort.Ping();
+    public void UpdateBuilding()
+    { 
+        if(LogicInPort==null||LogicInPort.fromBuilding==null) SetUpInPort(null);
+        if(LogicOutPort==null||LogicOutPort.toBuilding==null) SetUpOutPort(null);
     }
     public override void SetUpInPort(Port inPort)
     {
@@ -96,21 +99,31 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
     {
        
        canMove=Move(deltaTime/countOfSegments*speed);
+       onStateChanged?.Invoke(state);
     }
     bool Move(float deltaTime)
     {
         OnMove?.Invoke(deltaTime);
-        LogicOutPort.Ping();
         LogicInPort.Ping();
+        LogicOutPort.Ping();
         if (splineItems.Count > 0 && splineItems[0].value == 1)
         {
             OutTransferSlot=splineItems[0].slot;
             LogicOutPort.transferSlot=OutTransferSlot;
         }
-
+        if(t!=splineItemsQueue.Count)
+        {
+            t=splineItemsQueue.Count;
+            state=ProcessionState.Processed;
+        }
+        else  state=ProcessionState.AwaitForInput;  
         
         if (splineItemsQueue.Count == 0)
+        {
+            state=ProcessionState.AwaitForOutput;
             return false;
+        }
+        
         return false;
     }
         
@@ -136,10 +149,12 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
         }
         else if(splineItemsQueue.Count==0&&splineItems.Count>0)
         {
-            if(splineItems.Last().slot.Id==id)
+            if(splineItems.Last().slot.Id==id&&splineItems.Last().slot.Count!=splineItems.Last().slot.MaxCount)
+            {
                 res=splineItems.Last().slot.AddItem(amount);
+            }
         }
-       return new SlotTransferArgs(id,res);
+        return new SlotTransferArgs(id,res);
     }
 
     public void RemoveItem(Port port)
@@ -157,6 +172,7 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
                 foreach(var item in splineItems)
                 {   
                     item.UpdateTarget((float)(countOfSegments-splineItems.IndexOf(item))/(float)countOfSegments);
+                    
                 }
             }
         }
@@ -176,5 +192,57 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
         }
 
         return true;
+    }
+   public override void Destroy()
+    {
+        Clear();
+
+        TickManager.Instance.Unsubscribe(this);
+
+        if (LogicInPort != null)
+        {
+            LogicInPort.toBuilding = null;
+            LogicInPort.transferSlot = null;
+        }
+
+        if (LogicOutPort != null)
+        {
+            LogicOutPort.fromBuilding = null;
+            LogicOutPort.transferSlot = null;
+            LogicOutPort.onItemRemovedFromSlot -= RemoveItem;
+        }
+
+        foreach (var item in splineItemsQueue)
+        {
+            if (item != null) Destroy(item.gameObject);
+        }
+        splineItemsQueue.Clear();
+
+        base.Destroy();
+
+    }
+    public void Clear()
+    {
+        if (splineItems.Count > 0)
+        {
+            for (int i = splineItems.Count - 1; i >= 0; i--)
+            {
+                if (splineItems[i] != null)
+                {
+                    splineItems[i].slot = null;
+                    splineItems[i].gameObject.SetActive(false);
+                    splineItemsQueue.Enqueue(splineItems[i]);
+                    OnMove -= splineItems[i].UpdateValue;
+                    OnVisualUpdate -= splineItems[i].ChangePos;
+                }
+            }
+            splineItems.Clear();
+        }
+
+        LogicInPort.transferSlot = null;
+        LogicOutPort.transferSlot = null;
+        OutTransferSlot = null;
+
+        state = ProcessionState.AwaitForInput;
     }
 }

@@ -21,6 +21,22 @@ public class ActionsGrid : UIController
             s.SetUpButton(uIAction.name,this);
         }
     }
+    public override void Disable()
+    {
+        foreach(var c in _uiActions.Values)
+        {
+            c.Item1.Disable();
+        }
+        base.Disable();
+    }
+    public override void Enable()
+    {
+        foreach(var c in _uiActions.Values)
+        {
+            c.Item1.Enable();
+        }
+        base.Enable();
+    }
     public override void InvokeMethod(string id,ActionButton button)
     { 
         onActionInvoke(_uiActions[id]);

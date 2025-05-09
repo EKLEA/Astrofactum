@@ -9,7 +9,7 @@ public class PhantomParent : MonoBehaviour
 	
 	public virtual void UnPhantom()
 	{
-	    foreach (var s in gameObject.transform.GetComponentsInChildren<Transform>())
+	    foreach (var s in gameObject.transform.GetComponentsInChildren<Transform>(includeInactive:true))
 		{
 		    s.gameObject.layer=LayerMask.NameToLayer("Building");
 		}
@@ -19,7 +19,7 @@ public class PhantomParent : MonoBehaviour
     public virtual void Init()
     {	
 		logic=GetComponent<IAmTickable>();
-        foreach (var s in gameObject.transform.GetComponentsInChildren<Transform>())
+        foreach (var s in gameObject.transform.GetComponentsInChildren<Transform>(includeInactive:true))
 		{
 		    s.gameObject.layer=LayerMask.NameToLayer("Phantom");
 		}

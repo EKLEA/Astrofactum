@@ -30,6 +30,9 @@ public class Receiver : Building, IWorkWithItems, IAmTickable,IHavePorts,IWorkWi
     public bool IAmSetUped {get{return _isAmSetUped;}}
 
     public bool IsRemovedNow {get{return _isRemovedNow;}set{_isRemovedNow = value;}}
+
+    public ProcessionState state{get;private set;}
+
     bool _isRemovedNow;
 
     bool _isAmSetUped;
@@ -38,6 +41,9 @@ public class Receiver : Building, IWorkWithItems, IAmTickable,IHavePorts,IWorkWi
 
     protected float _currentTime;
     protected bool _isProcessed;
+
+    public event Action<ProcessionState> onStateChanged;
+
     public override void Init(string id)
     {
         base.Init(id);
@@ -50,17 +56,36 @@ public class Receiver : Building, IWorkWithItems, IAmTickable,IHavePorts,IWorkWi
         //задвать айди
         _slot=new Slot("iron_ore");
     }
-
+    public void Tick(float deltaTime)
+    {
+        onStateChanged?.Invoke(state);
+    }
     public SlotTransferArgs AddToBuilding(string id, int amount)
     {
+        state=ProcessionState.Processed;
         _slot.AddItem(amount);
         Debug.Log(amount);
         //обращаться к главному контролерру сбора метрик
+        state=ProcessionState.AwaitForInput;
         return new SlotTransferArgs(id, amount);
     }
     public bool CanAddM(string id)
     {
         //проверять на йди
         return true;
+    }
+    public override void Destroy()
+    {
+        foreach(var p in _inPorts)
+        {
+             p.fromBuilding=null;
+             p.Ping();
+        }
+        TickManager.Instance.Unsubscribe(this);
+        base.Destroy();
+    }
+    public void Clear()
+    {
+        foreach(var p in _inPorts) p.transferSlot=null;
     }
 }

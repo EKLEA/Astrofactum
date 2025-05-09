@@ -21,7 +21,6 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
     
     [SerializeField] Port[] _outPorts;
     [SerializeField] Port[] _inPorts;
-    public bool IsProcessed {get{return _isProcessed;}}
 
     public List<Slot> inSlots{get{return _inSlots;}}
 
@@ -34,6 +33,9 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
     public bool IAmSetUped {get;private set;}
 
     public bool IsRemovedNow {get;set;}
+
+    public ProcessionState state {get;private set;}
+
     public RecipeTag recipeTag;
     int max;
     Dictionary<string,(Slot,ItemStack,Port)> inSlotsD=new();
@@ -41,7 +43,9 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
     private List<Slot> _outSlots=new();
     private List<Slot> _inSlots=new();
     protected float _currentTime;
-    protected bool _isProcessed;
+
+    public event Action<ProcessionState> onStateChanged;
+
     public override void Init(string id)
     {
         base.Init(id);
@@ -77,27 +81,30 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
     }
     public void Tick(float deltaTime)
     {   
-        if(_currentTime>=recipe.Duration)
+        var Inputs=inSlotsD.Where(f=>f.Value.Item1.Count>=f.Value.Item2.amount);
+        if(Inputs.Count()!=inSlotsD.Count()) state=ProcessionState.AwaitForInput;
+        var Outputs= outSlotsD.Where(f=>(f.Value.Item1.MaxCount-f.Value.Item1.Count)>=f.Value.Item2.amount&&f.Value.Item3.transferSlot==null);
+        if(Outputs.Count()!=outSlotsD.Count) state=ProcessionState.AwaitForOutput;
+        if(Inputs.Count()!=inSlotsD.Count()&&Outputs.Count()!=outSlotsD.Count)
         {
-              if(
-                inSlotsD.Where(f=>f.Value.Item1.Count>=f.Value.Item2.amount).Count()==inSlotsD.Count()&&
-                outSlotsD.Where(f=>(f.Value.Item1.MaxCount-f.Value.Item1.Count)>=f.Value.Item2.amount&&f.Value.Item3.transferSlot==null).Count()==outSlotsD.Count())
+            state=ProcessionState.Processed;
+            if(_currentTime>=recipe.Duration)
+            {
+                foreach(var i in inSlotsD.Values)
                 {
-                     _isProcessed=true;
-                    foreach(var i in inSlotsD.Values)
-                    {
-                        i.Item1.RemoveItem(i.Item2.amount);
-                    }
-                    foreach(var o in outSlotsD.Values)
-                    {
-                        o.Item1.AddItem(o.Item2.amount);
-                        o.Item3.transferSlot=o.Item1;
-                    }
-                    _currentTime=0;
-                     _isProcessed=false;
+                    i.Item1.RemoveItem(i.Item2.amount);
                 }
+                foreach(var o in outSlotsD.Values)
+                {
+                    o.Item1.AddItem(o.Item2.amount);
+                    o.Item3.transferSlot=o.Item1;
+                }
+                _currentTime=0;
+            }
+            else _currentTime+=deltaTime;
         }
-        else _currentTime+=deltaTime;
+        onStateChanged?.Invoke(state);
+       
     }
     public bool CanAddM(string _id)
     {
@@ -112,5 +119,33 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
            r= insl[0].AddItem(_amount);
         }
         return new SlotTransferArgs(_id,r);
+    }
+    public void Clear()
+    {
+        foreach(var p in inSlotsD.Values)
+        {
+            p.Item1.RemoveItem();
+            p.Item3.transferSlot=p.Item1;
+        }
+        foreach(var p in outSlotsD.Values)
+        {
+            p.Item1.RemoveItem();
+            p.Item3.transferSlot=p.Item1;
+        }
+    }
+    public override void Destroy()
+    {
+        TickManager.Instance.Unsubscribe(this);
+        foreach(var i in _inPorts)
+        {
+            i.toBuilding=null;
+            i.Ping();
+        }
+        foreach(var o in _outPorts)
+        {
+            o.fromBuilding=null;
+            o.Ping();
+        }
+        base.Destroy();
     }
 }

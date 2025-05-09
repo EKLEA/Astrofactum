@@ -24,9 +24,14 @@ public class Splitter : Building,IHavePorts,IAmTickable,IWorkWithItems
     public List<Slot> inSlots => new List<Slot>(){_slot};
 
     public List<Slot> outSlots => throw new NotImplementedException();
+
+    public ProcessionState state {get; private set;}
+
     Slot _slot;
     int currInd;
-    
+
+    public event Action<ProcessionState> onStateChanged;
+
     public override void Init(string tid)
     {
         base.Init(tid);
@@ -39,7 +44,6 @@ public class Splitter : Building,IHavePorts,IAmTickable,IWorkWithItems
 	{
 	    TickManager.Instance.Subscribe(this);
         IAmSetUped=true;
-        _isWork = true;
 	}    
     public SlotTransferArgs AddToBuilding(string id,int amount)
     {
@@ -51,11 +55,13 @@ public class Splitter : Building,IHavePorts,IAmTickable,IWorkWithItems
 
     public virtual void Tick(float deltaTime)
     {
+        state=ProcessionState.AwaitForInput;
         if(_slot==null) return;
-        
+        state=ProcessionState.AwaitForOutput;
         if(_outPortsGM[currInd].toBuilding==null||_outPortsGM[currInd].toBuilding.CanAdd==false) currInd++;
         if(currInd>=_outPortsGM.Length) currInd=0;
         var t=_slot.RemoveItem();
+        state=ProcessionState.Processed;
         if(t!=0) 
         {
             if(_outPortsGM[currInd].transferSlot==null) _outPortsGM[currInd].transferSlot=new Slot(_slot.Id,_slot.MaxCount,t);
@@ -64,7 +70,28 @@ public class Splitter : Building,IHavePorts,IAmTickable,IWorkWithItems
         {
             _slot=null;
         }
+        onStateChanged?.Invoke(state);
         
-        
+    }
+    public override void Destroy()
+    {
+        foreach(var p in _outPortsGM)
+        {
+             p.toBuilding=null;
+             p.Ping();
+        }
+        foreach(var p in _inPortsGM)
+        {
+            p.fromBuilding=null;
+            p.Ping();
+        }
+        TickManager.Instance.Unsubscribe(this);
+        base.Destroy();
+    }
+
+    public void Clear()
+    {
+        foreach(var p in _inPortsGM) p.transferSlot=null;
+        foreach(var p in _outPortsGM) p.transferSlot=null;
     }
 }

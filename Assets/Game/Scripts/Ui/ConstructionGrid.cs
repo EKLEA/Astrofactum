@@ -20,7 +20,6 @@ public class ConstructionGrid : UIController
     }
     public override void InvokeMethod(string id,ActionButton button)
     {
-        
         buildingsGrid.Init(id);
         buildingsGrid.gameObject.SetActive(true);
         buildingsGrid.transform.position= new Vector3(button.transform.position.x,buildingsGrid.transform.position.y,buildingsGrid.transform.position.z);

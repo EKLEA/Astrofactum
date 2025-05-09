@@ -10,8 +10,9 @@ public interface IWorkWithItems
     public List<Slot> inSlots{get;}
     public List<Slot> outSlots{get;}
     public SlotTransferArgs AddToBuilding(string id,int amount);
-    public virtual void Ping(){}
+    public virtual void UpdateBuilding(){}
     public bool CanAddM(string id){return true;}
+    public void Clear();
 }
 public class SlotTransferArgs:EventArgs
 {

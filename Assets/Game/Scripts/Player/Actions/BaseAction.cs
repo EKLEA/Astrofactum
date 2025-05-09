@@ -1,37 +1,32 @@
 using System;
-using System.Collections.Generic;
-using System.Threading;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class BaseAction : ActionWithWorld
 {
-	//public event Action<Building> OnUIOpen;
-	//bool UIOpen;
-	//Building building;
+	public event Action<Building> OnUIOpen;
+	public event Action OnUIClose;
+	Building building;
 	public override void LeftClick()
 	{	
-		/*if (!UIOpen)
+		building=hit.collider.GetComponent<Building>() ;
+		if(building!= null)
 		{
-			building=hit.collider.GetComponent<Building>() ;
-			if(building!= null)
-			{
-				OnUIOpen?.Invoke(building);
-				UIOpen=true;
-			}
-		}*/
+			OnUIOpen?.Invoke(building);
+			Debug.Log("open");
+		}
 	}
 
 	public override void RightClick()
 	{
-		
+		ActionL();
 	}
     public override void UpdateFunc()
     {
        // base.UpdateFunc();
     }
-    public void Reset()
+    public override void Reset()
     {
-        //OnUIOpen=null;
+		base.Reset();
+        OnUIOpen=null;
     }
 }

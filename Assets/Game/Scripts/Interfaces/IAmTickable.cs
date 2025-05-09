@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,10 +9,17 @@ public interface IAmTickable
 	{
 	    
 	}    
-	public bool IsProcessed{get;}
 	public float CurrentProcent{get;}
+	public ProcessionState state{get;}
+	public event Action<ProcessionState> onStateChanged;
     public virtual void Tick(float deltaTime)
     {
     
     }
+}
+public enum ProcessionState
+{
+    Processed,
+    AwaitForOutput,
+    AwaitForInput,
 }

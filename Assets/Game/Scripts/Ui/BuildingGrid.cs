@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class BuildingGrid : UIController
 {
+    public GameObject grid;
     public override void Init(string type)
     {
-        foreach (Transform child in transform)
+        foreach (Transform child in grid.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
@@ -17,7 +18,7 @@ public class BuildingGrid : UIController
 		
         foreach (var en in infos)
         {
-            ActionButton s =Instantiate(UIManager.Instance.actionButtonExample,transform);
+            ActionButton s =Instantiate(UIManager.Instance.actionButtonExample,grid.transform);
             s.SetUpButton(en.Key,this);
         }
     
@@ -25,6 +26,6 @@ public class BuildingGrid : UIController
     public override void InvokeMethod(string id,ActionButton button)
     {
         EditWorldController.Instance.SetUpAction(id);
-        this.gameObject.SetActive(false);
+        Disable();
     }
 }

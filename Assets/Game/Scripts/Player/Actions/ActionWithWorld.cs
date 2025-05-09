@@ -60,4 +60,8 @@ public class ActionWithWorld
 	{
 		endOfAction?.Invoke();
 	}
+	public virtual void Reset()
+	{
+	    endOfAction=null;
+	}
 }

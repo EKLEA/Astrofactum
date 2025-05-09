@@ -18,7 +18,6 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     public Port[] OutPorts => _outPorts;
     [SerializeField] Port[] _outPorts;
     private Slot GeneratorSlot;
-    public bool IsProcessed {get{return _isProcessed;}}
 
     public List<Slot> inSlots =>null;
 
@@ -31,6 +30,9 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     public bool IAmSetUped {get{return _isAmSetUped;}}
 
     public bool IsRemovedNow {get{return _isRemovedNow;}set{_isRemovedNow = value;}}
+
+    public ProcessionState state {get;private set;}
+
     bool _isRemovedNow;
 
     bool _isAmSetUped;
@@ -38,7 +40,9 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
 
     private List<Slot> _outSlots=new();
     protected float _currentTime;
-    protected bool _isProcessed;
+
+    public event Action<ProcessionState> onStateChanged;
+
     public override void Init(string id)
     {
         base.Init(id);
@@ -56,7 +60,7 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     public void SetUpReciepe(string id)
     {
         recipe=InfoDataBase.recipeBase["generate_iron_ore"];
-        GeneratorSlot=new Slot(recipe.Outputs[0].id);
+        GeneratorSlot=new Slot(recipe.Outputs[0].id,5);
         _outSlots.Clear();
         _outSlots.Add(GeneratorSlot);
         
@@ -64,24 +68,45 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     }
     public void Tick(float deltaTime)
     {   
-        if(GeneratorSlot.MaxCount-GeneratorSlot.Count<=recipe.Outputs[0].amount) _isProcessed=false;
+       
+        if(GeneratorSlot.MaxCount-GeneratorSlot.Count<recipe.Outputs[0].amount)
+        {
+             state=ProcessionState.AwaitForOutput;
+        }
         else
         {
-            _isProcessed=true;
+            state=ProcessionState.Processed;
             if(_currentTime>=recipe.Duration)
             {
+                state=ProcessionState.Processed;
                 GeneratorSlot.AddItem(recipe.Outputs[0].amount);
+                Debug.Log(GeneratorSlot.Count);
                 _currentTime=0;
-                if(_outPorts[0].transferSlot==null) _outPorts[0].transferSlot=new Slot(GeneratorSlot.Id,999,GeneratorSlot.RemoveItem(max));
-                else _outPorts[0].transferSlot.AddItem(GeneratorSlot.RemoveItem(max));
+                if(_outPorts[0].transferSlot==null) _outPorts[0].transferSlot=GeneratorSlot;
+                if(GeneratorSlot==null) GeneratorSlot=new Slot(recipe.Outputs[0].id,5);
                 
             }
             else _currentTime+=deltaTime;
         }
+        onStateChanged?.Invoke(state);
     }
 
     public SlotTransferArgs AddToBuilding(string id, int amount)
     {
         throw new NotImplementedException();
+    }
+    public override void Destroy()
+    {
+        foreach(var p in _outPorts)
+        {
+            p.fromBuilding=null;
+            p.Ping();
+        }
+        TickManager.Instance.Unsubscribe(this);
+        base.Destroy();
+    }
+    public void Clear()
+    {
+        foreach(var p in _outPorts) p.transferSlot=null;
     }
 }
