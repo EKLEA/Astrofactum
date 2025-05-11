@@ -2,7 +2,9 @@
     {
       "id": "iron_ingot",
       "tag": "Smelting",
+      "title": "Железный слиток",
       "duration": 1.0,
+      "iconPath": "Items/iron_ingot",
       "inputs": [
         {
           "itemID": "iron_ore",
@@ -19,7 +21,9 @@
     {
       "id": "generate_iron_ore",
       "tag": "Generator",
+      "title": "Железная руда",
       "duration": 1,
+      "iconPath": "Items/iron_ore",
       "inputs": [],
       "outputs": [
         {

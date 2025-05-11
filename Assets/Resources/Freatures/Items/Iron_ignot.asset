@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4128e9a3918cb2b498001db86c30d848, type: 3}
   m_Name: Iron_ignot
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 77d672ae0bdd01a4cb25563b462edfb1, type: 3}
   id: iron_ingot
+  title: 
   description: 
   FreatureType: 1
   prefab: {fileID: 903852527745824574, guid: 0d1d9e3f7e7d008479333c92f1d4def1, type: 3}

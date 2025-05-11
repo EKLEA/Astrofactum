@@ -1,0 +1,32 @@
+{
+  "Images": [
+    {
+      "BuildingType": "Special",
+      "ImagePath": "Images/Buildings/special_icon"
+    },
+    {
+      "BuildingType": "Production",
+      "ImagePath": "Images/Buildings/production_icon"
+    },
+    {
+      "BuildingType": "Elect",
+      "ImagePath": "Images/Buildings/elect_icon"
+    },
+    {
+      "BuildingType": "Logistic",
+      "ImagePath": "Images/Buildings/logistic_icon"
+    },
+    {
+      "BuildingType": "Logic",
+      "ImagePath": "Images/Buildings/logic_icon"
+    },
+    {
+      "BuildingType": "Foundation",
+      "ImagePath": "Images/Buildings/foundation_icon"
+    },
+    {
+      "BuildingType": "Terrain",
+      "ImagePath": "Images/Buildings/terrain_icon"
+    }
+  ]
+}

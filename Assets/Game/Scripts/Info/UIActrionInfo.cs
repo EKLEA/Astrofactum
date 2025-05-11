@@ -1,8 +1,7 @@
 using UnityEngine;
 [CreateAssetMenu(menuName = "Astrofactum/UIActionInfo")]
-public class UIActionInfo: ScriptableObject
+public class UIActionInfo: FreatureInfo
 {
-    public string actionName;
     public UIController uiController;
     public bool DisableAnotherUI;
 }

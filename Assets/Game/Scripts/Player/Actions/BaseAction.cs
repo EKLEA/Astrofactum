@@ -12,7 +12,6 @@ public class BaseAction : ActionWithWorld
 		if(building!= null)
 		{
 			OnUIOpen?.Invoke(building);
-			Debug.Log("open");
 		}
 	}
 

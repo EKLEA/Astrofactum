@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34820d5bc901fb44ea7cc1d806da3401, type: 3}
   m_Name: Foundation
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 141451ebc2e6ccd47854d900333bf789, type: 3}
   id: foundation
+  title: "\u0424\u0443\u043D\u0434\u0430\u043C\u0435\u043D\u0442"
   description: 
   FreatureType: 0
   actionType: 1

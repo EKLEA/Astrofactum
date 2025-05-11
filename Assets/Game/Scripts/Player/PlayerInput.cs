@@ -12,7 +12,6 @@ public class PlayerInput: MonoBehaviour
 	public float maxAngleCam;
 	public Camera cam;
 	public GameObject camObj;
-	public GameObject point;
 	//public TerrainGeneretion gameWorld;//переделать
 	
 	float _disToPlayer;

@@ -32,6 +32,9 @@ public class Receiver : Building, IWorkWithItems, IAmTickable,IHavePorts,IWorkWi
     public bool IsRemovedNow {get{return _isRemovedNow;}set{_isRemovedNow = value;}}
 
     public ProcessionState state{get;private set;}
+    public RecipeTag recipeTag{get{return _recipeTag;}}
+
+    public RecipeTag _recipeTag;
 
     bool _isRemovedNow;
 
@@ -43,6 +46,7 @@ public class Receiver : Building, IWorkWithItems, IAmTickable,IHavePorts,IWorkWi
     protected bool _isProcessed;
 
     public event Action<ProcessionState> onStateChanged;
+    public event Action OnUIUpdate;
 
     public override void Init(string id)
     {
@@ -59,6 +63,7 @@ public class Receiver : Building, IWorkWithItems, IAmTickable,IHavePorts,IWorkWi
     public void Tick(float deltaTime)
     {
         onStateChanged?.Invoke(state);
+        OnUIUpdate?.Invoke();
     }
     public SlotTransferArgs AddToBuilding(string id, int amount)
     {
@@ -86,6 +91,7 @@ public class Receiver : Building, IWorkWithItems, IAmTickable,IHavePorts,IWorkWi
     }
     public void Clear()
     {
+         OnUIUpdate?.Invoke();
         foreach(var p in _inPorts) p.transferSlot=null;
     }
 }

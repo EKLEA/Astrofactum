@@ -44,7 +44,8 @@ public class BuildingStructure : MonoBehaviour, IAmSctructure
 	{
 		if(Input.GetKeyDown(KeyCode.P))
 		{
-			foreach (var s in _buildings)
+			var b=_buildings.Where(x=>x!=null);
+			foreach (var s in b)
 				s.UnPhantom();
 			DestroyImmediate(gameObject);
 		}

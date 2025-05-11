@@ -42,6 +42,8 @@ public class SplineParent : Building,IHavePorts
     }
     public void SetFirstPointSpline(Vector3 pos, Quaternion rot)
     {   
+                Debug.Log(1);
+
         Vector3 localPos = splineContainer.transform.InverseTransformPoint(pos);
         Quaternion localRot = Quaternion.Inverse(splineContainer.transform.rotation) * rot;
         
@@ -50,6 +52,8 @@ public class SplineParent : Building,IHavePorts
 
     public void SetSecondPointSpline(Vector3 pos, Quaternion rot)
     {
+        Debug.Log(2);
+    
         Vector3 localPos = splineContainer.transform.InverseTransformPoint(pos);
         Quaternion localRot = Quaternion.Inverse(splineContainer.transform.rotation) * rot;
         

@@ -154,7 +154,7 @@ MonoBehaviour:
   - {fileID: 3518292896292386419}
   _inPorts:
   - {fileID: 4641618381270654989}
-  recipeTag: 1
+  _recipeTag: 1
 --- !u!65 &1983849340804907883
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34820d5bc901fb44ea7cc1d806da3401, type: 3}
   m_Name: Connector
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 63145b54db08f324c802a287849dcc72, type: 3}
   id: connector
+  title: "\u0421\u043E\u0435\u0434\u0438\u043D\u0438\u0442\u0435\u043B\u044C"
   description: 
   FreatureType: 0
   actionType: 1

@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4128e9a3918cb2b498001db86c30d848, type: 3}
   m_Name: Iron_ore
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f2bb2ddcfbfa88141bb5f84243f0252b, type: 3}
   id: iron_ore
+  title: 
   description: 
   FreatureType: 1
   prefab: {fileID: 8322929590856609948, guid: 3237cde695e08af44be8072115fcb856, type: 3}

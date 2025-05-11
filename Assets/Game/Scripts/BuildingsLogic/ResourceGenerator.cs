@@ -7,9 +7,9 @@ using Zenject;
 
 public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePorts,IWorkWithRecipe
 {
-    public string recipeID {get{return recipe.Id;}}
-    public float duration {get{return recipe.Duration;}}
-    public ItemStack[] Outputs{get{return recipe.Outputs.ToArray();}}
+    public string recipeID {get{return recipe!=null?recipe.Id:null;}}
+    public float duration {get{return recipe!=null?recipe.Duration:0f;}}
+    public ItemStack[] Outputs{get{return recipe!=null?recipe.Outputs.ToArray():null;}}
     private Recipe recipe;
     public float GenerationSpeed{get{return generationSpeed;}}
     [field:SerializeField] float generationSpeed;
@@ -32,6 +32,9 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     public bool IsRemovedNow {get{return _isRemovedNow;}set{_isRemovedNow = value;}}
 
     public ProcessionState state {get;private set;}
+    public RecipeTag recipeTag{get{return _recipeTag;}}
+
+    public RecipeTag _recipeTag;
 
     bool _isRemovedNow;
 
@@ -42,13 +45,12 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     protected float _currentTime;
 
     public event Action<ProcessionState> onStateChanged;
+    public event Action OnUIUpdate;
 
     public override void Init(string id)
     {
         base.Init(id);
-        
-        SetUpReciepe(null);
-        max=InfoDataBase.itemInfoBase.GetInfo(GeneratorSlot.Id).maxCountInPack;
+       
        
     }
     public void SetUpLogic()
@@ -59,8 +61,9 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     }
     public void SetUpReciepe(string id)
     {
-        recipe=InfoDataBase.recipeBase["generate_iron_ore"];
+        recipe=InfoDataBase.recipeBase[id];
         GeneratorSlot=new Slot(recipe.Outputs[0].id,5);
+        max=InfoDataBase.itemInfoBase.GetInfo(GeneratorSlot.Id).maxCountInPack;
         _outSlots.Clear();
         _outSlots.Add(GeneratorSlot);
         
@@ -68,7 +71,7 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     }
     public void Tick(float deltaTime)
     {   
-       
+        if(GeneratorSlot==null) return;
         if(GeneratorSlot.MaxCount-GeneratorSlot.Count<recipe.Outputs[0].amount)
         {
              state=ProcessionState.AwaitForOutput;
@@ -80,11 +83,10 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
             {
                 state=ProcessionState.Processed;
                 GeneratorSlot.AddItem(recipe.Outputs[0].amount);
-                Debug.Log(GeneratorSlot.Count);
                 _currentTime=0;
                 if(_outPorts[0].transferSlot==null) _outPorts[0].transferSlot=GeneratorSlot;
                 if(GeneratorSlot==null) GeneratorSlot=new Slot(recipe.Outputs[0].id,5);
-                
+                OnUIUpdate?.Invoke();
             }
             else _currentTime+=deltaTime;
         }
@@ -107,6 +109,8 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     }
     public void Clear()
     {
+        OnUIUpdate?.Invoke();
+        GeneratorSlot.RemoveItem();
         foreach(var p in _outPorts) p.transferSlot=null;
     }
 }

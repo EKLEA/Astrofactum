@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ActionWithWorld
 {
@@ -46,14 +47,18 @@ public class ActionWithWorld
 		
 	}
 	public void Update()
-	{
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		if (Physics.Raycast(ray, out hit))
-		{
-			UpdateFunc();
-		}
-		
-	}
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit))
+        {
+            UpdateFunc();
+        }
+    }
 	public virtual void UpdateFunc(){}
 	public virtual bool ValidateBuild(Vector3 pos){ return false; }
 	protected virtual void onActionEnded()

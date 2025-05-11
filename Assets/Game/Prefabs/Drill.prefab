@@ -151,6 +151,7 @@ MonoBehaviour:
   generationSpeed: 1
   _outPorts:
   - {fileID: 5790131513091379494}
+  _recipeTag: 3
 --- !u!65 &2473231407622192098
 BoxCollider:
   m_ObjectHideFlags: 0

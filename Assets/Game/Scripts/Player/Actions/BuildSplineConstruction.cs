@@ -12,6 +12,7 @@ public class BuildSplineConstruction : ActionWithWorld
     string _id;
     Collider[] crossColliders;
     SplineParent prevSpline;
+    bool connected;
     public BuildSplineConstruction(string id)
 	{
 	    _id=id;
@@ -100,10 +101,11 @@ public class BuildSplineConstruction : ActionWithWorld
 			{
 			    if(port!=null)
 			    {
-			        if(firstport!=null&&firstport.portDir==PortDir.Out) splineParent.SetUpOutPort(port);
+			        if(firstport==null|| firstport.portDir==PortDir.Out&&port.portDir==PortDir.In) splineParent.SetUpOutPort(port);
 			    	else splineParent.SetUpInPort(port);
 			    	secondport=port;
 			    }
+			    else splineParent.SetUpOutPort(port);
 			    splineParent.DrawSpline(splineType,SplineState.Passive);
 			    buildingStructure.AddPoint(phantomObject);
 				prevSpline=splineParent;
@@ -143,6 +145,8 @@ public class BuildSplineConstruction : ActionWithWorld
 		else
 		{
 			var rot=port==null?Quaternion.Euler(0,currentRot/45*45,0):port.point.transform.rotation;
+			
+			
 			if(firstport==null||firstport.portDir==PortDir.Out) splineParent.SetSecondPointSpline(currentPos,rot);
 			else splineParent.SetFirstPointSpline(currentPos,rot);
 			splineParent.DrawSpline(splineType,SplineState.Active);
@@ -184,6 +188,7 @@ public class BuildSplineConstruction : ActionWithWorld
 	}
 	public override bool ValidateBuild(Vector3 pos)
 	{	
+		if(connected) return true;
 		if(splineParent.GetLenght()>splineParent.maxLenght)return false;
 		if(pointCount>0)
 			if(!splineParent.ValidateSpline()) return false;
@@ -199,6 +204,7 @@ public class BuildSplineConstruction : ActionWithWorld
 		var bx = collider as BoxCollider;
 		if (amBuilding!=null)
 		{
+			if(amBuilding.id==null) return;
 			var buildingLogic=InfoDataBase.buildingBase.GetInfo(amBuilding.id).prefab.GetComponent<Building>();
 			if (buildingLogic is FoundationLogic)
 			{
@@ -212,19 +218,23 @@ public class BuildSplineConstruction : ActionWithWorld
 				}
 			} 
 			else currentPos=pos;
+			connected=false;
 		}
 		else
 		{	
-			if(port!=null&&firstport?.portDir!=port.portDir) 
+			if(port!=null&&(pointCount==0||firstport!=null&&firstport.portDir!=port.portDir||firstport==null&&port.portDir==PortDir.In))
 			{
 			    currentPos=port.point.position;
-			    currentRot=port.point.rotation.eulerAngles.y;
+			    currentRot=port.transform.rotation.eulerAngles.y;
+			    connected=true;
 			}
 			else
 			{
 			    currentPos=pos;
+			    connected=false;
 			}
 		}
+		
 	}
 	
 }

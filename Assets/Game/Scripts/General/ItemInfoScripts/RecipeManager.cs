@@ -7,10 +7,12 @@ using System;
 public class RecipeManager : MonoBehaviour
 {
     static TextAsset _recipeJson;
-    public static void Init(TextAsset recipeJson )
+    
+    public static void Init(TextAsset recipeJson)
     {
-        _recipeJson=recipeJson;
+        _recipeJson = recipeJson;
     }
+    
     public static IReadOnlyDictionary<string, Recipe> LoadRecipesFromJson()
     {
         var recipes = new Dictionary<string, Recipe>();
@@ -21,19 +23,30 @@ public class RecipeManager : MonoBehaviour
             Recipe recipe = new Recipe();
             recipe.Id = entry.Value["id"].Value;
             recipe.Duration = entry.Value["duration"].AsFloat;
+            recipe.Title=entry.Value["title"].Value;
+            if (entry.Value.HasKey("iconPath"))
+            {
+                string iconPath = entry.Value["iconPath"].Value;
+                recipe.Icon = Resources.Load<Sprite>(iconPath);
+                
+                if (recipe.Icon == null)
+                {
+                    Debug.LogWarning($"Не удалось загрузить иконку по пути: {iconPath}");
+                }
+            }
 
             recipe.Inputs = new List<ItemStack>();
             foreach (JSONNode input in entry.Value["inputs"].AsArray)
             {
-                recipe.Inputs.Add(new ItemStack(input["itemID"].Value,input["amount"].AsInt));
+                recipe.Inputs.Add(new ItemStack(input["itemID"].Value, input["amount"].AsInt));
             }
+            
             recipe.Outputs = new List<ItemStack>();
             foreach (JSONNode output in entry.Value["outputs"].AsArray)
             {
                 recipe.Outputs.Add(new ItemStack(output["itemID"].Value, output["amount"].AsInt));
             }
 
-            // Загрузка тега и станций
             recipe.Tag = (RecipeTag)Enum.Parse(typeof(RecipeTag), entry.Value["tag"].Value);
             recipes.Add(recipe.Id, recipe);
         }

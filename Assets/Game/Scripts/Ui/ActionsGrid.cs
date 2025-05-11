@@ -16,9 +16,9 @@ public class ActionsGrid : UIController
             var act=Instantiate(uIAction.uiController,transform.parent);
             act.Init();
             act.gameObject.SetActive(false);
-            _uiActions.Add(uIAction.actionName,(act,uIAction));
+            _uiActions.Add(uIAction.id,(act,uIAction));
             ActionButton s =Instantiate(UIManager.Instance.actionButtonExample,transform);
-            s.SetUpButton(uIAction.name,this);
+            s.SetUpButton(uIAction.id,uIAction.title,uIAction.icon,this);
         }
     }
     public override void Disable()

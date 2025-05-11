@@ -7,20 +7,22 @@ using UnityEngine.UI;
 
 public class ActionButton : Button
 {
-	[SerializeField] public TextMeshProUGUI textMeshPro;
-	string _id;
-	UIController _controller;
-	public void SetUpButton(string id,UIController controller)
-	{
-		textMeshPro= GetComponentInChildren<TextMeshProUGUI>();	
-		_id=id;
-		textMeshPro.text=id;
-		_controller = controller;
-		onClick.AddListener(InvokeInfo);
-		
-	}
-	void InvokeInfo()
-	{
-		_controller.InvokeMethod(_id,this);
-	}
+    [SerializeField] public TextMeshProUGUI textMeshPro=> GetComponentInChildren<TextMeshProUGUI>(); 
+    private string _id;
+    private UIController _controller;
+
+    public void SetUpButton(string id, string title, Sprite sprite,UIController controller)
+    {
+        
+        _id = id;
+        textMeshPro.text=title;
+        image.sprite=sprite;
+        _controller = controller;
+        onClick.AddListener(InvokeInfo);
+    }
+
+    void InvokeInfo()
+    {
+        _controller.InvokeMethod(_id, this);
+    }
 }

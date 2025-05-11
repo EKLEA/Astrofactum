@@ -19,7 +19,7 @@ public class BuildingGrid : UIController
         foreach (var en in infos)
         {
             ActionButton s =Instantiate(UIManager.Instance.actionButtonExample,grid.transform);
-            s.SetUpButton(en.Key,this);
+            s.SetUpButton(en.Key,en.Value.title,en.Value.icon,this);
         }
     
     }

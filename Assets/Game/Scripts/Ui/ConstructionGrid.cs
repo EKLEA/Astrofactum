@@ -11,11 +11,24 @@ public class ConstructionGrid : UIController
     public Transform buttons;
     public override void Init()
     {
-        foreach (var en in Enum.GetValues(typeof(BuildingsTypes)))
+        foreach (BuildingsTypes buildingType in Enum.GetValues(typeof(BuildingsTypes)))
         {
-            ActionButton s =Instantiate(UIManager.Instance.actionButtonExample,buttons);
-            s.SetUpButton(en.ToString(),this);
-            s.interactable=InfoDataBase.buildingBase.GetBase().Where(f=>f.Value.buildingType==(BuildingsTypes)Enum.Parse(typeof(BuildingsTypes), en.ToString())).Count()>0;
+            string localizedName = buildingType.GetStringOfBuildingsTypes();
+            
+            Sprite icon = BuildingsImagesManager.GetBuildingImage(buildingType);
+            ActionButton button = Instantiate(UIManager.Instance.actionButtonExample, buttons);
+            
+            button.SetUpButton(
+                buildingType.ToString(),  
+                localizedName,          
+                icon,                   
+                this
+            );
+
+            bool hasBuildings = InfoDataBase.buildingBase.GetBase()
+                .Any(f => f.Value.buildingType == buildingType);
+                
+            button.interactable = hasBuildings;
         }
     }
     public override void InvokeMethod(string id,ActionButton button)

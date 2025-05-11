@@ -16,10 +16,13 @@ public class ItemStack
 public class Recipe
 {
     public string Id { get; set; }
+    public string Title { get; set; }
     public float Duration { get; set; }
-    public List<ItemStack> Inputs { get; set; } = new List<ItemStack>();
-    public List<ItemStack> Outputs { get; set; } = new List<ItemStack>();
+    
+    public Sprite Icon { get; set; }  // Добавлено поле для спрайта
     public RecipeTag Tag { get; set; }
+    public List<ItemStack> Inputs { get; set; }
+    public List<ItemStack> Outputs { get; set; }
 }
 public enum RecipeTag
 {

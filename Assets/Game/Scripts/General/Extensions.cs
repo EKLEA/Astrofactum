@@ -26,4 +26,18 @@ public static class Extensoins
             _ => settings.defaultColor
         };
     }
+    public static string GetStringOfBuildingsTypes(this BuildingsTypes type)
+    {
+        return type switch
+        {
+            BuildingsTypes.Special=>$"Специальное",
+            BuildingsTypes.Production=>"Производствео",
+            BuildingsTypes.Elect=>"Электросеть",
+            BuildingsTypes.Logistic=>"Логистика",
+            BuildingsTypes.Logic=>"Логика",
+            BuildingsTypes.Foundation=>"Конструкции",
+            BuildingsTypes.Terrain=>"Ландшафт",
+            _ => "Нет"
+        };
+    }
 }

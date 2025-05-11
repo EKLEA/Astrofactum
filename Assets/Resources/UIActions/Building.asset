@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 985973199b23e6940973cb280e46130c, type: 3}
   m_Name: Building
   m_EditorClassIdentifier: 
-  actionName: Building
+  icon: {fileID: 21300000, guid: 48b9e79a0dc958c4aa1998b2a896735b, type: 3}
+  id: Building
+  title: "\u0421\u0442\u0440\u043E\u0439\u043A\u0430"
+  description: 
+  FreatureType: 0
   uiController: {fileID: 2134191787704668984, guid: 713de29d0b7b23d4c98e75da0f382879, type: 3}
   DisableAnotherUI: 0

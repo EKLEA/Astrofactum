@@ -7,10 +7,10 @@ using Zenject;
 
 public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHavePorts,IWorkWithRecipe
 {
-    public string recipeID {get{return recipe.Id;}}
-    public float duration {get{return recipe.Duration;}}
-    public ItemStack[] Outputs{get{return recipe.Outputs.ToArray();}}
-    public ItemStack[] InPuts{get{return recipe.Inputs.ToArray();}}
+    public string recipeID {get{return recipe!=null?recipe.Id:null;}}
+    public float duration {get{return recipe!=null?recipe.Duration:0f;}}
+    public ItemStack[] Outputs{get{return recipe!=null?recipe.Outputs.ToArray():null;}}
+    public ItemStack[] InPuts{get{return recipe!=null?recipe.Inputs.ToArray():null;}}
     private Recipe recipe;
     
     public float GenerationSpeed{get{return generationSpeed;}}
@@ -36,7 +36,9 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
 
     public ProcessionState state {get;private set;}
 
-    public RecipeTag recipeTag;
+    public RecipeTag recipeTag{get{return _recipeTag;}}
+
+    public RecipeTag _recipeTag;
     int max;
     Dictionary<string,(Slot,ItemStack,Port)> inSlotsD=new();
     Dictionary<string,(Slot,ItemStack,Port)> outSlotsD=new();
@@ -45,11 +47,11 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
     protected float _currentTime;
 
     public event Action<ProcessionState> onStateChanged;
+    public event Action OnUIUpdate;
 
     public override void Init(string id)
     {
         base.Init(id);
-        SetUpReciepe(null);
        
     }
     public void SetUpLogic()
@@ -63,42 +65,54 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
     }
     public void SetUpReciepe(string id)
     {
-        
-        recipe=InfoDataBase.recipeBase["iron_ingot"];
+        recipe=InfoDataBase.recipeBase[id];
         if(recipeTag!=recipe.Tag) return;
         if(recipe.Inputs.Count>_inPorts.Count()|| recipe.Outputs.Count >_outPorts.Count()) return;
+        _inSlots.Clear();
+        inSlotsD.Clear();
         for(int i=0;i<recipe.Inputs.Count();i++)
         {
-            _inSlots.Add(new Slot(recipe.Inputs[i].id,1));
-            inSlotsD.Add(recipe.Inputs[i].id,(_inSlots[i],recipe.Inputs[i],_inPorts[i]));
+            Slot slot=new Slot(recipe.Inputs[i].id,5);
+            inSlotsD.Add(recipe.Inputs[i].id,(slot,recipe.Inputs[i],_inPorts[i]));
         }
+        _inSlots=inSlotsD.Values.Select(f=>f.Item1).ToList();
+        _outSlots.Clear();
+        outSlotsD.Clear();
         for(int i=0;i<recipe.Outputs.Count();i++)
         {
-            _outSlots.Add(new Slot(recipe.Outputs[i].id,1));
-            outSlotsD.Add(recipe.Outputs[i].id,(_outSlots[i],recipe.Outputs[i],_outPorts[i]));
+            Slot slot=new Slot(recipe.Outputs[i].id,5);
+            outSlotsD.Add(recipe.Outputs[i].id,(slot,recipe.Outputs[i],_outPorts[i]));
         }
-        
+        _outSlots=outSlotsD.Values.Select(f=>f.Item1).ToList();
+        OnUIUpdate?.Invoke();
     }
     public void Tick(float deltaTime)
     {   
+        if(recipe==null) return;
         var Inputs=inSlotsD.Where(f=>f.Value.Item1.Count>=f.Value.Item2.amount);
         if(Inputs.Count()!=inSlotsD.Count()) state=ProcessionState.AwaitForInput;
-        var Outputs= outSlotsD.Where(f=>(f.Value.Item1.MaxCount-f.Value.Item1.Count)>=f.Value.Item2.amount&&f.Value.Item3.transferSlot==null);
+        
+        var Outputs= outSlotsD.Where(f=>(f.Value.Item1.MaxCount-f.Value.Item1.Count)>=f.Value.Item2.amount);
         if(Outputs.Count()!=outSlotsD.Count) state=ProcessionState.AwaitForOutput;
-        if(Inputs.Count()!=inSlotsD.Count()&&Outputs.Count()!=outSlotsD.Count)
+        
+        if(Inputs.Count()==inSlotsD.Count()&&Outputs.Count()==outSlotsD.Count)
         {
             state=ProcessionState.Processed;
             if(_currentTime>=recipe.Duration)
             {
                 foreach(var i in inSlotsD.Values)
                 {
+                    
                     i.Item1.RemoveItem(i.Item2.amount);
+                    
                 }
                 foreach(var o in outSlotsD.Values)
                 {
                     o.Item1.AddItem(o.Item2.amount);
                     o.Item3.transferSlot=o.Item1;
+                    //переделать
                 }
+                OnUIUpdate?.Invoke();
                 _currentTime=0;
             }
             else _currentTime+=deltaTime;
@@ -117,6 +131,8 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
         if(insl.Count()>0)
         {
            r= insl[0].AddItem(_amount);
+           Debug.Log("aaaa");
+           OnUIUpdate?.Invoke();
         }
         return new SlotTransferArgs(_id,r);
     }
@@ -132,6 +148,7 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
             p.Item1.RemoveItem();
             p.Item3.transferSlot=p.Item1;
         }
+        OnUIUpdate?.Invoke();
     }
     public override void Destroy()
     {
