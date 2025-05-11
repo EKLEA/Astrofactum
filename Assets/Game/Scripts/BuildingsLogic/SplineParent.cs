@@ -164,7 +164,7 @@ public class SplineParent : Building,IHavePorts
         splineBoxColliderGenerator.GenerateAndAssignMesh();
     }
     
-    public Collider[] GetAllCollisionsAlongSpline(float checkStep = 1.0f, float checkRadius = 0.3f)
+    public Collider[] GetAllCollisionsAlongSpline(float checkStep = 1.0f, float checkRadius = 0.2f, float verticalOffset = 0.75f)
     {
         List<Collider> result = new List<Collider>();
         
@@ -176,7 +176,10 @@ public class SplineParent : Building,IHavePorts
         for (int i = 0; i <= steps; i++)
         {
             Vector3 point = splineContainer.EvaluatePosition(i / (float)steps);
-            Collider[] colliders = Physics.OverlapSphere(point, checkRadius);
+            
+            Vector3 checkPoint = point + Vector3.up * verticalOffset;
+            
+            Collider[] colliders = Physics.OverlapSphere(checkPoint, checkRadius);
             
             foreach (var collider in colliders)
             {
