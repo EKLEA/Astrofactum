@@ -8,7 +8,7 @@ public class BaseAction : ActionWithWorld
 	Building building;
 	public override void LeftClick()
 	{	
-		building=hit.collider.GetComponent<Building>() ;
+		building=hit.collider?.GetComponent<Building>() ;
 		if(building!= null)
 		{
 			OnUIOpen?.Invoke(building);
