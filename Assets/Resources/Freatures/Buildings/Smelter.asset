@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34820d5bc901fb44ea7cc1d806da3401, type: 3}
   m_Name: Smelter
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: bbbb025567a19064aa140be3ce703291, type: 3}
+  icon: {fileID: 21300000, guid: ec321bfbf94874649bc86125ef58450b, type: 3}
   id: smelter
   title: "\u041F\u0435\u0447\u044C"
   description: 

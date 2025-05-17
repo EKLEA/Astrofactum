@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34820d5bc901fb44ea7cc1d806da3401, type: 3}
   m_Name: Drill
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: d2b296698f212264695f1b5a4b799a37, type: 3}
+  icon: {fileID: 21300000, guid: 66db0978046f9304dae3fe0be48728d3, type: 3}
   id: Drill
   title: "\u0414\u0440\u0435\u043B\u044C"
   description: 

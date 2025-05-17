@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34820d5bc901fb44ea7cc1d806da3401, type: 3}
   m_Name: Splitter
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 417fa33b93385a3438bcc5dc5fe44933, type: 3}
+  icon: {fileID: 21300000, guid: 2dbfec071ec6ab842944084f6e0b1d1d, type: 3}
   id: splitter
   title: "\u0420\u0430\u0437\u0434\u0435\u043B\u0438\u0442\u0435\u043B\u044C"
   description: 

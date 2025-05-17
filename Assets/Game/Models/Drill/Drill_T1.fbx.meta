@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: BlackDrillM
-    second: {fileID: 2100000, guid: a2eec48f5d0647945a8e8d981d3b91fd, type: 2}
+    second: {fileID: 2100000, guid: 1c004a8bd9a24204285c794042a174b1, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
