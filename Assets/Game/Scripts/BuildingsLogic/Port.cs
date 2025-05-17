@@ -9,6 +9,7 @@ public class Port : MonoBehaviour
 	public PortDir portDir{get {return _portDir;}}
 	public PortType portType{get {return _portType;}}
 	public Transform point;
+	public PortArrow arrow;
 	[SerializeField] PortDir _portDir;
 	[SerializeField] PortType _portType;
 	

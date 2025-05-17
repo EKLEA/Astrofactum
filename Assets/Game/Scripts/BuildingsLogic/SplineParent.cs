@@ -22,8 +22,8 @@ public class SplineParent : Building,IHavePorts
     public Port[] InPorts => new Port[] {LogicInPort};
 
     [SerializeField] protected Port[]_outPortsGM;
-    protected Port LogicInPort;
-    protected Port LogicOutPort;
+    public Port LogicInPort;
+    public Port LogicOutPort;
     public override void Init(string tid)
     {
         base.Init(tid);
@@ -42,7 +42,6 @@ public class SplineParent : Building,IHavePorts
     }
     public void SetFirstPointSpline(Vector3 pos, Quaternion rot)
     {   
-                Debug.Log(1);
 
         Vector3 localPos = splineContainer.transform.InverseTransformPoint(pos);
         Quaternion localRot = Quaternion.Inverse(splineContainer.transform.rotation) * rot;
@@ -52,7 +51,6 @@ public class SplineParent : Building,IHavePorts
 
     public void SetSecondPointSpline(Vector3 pos, Quaternion rot)
     {
-        Debug.Log(2);
     
         Vector3 localPos = splineContainer.transform.InverseTransformPoint(pos);
         Quaternion localRot = Quaternion.Inverse(splineContainer.transform.rotation) * rot;
@@ -63,12 +61,13 @@ public class SplineParent : Building,IHavePorts
     {
         if(inPort==null)
         {
+             _inPortsGM[0].arrow.Enable();
             LogicInPort=_inPortsGM[0];
             LogicInPort.gameObject.SetActive(true);
         }
         else
         {
-            
+            _inPortsGM[0].arrow.Disable();
             LogicInPort = inPort;
             
             _inPortsGM[0].gameObject.SetActive(false);
@@ -78,11 +77,13 @@ public class SplineParent : Building,IHavePorts
     {
         if(outPort==null) 
         {
+            _outPortsGM[0].arrow.Enable();
             LogicOutPort=_outPortsGM[0];
             LogicOutPort.gameObject.SetActive(true);
         }
         else 
         {
+            _outPortsGM[0].arrow.Disable();
             LogicOutPort = outPort;
             _outPortsGM[0].gameObject.SetActive(false);
         }
@@ -154,14 +155,13 @@ public class SplineParent : Building,IHavePorts
         
         LogicInPort=_inPortsGM[0];
         LogicOutPort=_outPortsGM[0];
+        
         _inPortsGM[0].gameObject.SetActive(true);
         _outPortsGM[0].gameObject.SetActive(true);
         
         spline[0] = new BezierKnot(Vector3.zero,Vector3.zero,Vector3.zero);
         spline[1] = new BezierKnot(Vector3.forward,Vector3.zero,Vector3.zero);
-        
-        resolution.GenerateMeshAlongSpline();
-        splineBoxColliderGenerator.GenerateAndAssignMesh();
+        DrawSpline(SplineType.StraightAngle,SplineState.Active);
     }
     public Collider[] GetAllCollisionsAlongSpline(float checkStep = 1.0f, float checkRadius = 0.2f, float verticalOffset = 0.75f)
     {

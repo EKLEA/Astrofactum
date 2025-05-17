@@ -7,7 +7,7 @@ public class BuildSplineConstruction : ActionWithWorld
     BuildingStructure buildingStructure;
 	SplineParent splineParent;
 	PhantomParent phantomObject; 
-    Port port,firstport,secondport;
+    Port port,firstport,secondport,lastPort;
     SplineType splineType=>SplineType.StraightAngle;
     string _id;
     Collider[] crossColliders;
@@ -29,6 +29,8 @@ public class BuildSplineConstruction : ActionWithWorld
 		{
 		    s.gameObject.layer=LayerMask.NameToLayer("Ignore Raycast");
 		}
+		splineParent.LogicInPort.arrow.Enable();
+		splineParent.LogicOutPort.arrow.Enable();
 	}
 	public override void UpdateFunc()
 	{
@@ -87,7 +89,7 @@ public class BuildSplineConstruction : ActionWithWorld
             {
 				splineParent.SetFirstPointSpline(currentPos,Quaternion.Euler(0,currentRot,0));
             }
-            
+            firstport?.arrow.Disable();
 			firstport=port;
 			
         }
@@ -108,6 +110,8 @@ public class BuildSplineConstruction : ActionWithWorld
 			    else splineParent.SetUpOutPort(port);
 			    splineParent.DrawSpline(splineType,SplineState.Passive);
 			    buildingStructure.AddPoint(phantomObject);
+			    splineParent.LogicInPort.arrow.Disable();
+				splineParent.LogicOutPort.arrow.Disable();
 				prevSpline=splineParent;
 				NewPhantom();
 				if(secondport!=null) ActionL();
@@ -227,11 +231,20 @@ public class BuildSplineConstruction : ActionWithWorld
 			    currentPos=port.point.position;
 			    currentRot=port.transform.rotation.eulerAngles.y;
 			    connected=true;
+			    lastPort=port;
+			    lastPort.arrow.Enable();
+			    if(port.portDir==PortDir.In)splineParent.LogicOutPort.arrow.Disable();
+			    else splineParent.LogicInPort.arrow.Disable();
 			}
 			else
 			{
 			    currentPos=pos;
 			    connected=false;
+			    if (lastPort != null)
+				{
+					lastPort.arrow.Disable();
+					lastPort = null;
+				}
 			}
 		}
 		

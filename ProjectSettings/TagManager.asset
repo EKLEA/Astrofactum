@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - Structure
   - PlanetFace
+  - NotChangeMat
   layers:
   - Default
   - TransparentFX

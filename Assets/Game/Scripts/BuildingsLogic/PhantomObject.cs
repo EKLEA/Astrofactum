@@ -12,7 +12,7 @@ public class PhantomObject : PhantomParent
 	List<Material[]> Materials=new();
 	public override void Init()
 	{
-		meshRenderers.AddRange(GetComponentsInChildren<MeshRenderer>(true));
+		meshRenderers.AddRange(GetComponentsInChildren<MeshRenderer>(true).Where(f=>f.tag!="NotChangeMat"));
 		
 		foreach (MeshRenderer mr in meshRenderers)
 		{

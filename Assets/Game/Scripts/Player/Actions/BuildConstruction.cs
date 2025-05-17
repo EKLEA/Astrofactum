@@ -13,12 +13,19 @@ public class BuildConstruction : ActionWithWorld
 	protected BuildingStructure buildingStructure;
 	protected PhantomParent phantomObject;
 	protected BoxCollider boxCollider;
-	
+	IHavePorts havePorts;
 	public BuildConstruction(string id)
 	{
 		buildingInfo=InfoDataBase.buildingBase.GetInfo(id);
 		phantomObject=PhantomCreater.CreatePhantomObject(BuildingFactory.Create(buildingInfo,currentPos,Quaternion.Euler(0,currentRot,0)));
 		boxCollider=phantomObject.GetComponent<BoxCollider>();
+		havePorts=phantomObject.GetComponent<IHavePorts>();
+		if(havePorts!=null)
+		{
+		    foreach(var i in havePorts.InPorts) i.arrow.Enable();
+		    foreach(var o in havePorts.OutPorts) o.arrow.Enable();
+		    
+		}
 	}
 	public override void UpdateFunc()
 	{
