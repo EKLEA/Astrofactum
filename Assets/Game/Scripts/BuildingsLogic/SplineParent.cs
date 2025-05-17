@@ -163,7 +163,6 @@ public class SplineParent : Building,IHavePorts
         resolution.GenerateMeshAlongSpline();
         splineBoxColliderGenerator.GenerateAndAssignMesh();
     }
-    
     public Collider[] GetAllCollisionsAlongSpline(float checkStep = 1.0f, float checkRadius = 0.2f, float verticalOffset = 0.75f)
     {
         List<Collider> result = new List<Collider>();
