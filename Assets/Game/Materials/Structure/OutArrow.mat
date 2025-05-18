@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: InArrow
+  m_Name: OutArrow
   m_Shader: {fileID: -6465566751694194690, guid: 72913eefde9549e46b65884f48aa8b7f, type: 3}
   m_Parent: {fileID: 2100000, guid: 1df969f00db73954da178640d33a59e2, type: 2}
   m_ModifiedSerializedProperties: 0
@@ -44,7 +44,7 @@ Material:
     - _LineThickness: 0.2
     m_Colors:
     - _Color: {r: 0.6084906, g: 0.77178353, b: 1, a: 0.4745098}
-    - _FresnelColor: {r: 0, g: 2.3775942, b: 0.7132783, a: 1}
-    - _Tint: {r: 0, g: 0.78431374, b: 0.23529412, a: 0.47058824}
+    - _FresnelColor: {r: 0.00833855, g: 2.3775942, b: 0, a: 1}
+    - _Tint: {r: 0, g: 0.78431374, b: 0.106630325, a: 0.47058824}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

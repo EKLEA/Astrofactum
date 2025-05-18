@@ -13,6 +13,7 @@ public class BuildConstruction : ActionWithWorld
 	protected BuildingStructure buildingStructure;
 	protected PhantomParent phantomObject;
 	protected BoxCollider boxCollider;
+	
 	IHavePorts havePorts;
 	public BuildConstruction(string id)
 	{
@@ -72,9 +73,14 @@ public class BuildConstruction : ActionWithWorld
 		MonoBehaviour.DestroyImmediate(phantomObject.gameObject.gameObject);
         base.ActionR();
     }
+
+
 	public override void MouseWheelRotation(float Value)
 	{
-		currentRot=MathF.Round(Value*30+currentRot);
+		//currentRot = MathF.Round(Value * 30 + currentRot);
+		if(Value != 0)
+			currentRot += Mathf.Sign(Value) * 15f;
+   		currentRot %= 360f;
 	}
 
 	protected Vector3 SnapToGrid(Vector3 point)
