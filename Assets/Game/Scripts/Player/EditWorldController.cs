@@ -84,6 +84,7 @@ public class EditWorldController : MonoBehaviour
 	}
 	void ClearAction()
 	{
+		actionsGrid.Disable();
 		if (action!=null)action.endOfAction-=ClearAction;
 		action=null;
 		SetUpAction(null);

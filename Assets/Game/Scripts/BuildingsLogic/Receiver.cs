@@ -41,7 +41,7 @@ public class Receiver : Building, IWorkWithItems, IAmTickable,IHavePorts,IWorkWi
     bool _isAmSetUped;
     int max;
     Slot _slot;
-
+    public bool canChange{ get; set; }
     protected float _currentTime;
     protected bool _isProcessed;
 

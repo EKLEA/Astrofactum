@@ -77,10 +77,7 @@ public class BuildConstruction : ActionWithWorld
 
 	public override void MouseWheelRotation(float Value)
 	{
-		//currentRot = MathF.Round(Value * 30 + currentRot);
-		if(Value != 0)
-			currentRot += Mathf.Sign(Value) * 15f;
-   		currentRot %= 360f;
+		currentRot=  Value*30+currentRot;
 	}
 
 	protected Vector3 SnapToGrid(Vector3 point)

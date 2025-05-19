@@ -163,12 +163,12 @@ public class SplineParent : Building,IHavePorts
         spline[1] = new BezierKnot(Vector3.forward,Vector3.zero,Vector3.zero);
         DrawSpline(SplineType.StraightAngle,SplineState.Active);
     }
-    public Collider[] GetAllCollisionsAlongSpline(float checkStep = 1.0f, float checkRadius = 0.2f, float verticalOffset = 0.75f)
+    public List<GameObject>GetAllCollisionsAlongSpline(float checkStep = 1.0f, float checkRadius = 0.2f, float verticalOffset = 0.75f)
     {
-        List<Collider> result = new List<Collider>();
+        List<GameObject> result = new();
         
         if (spline == null || splineContainer == null || spline.GetLength() <= 0)
-            return result.ToArray();
+            return result;
 
         int steps = Mathf.Max(1, Mathf.CeilToInt(spline.GetLength() / checkStep));
         
@@ -184,14 +184,14 @@ public class SplineParent : Building,IHavePorts
             {
                 if (collider.transform != this.transform && 
                     !collider.transform.IsChildOf(this.transform) &&
-                    !result.Contains(collider))
+                    !result.Contains(collider.gameObject))
                 {
-                    result.Add(collider);
+                    result.Add(collider.gameObject);
                 }
             }
         }
         
-        return result.ToArray();
+        return result;
     }
     public virtual bool ValidateSpline()
     {

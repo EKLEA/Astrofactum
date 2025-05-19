@@ -45,6 +45,7 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
     private List<Slot> _outSlots=new();
     private List<Slot> _inSlots=new();
     protected float _currentTime;
+    public bool canChange{ get; set; }
 
     public event Action<ProcessionState> onStateChanged;
     public event Action OnUIUpdate;
@@ -52,6 +53,7 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
     public override void Init(string id)
     {
         base.Init(id);
+        canChange = true;
        
     }
     public void SetUpLogic()

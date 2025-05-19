@@ -1,4 +1,5 @@
 using UnityEngine;
+using Zenject;
 
 public class UIManager : MonoBehaviour
 {
@@ -7,25 +8,16 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance;
     public ActionButton actionButtonExample;
     UIController[] controllers;
-    void Awake()
-    {
-         if (Instance != null && Instance != this)
-		{
-			Destroy(gameObject);
-		}
-		else
-		{
-			Instance = this;
-		}
-		Init();
-    }
     public void Init()
     {
-		//itemsGrid.Init();
-		actionsGrid.Init();
+        //itemsGrid.Init();
+        Instance = this;
+        actionsGrid.Init();
 		controllers=GetComponentsInChildren<UIController>(true);
 		actionsGrid.onActionInvoke+=ChangeWindow;
+		
     }
+
     void ChangeWindow((UIController,UIActionInfo) Info)
     {
        if(Info.Item1.gameObject.activeSelf==false)
@@ -34,14 +26,14 @@ public class UIManager : MonoBehaviour
             {
                 foreach( var con in controllers)
                 {
-                    if(con!=Info.Item1) con.gameObject.SetActive(false);
+                    if(con!=Info.Item1) con.Disable();
                 }
             }
-            Info.Item1.gameObject.SetActive(true);
+            Info.Item1.Enable();
        }
        else
        {
-           Info.Item1.gameObject.SetActive(false);
+           Info.Item1.Disable();
        }
     }
 }

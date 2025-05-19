@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using Zenject;
 
 public class ConstructionGrid : UIController
 {
     public UIController buildingsGrid;
-    RectTransform rectTransform;
+    public RectTransform rectTransform;
     public Transform buttons;
+    UIManager uiManager=>UIManager.Instance;
+    WorldController worldController=WorldController.Instance;
     public override void Init()
     {
         foreach (BuildingsTypes buildingType in Enum.GetValues(typeof(BuildingsTypes)))
@@ -16,7 +20,7 @@ public class ConstructionGrid : UIController
             string localizedName = buildingType.GetStringOfBuildingsTypes();
             
             Sprite icon = BuildingsImagesManager.GetBuildingImage(buildingType);
-            ActionButton button = Instantiate(UIManager.Instance.actionButtonExample, buttons);
+            ActionButton button = Instantiate(uiManager.actionButtonExample, buttons);
             
             button.SetUpButton(
                 buildingType.ToString(),  
@@ -24,9 +28,9 @@ public class ConstructionGrid : UIController
                 icon,                   
                 this
             );
-
-            bool hasBuildings = InfoDataBase.buildingBase.GetBase()
-                .Any(f => f.Value.buildingType == buildingType);
+            List<BuildingInfo> buildingId = InfoDataBase.buildingBase.GetBase().Values.ToList();
+            buildingId.RemoveAll(f=>worldController.NotAllowedBuilding.Contains(f));
+            bool hasBuildings = buildingId.Any(f => f.buildingType == buildingType);
                 
             button.interactable = hasBuildings;
         }

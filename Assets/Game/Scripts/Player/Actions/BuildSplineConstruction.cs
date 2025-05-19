@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BuildSplineConstruction : ActionWithWorld
@@ -10,7 +12,7 @@ public class BuildSplineConstruction : ActionWithWorld
     Port port,firstport,secondport,lastPort;
     SplineType splineType=>SplineType.StraightAngle;
     string _id;
-    Collider[] crossColliders;
+    List<GameObject>crossColliders=new();
     SplineParent prevSpline;
     bool connected;
     public BuildSplineConstruction(string id)
@@ -35,7 +37,8 @@ public class BuildSplineConstruction : ActionWithWorld
 	public override void UpdateFunc()
 	{
 		ChangePos(hit.point,hit.collider);
-		crossColliders=splineParent.GetAllCollisionsAlongSpline();
+		crossColliders=splineParent.GetAllCollisionsAlongSpline().ToList();
+		crossColliders.Remove(firstport?.GetComponentInParent<Building>().gameObject);
 		canAction=ValidateBuild(currentPos);
 		port= hit.collider.GetComponent<Port>();
 		phantomObject?.ChangeColor(canAction);
@@ -196,8 +199,9 @@ public class BuildSplineConstruction : ActionWithWorld
 		if(splineParent.GetLenght()>splineParent.maxLenght)return false;
 		if(pointCount>0)
 			if(!splineParent.ValidateSpline()) return false;
+		
 		foreach(var crossCollider in crossColliders)
-			if(crossCollider!=null&&crossCollider.tag=="Building") return false;
+			if(crossCollider!=null&&crossCollider.tag=="Building")return false;
 			
 		return true;
 	}

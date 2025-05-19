@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Zenject;
 
-public class EnteryPoint : MonoInstaller
+public class EnteryPoint : MonoBehaviour
 {
 	public TextAsset recipeJson;
 	public UIManager uIManager;
 	public TextAsset enumImageJson;
+	public WorldController worldController;
 	
-	public override void InstallBindings()
+	
+	public void Awake()
 	{
+		
 		RecipeManager.Init(recipeJson);
 		InfoDataBase.InitBases();
 		BuildingsImagesManager.LoadImages(enumImageJson);
+		worldController.Init();
+		uIManager.Init();
+		
 	}
 }

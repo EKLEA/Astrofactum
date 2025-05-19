@@ -148,6 +148,7 @@ public class BuildingController : UIController
             outputUI[i].Item2.gameObject.SetActive(true);
             
         }
+        recipeBT.interactable = workWithRecipe.canChange;
     }
     void SetUpRecipe(string recipeID)
     {
@@ -172,7 +173,6 @@ public class BuildingController : UIController
     }
     public void ClearBuilding()
     {
-        Debug.Log("clear");
         workWithItems?.Clear();
     }
     void ChangeColor(ProcessionState state)

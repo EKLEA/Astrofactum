@@ -11,6 +11,7 @@ public class TickManager : MonoBehaviour
     public static TickManager Instance;
     public StateColorSettings stateColorSettings;
     Coroutine coroutine;
+    public bool isPaused;
     void Awake()
     {
         if(Instance != null&& Instance!=this)  
@@ -29,6 +30,14 @@ public class TickManager : MonoBehaviour
             StopCoroutine(coroutine);
             coroutine=null;}
     }
+    public void Pause()
+    {
+        isPaused = true;
+    }
+    public void UnPause()
+    {
+        isPaused = false;
+    }
     public void Subscribe(IAmTickable building)
     {
         if(tickableOjects.Add(building)) Ontick+=building.Tick;
@@ -40,10 +49,13 @@ public class TickManager : MonoBehaviour
     
     public IEnumerator WorldTick()
     {
-        while (true)
+        while (true) 
         {
-            Ontick?.Invoke(1/tickPerSecond);
-            yield return new WaitForSeconds(1/tickPerSecond);
+            if (!isPaused)
+            {
+                Ontick?.Invoke(1f / tickPerSecond);
+            }
+            yield return new WaitForSeconds(1f / tickPerSecond);
         }
-    }
+}
 }

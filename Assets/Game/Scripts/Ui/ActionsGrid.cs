@@ -6,8 +6,10 @@ using Zenject;
 
 public class ActionsGrid : UIController
 {
+    
     public event Action<(UIController,UIActionInfo)> onActionInvoke;
     Dictionary<string, (UIController,UIActionInfo)> _uiActions=new();
+    UIManager uiManager=>UIManager.Instance;
     public override void Init()
     {
         UIActionInfo[] uIActionsInfo= Resources.LoadAll<UIActionInfo>("UIActions");
@@ -15,10 +17,12 @@ public class ActionsGrid : UIController
         {
             var act=Instantiate(uIAction.uiController,transform.parent);
             act.Init();
-            act.gameObject.SetActive(false);
+            
             _uiActions.Add(uIAction.id,(act,uIAction));
-            ActionButton s =Instantiate(UIManager.Instance.actionButtonExample,transform);
+            ActionButton s =Instantiate(uiManager.actionButtonExample,transform);
             s.SetUpButton(uIAction.id,uIAction.title,uIAction.icon,this);
+            act.Disable();
+            
         }
     }
     public override void Disable()
@@ -31,10 +35,6 @@ public class ActionsGrid : UIController
     }
     public override void Enable()
     {
-        foreach(var c in _uiActions.Values)
-        {
-            c.Item1.Enable();
-        }
         base.Enable();
     }
     public override void InvokeMethod(string id,ActionButton button)

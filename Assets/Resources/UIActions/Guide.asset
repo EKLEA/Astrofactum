@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 985973199b23e6940973cb280e46130c, type: 3}
+  m_Name: Guide
+  m_EditorClassIdentifier: 
+  icon: {fileID: 21300000, guid: 541f14c2c0f08fb4091b37f6f4bd122f, type: 3}
+  id: Guide
+  title: "\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435"
+  description: 
+  FreatureType: 0
+  uiController: {fileID: 4063788623042281846, guid: 808aa2c4f54c31e44aedcacf521c5144, type: 3}
+  DisableAnotherUI: 0

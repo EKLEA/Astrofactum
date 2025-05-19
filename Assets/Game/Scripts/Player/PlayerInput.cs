@@ -12,6 +12,11 @@ public class PlayerInput: MonoBehaviour
 	public float maxAngleCam;
 	public Camera cam;
 	public GameObject camObj;
+	private float _wheelRotationTime = 0f;
+	private float _rotationSpeedMultiplier = 1f;
+	public float maxRotationSpeed = 5f;
+	public float accelerationRate = 0.5f;
+	public float decelerationRate = 2f;
 	//public TerrainGeneretion gameWorld;//переделать
 	
 	float _disToPlayer;
@@ -53,15 +58,16 @@ public class PlayerInput: MonoBehaviour
 	}
 	void Update()
 	{
-		CameraRotation();
-		CameraMove();
+		if (!WorldController.Instance.IsPaused)
+		{	
+			CameraRotation();
+			CameraMove();
+		}
 		camObj.transform.localPosition=new Vector3(0,math.sin(currentAngle*Mathf.Deg2Rad)*distanceToPlayer,-math.cos(currentAngle*Mathf.Deg2Rad)*distanceToPlayer);
 		camObj.transform.position=new Vector3(camObj.transform.position.x,checkY(camObj.transform.position.y),camObj.transform.position.z);
 		cam.transform.LookAt(transform.position);
 		if(Input.GetButtonDown("Fire1"))  EditWorldController.Instance.LeftClick();
 		if(Input.GetButtonDown("Fire2"))  EditWorldController.Instance.RightClick();
-		if(Input.GetKeyDown(KeyCode.N)) TickManager.Instance.StartTick();
-		if(Input.GetKeyDown(KeyCode.M)) TickManager.Instance.StopTick();
 		
 	}
 	void CameraRotation()
@@ -96,22 +102,39 @@ public class PlayerInput: MonoBehaviour
 		float moveX = Input.GetAxis("Horizontal");
 		float moveZ = Input.GetAxis("Vertical");
 
-		if ((moveX != 0 || moveZ != 0 )&&isMoving)
+		if ((moveX != 0 || moveZ != 0) && isMoving)
 		{
 			Vector3 localDirection = new Vector3(moveX, 0, moveZ);
-
 			Vector3 worldDirection = transform.TransformDirection(localDirection);
-
 			transform.position += worldDirection * Time.deltaTime * moveSpeed;
-			transform.position=new Vector3(transform.position.x,GetGroundHeight(transform.position)+0.2f,transform.position.z);
+			transform.position = new Vector3(transform.position.x, GetGroundHeight(transform.position) + 0.2f, transform.position.z);
 		}
+
 		float scroll = Input.GetAxis("Mouse ScrollWheel");
-		if(Input.GetButton("RotationFreature"))
-			EditWorldController.Instance.MouseWheelRotation(scroll);
-			
+
+		if (Input.GetButton("RotationFreature"))
+		{
+			if (Mathf.Abs(scroll) > 0.01f)
+			{
+				_wheelRotationTime += Time.deltaTime;
+				_rotationSpeedMultiplier = Mathf.Min(
+					1f + Mathf.Pow(_wheelRotationTime * accelerationRate, 2), 
+					maxRotationSpeed
+				);
+			}
+			else
+			{
+				_rotationSpeedMultiplier = Mathf.Max(1f, _rotationSpeedMultiplier - Time.deltaTime * decelerationRate);
+				_wheelRotationTime = 0f;
+			}
+
+			float acceleratedScroll = scroll * _rotationSpeedMultiplier * 2f;
+			EditWorldController.Instance.MouseWheelRotation(acceleratedScroll);
+		}
 		else
+		{
 			distanceToPlayer -= scroll * zoomSpeed;
-		
+		}
 	}
 	float GetGroundHeight( Vector3 position)
 	{

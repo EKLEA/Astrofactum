@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Drill
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 66db0978046f9304dae3fe0be48728d3, type: 3}
-  id: Drill
+  id: drill
   title: "\u0414\u0440\u0435\u043B\u044C"
   description: 
   FreatureType: 0

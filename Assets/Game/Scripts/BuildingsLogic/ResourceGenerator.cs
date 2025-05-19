@@ -46,12 +46,10 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
 
     public event Action<ProcessionState> onStateChanged;
     public event Action OnUIUpdate;
-
+    public bool canChange{ get; set; }
     public override void Init(string id)
     {
         base.Init(id);
-       
-       
     }
     public void SetUpLogic()
     {
