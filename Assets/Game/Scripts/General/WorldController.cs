@@ -8,18 +8,11 @@ public class WorldController : MonoBehaviour
     
     public BuildingInfo[] NotAllowedBuilding;
     [Header("SetUpRecipe")]
-    public ResourceGeneratorPair[] resourceGenerators;
+    
     public bool IsPaused => tickManager.isPaused;
     public void Init()
     {
         Instance = this;
-        for(int i = 0; i < resourceGenerators.Length; i++)
-        {
-            resourceGenerators[i].generator.Init("drill");
-            resourceGenerators[i].generator.SetUpReciepe(resourceGenerators[i].recipeID);
-            resourceGenerators[i].generator.canChange = false;
-            
-        }
     }
     public TickManager tickManager;
     public void Pause()
@@ -38,10 +31,4 @@ public class WorldController : MonoBehaviour
     {
         tickManager.StopTick();
     }
-}
-[System.Serializable]
-public class ResourceGeneratorPair
-{
-    public ResourceGenerator generator;
-    public string recipeID;
 }
