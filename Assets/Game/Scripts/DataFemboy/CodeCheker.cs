@@ -16,6 +16,7 @@ public class CodeCheker : MonoBehaviour
             Debug.LogWarning("Поле кода пустое!");
             return;
         }
+        if(code=="123") SceneController.Instance.LoadTestEnvironment();
         StartCoroutine(VerifyCodeCoroutine(code));
     }
 

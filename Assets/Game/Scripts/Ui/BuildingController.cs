@@ -114,7 +114,7 @@ public class BuildingController : UIController
     void SetUpRecipeTranform(Recipe recipe)
     {
     
-        
+        recipeBT.interactable = true;
         if (recipeBT.image != null)
         {
             recipeBT.image.sprite = recipe.Icon;

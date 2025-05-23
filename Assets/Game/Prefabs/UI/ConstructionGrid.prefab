@@ -320,7 +320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buildingsGrid: {fileID: 3975293860727541652}
-  rectTransform: {fileID: 0}
+  BuildingTransf: {fileID: 3872904959940199620}
   buttons: {fileID: 1083206848213682568}
 --- !u!1 &2425511404015878315
 GameObject:
@@ -359,7 +359,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 100}
-  m_SizeDelta: {x: 1100, y: 100}
+  m_SizeDelta: {x: 60, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1353162787333879396
 CanvasRenderer:

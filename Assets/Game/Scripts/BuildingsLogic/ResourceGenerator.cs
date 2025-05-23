@@ -50,12 +50,14 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     public override void Init(string id)
     {
         base.Init(id);
+        
     }
     public void SetUpLogic()
     {
         TickManager.Instance.Subscribe(this);
         _outPorts[0].fromBuilding=this;
         _isAmSetUped=true;
+        
     }
     public void SetUpReciepe(string id)
     {
@@ -64,7 +66,7 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
         max=InfoDataBase.itemInfoBase.GetInfo(GeneratorSlot.Id).maxCountInPack;
         _outSlots.Clear();
         _outSlots.Add(GeneratorSlot);
-        
+        canChange = false;
         
     }
     public void Tick(float deltaTime)

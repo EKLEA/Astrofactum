@@ -10,10 +10,11 @@ public class ActionButton : Button
     [SerializeField] public TextMeshProUGUI textMeshPro=> GetComponentInChildren<TextMeshProUGUI>(); 
     private string _id;
     private UIController _controller;
+    public RectTransform rectTransform;
 
     public void SetUpButton(string id, string title, Sprite sprite,UIController controller)
     {
-        
+        rectTransform=GetComponent<RectTransform>();
         _id = id;
         textMeshPro.text=title;
         image.sprite=sprite;

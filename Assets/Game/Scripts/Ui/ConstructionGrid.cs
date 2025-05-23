@@ -9,7 +9,7 @@ using Zenject;
 public class ConstructionGrid : UIController
 {
     public UIController buildingsGrid;
-    public RectTransform rectTransform;
+    public RectTransform BuildingTransf;
     public Transform buttons;
     UIManager uiManager=>UIManager.Instance;
     WorldController worldController=WorldController.Instance;
@@ -39,6 +39,13 @@ public class ConstructionGrid : UIController
     {
         buildingsGrid.Init(id);
         buildingsGrid.gameObject.SetActive(true);
-        buildingsGrid.transform.position= new Vector3(button.transform.position.x,buildingsGrid.transform.position.y,buildingsGrid.transform.position.z);
+        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, button.rectTransform.position);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            BuildingTransf.parent as RectTransform,
+            screenPos,
+            null,
+            out Vector2 localPos
+        );
+        BuildingTransf.anchoredPosition = new Vector2(localPos.x, 510f);
     }
 }

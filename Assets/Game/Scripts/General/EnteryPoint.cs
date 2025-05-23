@@ -9,29 +9,23 @@ public class EnteryPoint : MonoBehaviour
     public TextAsset enumImageJson;
     public WorldController worldController;
 
-    private IEnumerator Start()
+    void Start()
     {
-        // Инициализация базовых систем
+        StartCoroutine(FindScene());
+        
         RecipeManager.Init(recipeJson);
         InfoDataBase.InitBases();
         BuildingsImagesManager.LoadImages(enumImageJson);
         worldController.Init();
-
-        // Ждем полной загрузки всех сцен
+        uIManager.Init();
+    }
+    IEnumerator FindScene()
+    {
         yield return new WaitUntil(() => SceneController.AllScenesLoaded);
-
-        // Поиск TestController в основной сцене (для дебага)
         TestController testController = FindFirstObjectByType<TestController>();
-        if (testController != null)
-        {
-            testController.Init();
-            Debug.Log("TestController инициализирован из основной сцены!");
-            uIManager.Init();
-            yield break;
-        }
         
-        // Поиск в аддитивных сценах (Запасной вариант короче)
         testController = FindInAdditiveScenes();
+        Debug.Log(testController);
         if (testController != null)
         {
             testController.Init();
@@ -41,20 +35,19 @@ public class EnteryPoint : MonoBehaviour
         {
             Debug.LogWarning("TestController не найден ни в одной сцене");
         }
-
-        uIManager.Init();
     }
-
     private TestController FindInAdditiveScenes()
     {
+        
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
             Scene scene = SceneManager.GetSceneAt(i);
-            if (scene == gameObject.scene) continue; // Пропускаем основную сцену
-
+            if (scene == gameObject.scene) continue;
             GameObject[] rootObjects = scene.GetRootGameObjects();
+            Debug.Log(rootObjects.Length);
             foreach (var obj in rootObjects)
             {
+                Debug.Log(obj.name);
                 var controller = obj.GetComponentInChildren<TestController>(true);
                 if (controller != null) return controller;
             }

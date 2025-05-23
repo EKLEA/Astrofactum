@@ -7,18 +7,6 @@ public class TestController : MonoBehaviour
     [Header("Настройки генераторов")]
     public ResourceGeneratorPair[] resourceGenerators;
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     public void Init()
     {
         Debug.Log("Инициализация генераторов...");
