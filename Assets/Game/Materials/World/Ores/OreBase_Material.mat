@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Triplaner Beach
-  m_Shader: {fileID: -6465566751694194690, guid: f3aef7979a84fbd4eb0cd1735bcd6551, type: 3}
+  m_Name: OreBase_Material
+  m_Shader: {fileID: -6465566751694194690, guid: 273cb5a4fb4a8cf488ed303767012fce, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -52,16 +52,8 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainTexture:
-        m_Texture: {fileID: 2800000, guid: 9aaaf279e7a6d664f8d0a314ea9ad578, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NormalTexture:
-        m_Texture: {fileID: 2800000, guid: f77de69d18f2caf49b5536bebbdddfff, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
@@ -72,20 +64,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_22c7f7b104064db4a2da20a337ea272e_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 609b0b06b9d6e6a499e4607fe771f4c2, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SecondTexture:
-        m_Texture: {fileID: 2800000, guid: 609b0b06b9d6e6a499e4607fe771f4c2, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Triplanar_e70c3162c92648af839adbb42ed42a2c_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 9aaaf279e7a6d664f8d0a314ea9ad578, type: 3}
+    - _Texture:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -102,6 +86,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
     - _Blend: 0
@@ -119,28 +104,15 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _MainSmoothness: 0
+    - _MIn: 1.1
+    - _Max: 0.3
     - _Metallic: 0
-    - _NoiseScale: 1
-    - _Noise_1_Intensity: 4
-    - _Noise_1_Intensity_1: 4
-    - _Noise_1_Scale: 0.1
-    - _Noise_1_Scale_1: 0.03
-    - _Noise_2_Intensity: 8
-    - _Noise_2_Intensity_1: 8
-    - _Noise_2_Scale: 0.47
-    - _Noise_2_Scale_1: 0.14
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Scale: 0.07
-    - _Scale_Side: 0.02
-    - _Scale_Top: 0.02
-    - _SecondTextureHeight: -200
-    - _SecondTextureSmoothness: 0
-    - _SecondTextureThreshhold: 0.5
+    - _Shades: 0.42
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -151,19 +123,12 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Base_Color: {r: 0.7264151, g: 0.7264151, b: 0.5722232, a: 1}
-    - _Base_Color_1: {r: 0.9430153, g: 1, b: 0.5801887, a: 1}
-    - _Base_Color_2: {r: 0.23529412, g: 0.6117647, b: 0.23920682, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Second_Color: {r: 0.31132078, g: 0.30732372, b: 0.15712889, a: 1}
-    - _Second_Color_1: {r: 0.984106, g: 1, b: 0.36320752, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Third_Color: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
-    - _Third_Color_1: {r: 0.3301887, g: 0.29564428, b: 0.060742266, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &7897769719236873724
+--- !u!114 &1853670787778391589
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

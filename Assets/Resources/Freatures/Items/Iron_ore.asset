@@ -17,5 +17,5 @@ MonoBehaviour:
   title: 
   description: 
   FreatureType: 1
-  prefab: {fileID: 8322929590856609948, guid: 3237cde695e08af44be8072115fcb856, type: 3}
+  prefab: {fileID: 5239034639841808454, guid: 64aa323daff039e40b84b2f937182021, type: 3}
   maxCountInPack: 1

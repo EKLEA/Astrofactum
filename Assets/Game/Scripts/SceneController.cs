@@ -26,17 +26,20 @@ public class SceneController : MonoBehaviour
     }
 
     public void LoadTestEnvironment() => StartCoroutine(LoadTestEnvironmentRoutine());
+    public static bool AllScenesLoaded { get; private set; }
 
     private IEnumerator LoadTestEnvironmentRoutine()
     {
+        AllScenesLoaded = false;
         Debug.Log("Starting scene loading process...");
-        
+
         // Загружаем базовую сцену
         yield return LoadSceneSingle(baseScene);
-        
+
         // Загружаем тестовую сцену аддитивно
         yield return LoadSceneAdditive(testScene);
-        
+
+        AllScenesLoaded = true;
         Debug.Log("All scenes loaded successfully");
     }
 

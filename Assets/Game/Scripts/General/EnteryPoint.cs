@@ -11,14 +11,17 @@ public class EnteryPoint : MonoBehaviour
 
     private IEnumerator Start()
     {
-
+        // Инициализация базовых систем
         RecipeManager.Init(recipeJson);
         InfoDataBase.InitBases();
         BuildingsImagesManager.LoadImages(enumImageJson);
         worldController.Init();
 
-		//удобно для сцен дебаговых
-        TestController testController = Object.FindFirstObjectByType<TestController>();
+        // Ждем полной загрузки всех сцен
+        yield return new WaitUntil(() => SceneController.AllScenesLoaded);
+
+        // Поиск TestController в основной сцене (для дебага)
+        TestController testController = FindFirstObjectByType<TestController>();
         if (testController != null)
         {
             testController.Init();
@@ -26,31 +29,36 @@ public class EnteryPoint : MonoBehaviour
             uIManager.Init();
             yield break;
         }
-
-        //НУ НАЙДИ ТЫ ЕГО ЧЕЕЕЕЛ ГОСПОДИ
-        if (SceneManager.sceneCount > 1)
+        
+        // Поиск в аддитивных сценах (Запасной вариант короче)
+        testController = FindInAdditiveScenes();
+        if (testController != null)
         {
-            Scene testScene = SceneManager.GetSceneAt(1);
-            yield return new WaitUntil(() => testScene.isLoaded);
-
-            GameObject[] rootObjects = testScene.GetRootGameObjects();
-            foreach (var obj in rootObjects)
-            {
-                testController = obj.GetComponentInChildren<TestController>(true);
-                if (testController != null)
-                {
-                    testController.Init();
-                    Debug.Log("TestController инициализирован из аддитивной сцены!");
-                    break;
-                }
-            }
+            testController.Init();
+            Debug.Log("TestController инициализирован из аддитивной сцены!");
         }
-
-        if (testController == null)
+        else
         {
             Debug.LogWarning("TestController не найден ни в одной сцене");
         }
 
         uIManager.Init();
+    }
+
+    private TestController FindInAdditiveScenes()
+    {
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+            if (scene == gameObject.scene) continue; // Пропускаем основную сцену
+
+            GameObject[] rootObjects = scene.GetRootGameObjects();
+            foreach (var obj in rootObjects)
+            {
+                var controller = obj.GetComponentInChildren<TestController>(true);
+                if (controller != null) return controller;
+            }
+        }
+        return null;
     }
 }
