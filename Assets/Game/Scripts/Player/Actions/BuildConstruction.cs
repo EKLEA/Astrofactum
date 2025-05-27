@@ -23,8 +23,9 @@ public class BuildConstruction : ActionWithWorld
 		havePorts=phantomObject.GetComponent<IHavePorts>();
 		if(havePorts!=null)
 		{
-		    foreach(var i in havePorts.InPorts) i.arrow.Enable();
-		    foreach(var o in havePorts.OutPorts) o.arrow.Enable();
+		
+		    if (havePorts.InPorts != null) foreach(var i in havePorts.InPorts) i?.arrow.Enable();
+			if (havePorts.OutPorts != null) foreach(var o in havePorts.OutPorts) o?.arrow.Enable();
 		    
 		}
 	}

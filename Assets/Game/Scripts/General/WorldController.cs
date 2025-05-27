@@ -6,6 +6,7 @@ public class WorldController : MonoBehaviour
 {
     public static WorldController Instance;
     
+    
     public BuildingInfo[] NotAllowedBuilding;
     [Header("SetUpRecipe")]
     
@@ -13,8 +14,12 @@ public class WorldController : MonoBehaviour
     public void Init()
     {
         Instance = this;
+        levelTaskController.OnTaskDone += EndGame;
+        levelTaskController.SetUpTask();
+        StartLevel();
     }
     public TickManager tickManager;
+    public LevelTaskController levelTaskController;
     public void Pause()
     {
         tickManager.Pause();
@@ -30,5 +35,13 @@ public class WorldController : MonoBehaviour
     public void StopLevel()
     {
         tickManager.StopTick();
+    }
+    void EndGame(int score)
+    {
+        
+        StopLevel();
+        //Запрос
+        //чет делать с очками
+        Debug.Log("Конец");
     }
 }

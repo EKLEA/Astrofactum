@@ -8,6 +8,7 @@ public class Building : MonoBehaviour
 	
     protected string _id;
     public string title{get;private set;}
+	public bool canDestroy = true;
 	public virtual void Init(string id)
 	{
 		_id=id;
@@ -17,6 +18,6 @@ public class Building : MonoBehaviour
 	{
 		var s=GetComponentInParent<BuildingStructure>();
 		if(s!=null&&s.GetComponentsInChildren<Building>().Length<2)DestroyImmediate(s.gameObject);
-	    else DestroyImmediate(this.gameObject);
+		else DestroyImmediate(this.gameObject);
 	}
 }

@@ -394,6 +394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0278034e10ef8cf4d95da86dbbe946d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canDestroy: 1
   splineInstantiate: {fileID: 8213558323187403552}
   splineContainer: {fileID: 6501642608514554831}
   resolution: {fileID: 774486969522006649}

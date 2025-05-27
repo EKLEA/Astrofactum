@@ -73,8 +73,8 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
     }
     public void UpdateBuilding()
     { 
-        if(LogicInPort==null||LogicInPort.fromBuilding==null) SetUpInPort(null);
-        if(LogicOutPort==null||LogicOutPort.toBuilding==null) SetUpOutPort(null);
+        if(LogicInPort==null||LogicInPort.toBuilding==null) SetUpInPort(null);
+        if(LogicOutPort==null||LogicOutPort.fromBuilding==null) SetUpOutPort(null);
     }
     public override void SetUpInPort(Port inPort)
     {
@@ -217,7 +217,7 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
             if (item != null) Destroy(item.gameObject);
         }
         splineItemsQueue.Clear();
-
+        if (IAmSetUped) LevelTaskController.Instance.RemoveScore(10);
         base.Destroy();
 
     }

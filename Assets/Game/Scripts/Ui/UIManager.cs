@@ -3,7 +3,6 @@ using Zenject;
 
 public class UIManager : MonoBehaviour
 {
-    public UIController itemsGrid;//реализовать через ворлдконтрлолер
     public ActionsGrid actionsGrid;
     public static UIManager Instance;
     public ActionButton actionButtonExample;

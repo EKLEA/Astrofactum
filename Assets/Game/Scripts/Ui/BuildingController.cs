@@ -10,6 +10,7 @@ public class BuildingController : UIController
     public TextMeshProUGUI BuildingName;
     public Button DestroyBT;
     public Button ClearBT;
+    public Button UnphantomBT;
     [Header("Recipe")]
     public RecipePopUp ChooseRecipeController;
     public Transform recipeTranform;
@@ -29,6 +30,7 @@ public class BuildingController : UIController
     IWorkWithItems workWithItems;
     IAmTickable amTickable;
     Building _building;
+    PhantomParent phantomParent;
     Recipe _recipe;
     
     void InitBT()
@@ -53,7 +55,9 @@ public class BuildingController : UIController
         workWithRecipe=_building.GetComponent<IWorkWithRecipe>();
         workWithItems=_building.GetComponent<IWorkWithItems>();
         amTickable=_building.GetComponent<IAmTickable>();
+        phantomParent = _building.GetComponent<PhantomParent>();
         BuildingName.text=_building.title;
+        UnphantomBT.gameObject.SetActive(phantomParent!=null);
         if(amTickable!=null)
         {
             WorkIndicator.transform.parent.gameObject.SetActive(true);
@@ -175,6 +179,11 @@ public class BuildingController : UIController
     {
         workWithItems?.Clear();
     }
+    public void UnPhantomBuilding()
+    {
+        phantomParent?.UnPhantom();
+        UnphantomBT.gameObject.SetActive(false);
+    }
     void ChangeColor(ProcessionState state)
     {
         WorkIndicator.color=state.GetColorOfState();
@@ -188,6 +197,7 @@ public class BuildingController : UIController
         }
         
         ClearBT.gameObject.SetActive(false);
+         UnphantomBT.gameObject.SetActive(false);
         WorkIndicator.transform.parent.gameObject.SetActive(false);
         recipeTranform.gameObject.SetActive(false);
         ChooseRecipeController.Disable();
@@ -198,6 +208,7 @@ public class BuildingController : UIController
     public override void Disable()
     {
         actionsGrid.Enable();
+       
         if(amTickable!=null)  amTickable.onStateChanged-=ChangeColor;
         if(workWithRecipe!=null)
         {

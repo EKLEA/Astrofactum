@@ -86,6 +86,7 @@ public class Splitter : Building,IHavePorts,IAmTickable,IWorkWithItems
             p.Ping();
         }
         TickManager.Instance.Unsubscribe(this);
+        if (IAmSetUped) LevelTaskController.Instance.RemoveScore(10);
         base.Destroy();
     }
 

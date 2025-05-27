@@ -82,6 +82,7 @@ public class Connector : Building,IHavePorts,IAmTickable,IWorkWithItems
             p.fromBuilding=null;
             p.Ping();
         }
+        if (IAmSetUped) LevelTaskController.Instance.RemoveScore(10);
         TickManager.Instance.Unsubscribe(this);
         base.Destroy();
     }

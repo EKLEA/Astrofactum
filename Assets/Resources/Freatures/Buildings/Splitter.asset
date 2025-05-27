@@ -18,7 +18,7 @@ MonoBehaviour:
   description: 
   FreatureType: 0
   actionType: 1
-  prefab: {fileID: 1722776795198478407, guid: 769704ff4b8d71d428fd5e1757cafb57, type: 3}
+  prefab: {fileID: 1722776795198478407, guid: 874890af65d33ab45b61f309d6e09b9a, type: 3}
   buildingType: 3
   tier: 1
   weight: 1

@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class TestController : MonoBehaviour
 {
-    public static TestController Instance { get; private set; }
 
     [Header("Настройки генераторов")]
     public ResourceGeneratorPair[] resourceGenerators;
@@ -22,8 +21,10 @@ public class TestController : MonoBehaviour
             try
             {
                 pair.generator.Init("drill");
+                pair.generator.SetUpLogic();
                 pair.generator.SetUpReciepe(pair.recipeID);
                 pair.generator.canChange = false;
+                pair.generator.canDestroy = false;
                 Debug.Log($"Генератор {pair.generator.name} готов к работе");
             }
             catch (System.Exception e)

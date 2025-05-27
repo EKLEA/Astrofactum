@@ -99,13 +99,17 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     }
     public override void Destroy()
     {
-        foreach(var p in _outPorts)
+        if(canDestroy)
         {
-            p.fromBuilding=null;
-            p.Ping();
+            foreach(var p in _outPorts)
+            {
+                p.fromBuilding=null;
+                p.Ping();
+            }
+            if (_isAmSetUped) LevelTaskController.Instance.RemoveScore(10);
+            TickManager.Instance.Unsubscribe(this);
+            base.Destroy();
         }
-        TickManager.Instance.Unsubscribe(this);
-        base.Destroy();
     }
     public void Clear()
     {

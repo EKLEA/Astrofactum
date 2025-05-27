@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 541f14c2c0f08fb4091b37f6f4bd122f, type: 3}
   id: Guide
-  title: "\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435"
+  title: "\u0418\u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u044F"
   description: 
   FreatureType: 0
   uiController: {fileID: 4063788623042281846, guid: 808aa2c4f54c31e44aedcacf521c5144, type: 3}

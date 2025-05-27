@@ -165,6 +165,7 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
             o.fromBuilding=null;
             o.Ping();
         }
+        if (IAmSetUped) LevelTaskController.Instance.RemoveScore(10);
         base.Destroy();
     }
 }

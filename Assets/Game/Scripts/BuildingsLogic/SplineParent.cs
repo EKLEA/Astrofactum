@@ -61,13 +61,11 @@ public class SplineParent : Building,IHavePorts
     {
         if(inPort==null)
         {
-             _inPortsGM[0].arrow.Enable();
             LogicInPort=_inPortsGM[0];
             LogicInPort.gameObject.SetActive(true);
         }
         else
         {
-            _inPortsGM[0].arrow.Disable();
             LogicInPort = inPort;
             
             _inPortsGM[0].gameObject.SetActive(false);
@@ -77,13 +75,11 @@ public class SplineParent : Building,IHavePorts
     {
         if(outPort==null) 
         {
-            _outPortsGM[0].arrow.Enable();
             LogicOutPort=_outPortsGM[0];
             LogicOutPort.gameObject.SetActive(true);
         }
         else 
         {
-            _outPortsGM[0].arrow.Disable();
             LogicOutPort = outPort;
             _outPortsGM[0].gameObject.SetActive(false);
         }

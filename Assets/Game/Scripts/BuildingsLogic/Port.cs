@@ -50,7 +50,6 @@ public class Port : MonoBehaviour
 		else
 		{
 			if(!toBuilding.CanAddM(_slot.Id)) return;
-			
 			fromBuilding.IsRemovedNow=true;
 			var t= _slot.RemoveItem(_slot.MaxInPack);
 			if(t==0)
@@ -59,7 +58,6 @@ public class Port : MonoBehaviour
 			    fromBuilding.IsRemovedNow=false;
 			    return;
 			}
-			
 			toBuilding.AddToBuilding(_slot.Id, t);
 			if(_slot.Count==0)
 			{
