@@ -1,4 +1,3 @@
-// SceneController.cs
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -25,8 +24,35 @@ public class SceneController : MonoBehaviour
         Debug.Log("SceneController initialized");
     }
 
+    // Метод для загрузки главного меню
+    public void ReturnToMainMenu() => StartCoroutine(LoadMainMenuRoutine());
+
     public void LoadTestEnvironment() => StartCoroutine(LoadTestEnvironmentRoutine());
     public static bool AllScenesLoaded { get; private set; }
+
+    private IEnumerator LoadMainMenuRoutine()
+    {
+        Debug.Log("Returning to main menu...");
+
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            Destroy(player);
+            Debug.Log("Игрок уничтожен");
+        }
+
+        yield return LoadSceneSingle(mainMenuScene);
+        
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+            if (scene.name != mainMenuScene)
+            {
+                SceneManager.UnloadSceneAsync(scene);
+            }
+        }
+    }
 
     private IEnumerator LoadTestEnvironmentRoutine()
     {
