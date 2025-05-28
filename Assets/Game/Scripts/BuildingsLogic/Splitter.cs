@@ -92,6 +92,7 @@ public class Splitter : Building,IHavePorts,IAmTickable,IWorkWithItems
 
     public void Clear()
     {
+        if (IAmSetUped) LevelTaskController.Instance.RemoveScore(5);
         foreach(var p in _inPortsGM) p.transferSlot=null;
         foreach(var p in _outPortsGM) p.transferSlot=null;
     }

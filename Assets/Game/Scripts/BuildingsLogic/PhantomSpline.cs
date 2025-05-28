@@ -30,7 +30,9 @@ public class PhantomSpline : PhantomParent
 	{
 		gameObject.name=namee;
 		meshRenderer.materials=originMat;
-		gameObject.transform.parent=transform.parent.parent;
+		var p = gameObject.transform.parent;
+		this.gameObject.transform.parent=transform.parent.parent;
+		if (p.transform.childCount == 0) DestroyImmediate(p.gameObject);
 		
 		base.UnPhantom();
 		

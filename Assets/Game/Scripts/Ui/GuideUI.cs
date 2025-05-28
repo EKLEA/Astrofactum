@@ -17,13 +17,15 @@ public class GuideUI : UIController
         if (currI >= GuideLists.Length) currI = 0;
         else if(currI<0) currI = GuideLists.Length-1;
         foreach (var guide in GuideLists) guide.gameObject.SetActive(false);
-        Debug.Log(currI);
         GuideLists[currI].gameObject.SetActive(true);
     }
     public override void Disable()
     {
-        worldController.UnPause();
-        base.Disable();
+        if(gameObject.activeSelf)
+        {
+            worldController.UnPause();
+            base.Disable();
+        }
     }
     public override void Enable()
     {

@@ -114,6 +114,7 @@ public class ResourceGenerator : Building, IWorkWithItems, IAmTickable , IHavePo
     public void Clear()
     {
         OnUIUpdate?.Invoke();
+        if (IAmSetUped) LevelTaskController.Instance.RemoveScore(GeneratorSlot.Count);
         GeneratorSlot.RemoveItem();
         foreach(var p in _outPorts) p.transferSlot=null;
     }

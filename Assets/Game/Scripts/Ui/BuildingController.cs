@@ -65,7 +65,7 @@ public class BuildingController : UIController
         }
         if(workWithRecipe!=null)
         {
-            
+            recipeBT.interactable = true;
             for(int i = 0; i < inputUI.Length;i++)
             {
                 inputUI[i].Item2.gameObject.SetActive(false);
@@ -89,11 +89,15 @@ public class BuildingController : UIController
             
             recipeTranform.gameObject.SetActive(true);
             ChooseRecipeController.OnChoosedRecipe+=SetUpRecipe;
+            
+            Debug.Log(workWithRecipe.canChange);
+            recipeBT.interactable = workWithRecipe.canChange;
         }
         if(workWithItems!=null)ClearBT.gameObject.SetActive(true);
     }
     public void OpenChooseRecipe()
     {
+        
         ChooseRecipeController.Init(workWithRecipe.recipeTag);
     }
     void UpdateUI()
@@ -118,7 +122,7 @@ public class BuildingController : UIController
     void SetUpRecipeTranform(Recipe recipe)
     {
     
-        recipeBT.interactable = true;
+        
         if (recipeBT.image != null)
         {
             recipeBT.image.sprite = recipe.Icon;
@@ -144,15 +148,14 @@ public class BuildingController : UIController
         }
         for(int i=0;i<recipe.Outputs.Count;i++)
         {
-            var inputItem=recipe.Outputs[i];
-            outputUI[i].Item1=workWithItems.outSlots.Where(x=>x.Id==inputItem.id).FirstOrDefault();
+            var outputItem=recipe.Outputs[i];
+            outputUI[i].Item1=workWithItems.outSlots.Where(x=>x.Id==outputItem.id).FirstOrDefault();
             outputUI[i].Item2.Amount.text=outputUI[i].Item1.Count.ToString();
-            outputUI[i].Item2.text.text=InfoDataBase.itemInfoBase.GetInfo(inputItem.id).title;
-            outputUI[i].Item2.image.sprite=InfoDataBase.itemInfoBase.GetInfo(inputItem.id).icon;
+            outputUI[i].Item2.text.text=InfoDataBase.itemInfoBase.GetInfo(outputItem.id).title;
+            outputUI[i].Item2.image.sprite=InfoDataBase.itemInfoBase.GetInfo(outputItem.id).icon;
             outputUI[i].Item2.gameObject.SetActive(true);
             
         }
-        recipeBT.interactable = workWithRecipe.canChange;
     }
     void SetUpRecipe(string recipeID)
     {

@@ -236,9 +236,10 @@ public class BeltSpline : SplineParent,IAmTickable,IWorkWithItems
                     OnVisualUpdate -= splineItems[i].ChangePos;
                 }
             }
+            if (IAmSetUped) LevelTaskController.Instance.RemoveScore(splineItems.Count);
             splineItems.Clear();
         }
-
+        
         LogicInPort.transferSlot = null;
         LogicOutPort.transferSlot = null;
         OutTransferSlot = null;

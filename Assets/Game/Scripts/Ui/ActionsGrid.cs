@@ -24,6 +24,7 @@ public class ActionsGrid : UIController
             act.Disable();
             
         }
+        _uiActions.Values.Where(f => f.Item2.id == "Guide").FirstOrDefault().Item1.Enable();
     }
     public override void Disable()
     {

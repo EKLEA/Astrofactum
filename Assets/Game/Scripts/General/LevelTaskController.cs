@@ -59,6 +59,7 @@ public class LevelTaskController : UIController
             linkedUIItems[id].Amount.text = $"{currItems[id]}/{parts[1]}";
         }
 
+        RemoveScore(amount);
         if (CheckWin()) OnTaskDone?.Invoke(score);
     }
     public void RemoveScore(int s)

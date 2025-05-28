@@ -142,11 +142,13 @@ public class ProcessingBuilding : Building, IWorkWithItems, IAmTickable , IHaveP
     {
         foreach(var p in inSlotsD.Values)
         {
+            if (IAmSetUped) LevelTaskController.Instance.RemoveScore(p.Item1.Count);
             p.Item1.RemoveItem();
             p.Item3.transferSlot=p.Item1;
         }
         foreach(var p in outSlotsD.Values)
         {
+            if (IAmSetUped) LevelTaskController.Instance.RemoveScore(p.Item1.Count);
             p.Item1.RemoveItem();
             p.Item3.transferSlot=p.Item1;
         }

@@ -48,7 +48,10 @@ public class PhantomObject : PhantomParent
 		{
 			meshRenderers[i].materials=Materials[i];
 		}
+
+		var p = gameObject.transform.parent;
 		this.gameObject.transform.parent=transform.parent.parent;
+		if (p.transform.childCount == 0) DestroyImmediate(p.gameObject);
 		base.UnPhantom();
 	}
 }

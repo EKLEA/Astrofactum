@@ -25,8 +25,12 @@ public class TickManager : MonoBehaviour
 
     public void StartTick()
     {
-        if(coroutine != null) return;
-        else coroutine = StartCoroutine(WorldTick());
+        if(coroutine != null)
+        {
+            StopCoroutine(coroutine);
+            coroutine = null;
+        }
+        coroutine = StartCoroutine(WorldTick());
     }
 
     public float StopTick()
