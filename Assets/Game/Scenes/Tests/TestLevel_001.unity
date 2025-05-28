@@ -1377,9 +1377,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceGenerators:
   - generator: {fileID: 784215974}
-    recipeID: generate_iron_ore
+    recipeID: generate_cat_ore
   - generator: {fileID: 1208067202}
-    recipeID: generate_iron_ore
+    recipeID: generate_hehe_ore
 --- !u!4 &1652450302
 Transform:
   m_ObjectHideFlags: 0
