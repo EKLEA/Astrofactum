@@ -791,7 +791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e903be8438d8d44195c2b7f2dc0e700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveAttemptUrl: http://localhost:5000/save_attempt_from_game
+  saveAttemptUrl: 158.46.107.231:5000/save_attempt_from_game
 --- !u!4 &1220171635
 Transform:
   m_ObjectHideFlags: 0

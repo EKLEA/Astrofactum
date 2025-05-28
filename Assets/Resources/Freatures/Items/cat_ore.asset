@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4128e9a3918cb2b498001db86c30d848, type: 3}
   m_Name: cat_ore
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: f2bb2ddcfbfa88141bb5f84243f0252b, type: 3}
+  icon: {fileID: 21300000, guid: d66aad6cb6f93324b8031ac46522eebe, type: 3}
   id: cat_ore
   title: 
   description: 

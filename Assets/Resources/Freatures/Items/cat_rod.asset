@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4128e9a3918cb2b498001db86c30d848, type: 3}
   m_Name: cat_rod
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: f2bb2ddcfbfa88141bb5f84243f0252b, type: 3}
+  icon: {fileID: 21300000, guid: d909b5c4cc5e87c4a95a3fc2b628b114, type: 3}
   id: cat_rod
   title: 
   description: 
   FreatureType: 1
-  prefab: {fileID: 5239034639841808454, guid: 64aa323daff039e40b84b2f937182021, type: 3}
+  prefab: {fileID: 4849950776290534619, guid: a9d120e1b8884134b8afb2f6504b9850, type: 3}
   maxCountInPack: 1

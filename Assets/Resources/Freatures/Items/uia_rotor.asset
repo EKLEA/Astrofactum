@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4128e9a3918cb2b498001db86c30d848, type: 3}
   m_Name: uia_rotor
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 77d672ae0bdd01a4cb25563b462edfb1, type: 3}
+  icon: {fileID: 21300000, guid: d66aad6cb6f93324b8031ac46522eebe, type: 3}
   id: uia_rotor
   title: 
   description: 
   FreatureType: 1
-  prefab: {fileID: 4160826004695510512, guid: 2e61f2a7d0940a94392f566b3921d66d, type: 3}
+  prefab: {fileID: 7873291122227786265, guid: f0c49fbfb8f239d4cab18c6c4a200e10, type: 3}
   maxCountInPack: 1

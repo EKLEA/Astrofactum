@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4128e9a3918cb2b498001db86c30d848, type: 3}
   m_Name: maxwell_frame
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: f2bb2ddcfbfa88141bb5f84243f0252b, type: 3}
+  icon: {fileID: 21300000, guid: d66aad6cb6f93324b8031ac46522eebe, type: 3}
   id: maxwell_frame
   title: 
   description: 
   FreatureType: 1
-  prefab: {fileID: 4160826004695510512, guid: 2e61f2a7d0940a94392f566b3921d66d, type: 3}
+  prefab: {fileID: 4709686618234349390, guid: 722b748287e16364c8d706b9742d2af9, type: 3}
   maxCountInPack: 1

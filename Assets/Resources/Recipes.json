@@ -4,7 +4,7 @@
       "tag": "Assembling",
       "title": "Ротор УИА-1",
       "duration": 1.0,
-      "iconPath": "Items/iron_ingot",
+      "iconPath": "Items/uia_rotor",
       "inputs": [
         {
           "itemID": "cat_plate",
@@ -27,7 +27,7 @@
       "tag": "Assembling",
       "title": "Каркас Максвелла",
       "duration": 1.0,
-      "iconPath": "Items/iron_ingot",
+      "iconPath": "Items/maxwell_frame",
       "inputs": [
         {
           "itemID": "cat_rod",
@@ -51,7 +51,7 @@
       "tag": "Construction",
       "title": "Котинитовый прут",
       "duration": 1.0,
-      "iconPath": "Items/iron_ingot",
+      "iconPath": "Items/CatRod",
       "inputs": [
         {
           "itemID": "cat_ingot",
@@ -70,7 +70,7 @@
       "tag": "Construction",
       "title": "Котинитовая пластина",
       "duration": 1.0,
-      "iconPath": "Items/iron_ingot",
+      "iconPath": "Items/CatPlate",
       "inputs": [
         {
           "itemID": "cat_ingot",
@@ -89,7 +89,7 @@
       "tag": "Smelting",
       "title": "Котинитовый слиток",
       "duration": 1.0,
-      "iconPath": "Items/iron_ingot",
+      "iconPath": "Items/CatIngot",
       "inputs": [
         {
           "itemID": "cat_ore",
@@ -108,7 +108,7 @@
       "tag": "Generator",
       "title": "Котинитовая руда",
       "duration": 1,
-      "iconPath": "Items/iron_ore",
+      "iconPath": "Items/OreCat",
       "inputs": [],
       "outputs": [
         {
@@ -122,7 +122,7 @@
       "tag": "Construction",
       "title": "Ржомбиевый лист",
       "duration": 1.0,
-      "iconPath": "Items/iron_ingot",
+      "iconPath": "Items/HeheSheet",
       "inputs": [
         {
           "itemID": "hehe_ingot",
@@ -141,7 +141,7 @@
       "tag": "Construction",
       "title": "Ржомбиевая проволка",
       "duration": 1.0,
-      "iconPath": "Items/iron_ingot",
+      "iconPath": "Items/HeheWire",
       "inputs": [
         {
           "itemID": "hehe_ingot",
@@ -160,7 +160,7 @@
       "tag": "Smelting",
       "title": "Ржомбиевый слиток",
       "duration": 1.0,
-      "iconPath": "Items/iron_ingot",
+      "iconPath": "Items/HeheIngot",
       "inputs": [
         {
           "itemID": "hehe_ore",
@@ -179,7 +179,7 @@
       "tag": "Generator",
       "title": "Ржомбиевая руда",
       "duration": 1,
-      "iconPath": "Items/iron_ore",
+      "iconPath": "Items/OreHehepng",
       "inputs": [],
       "outputs": [
         {

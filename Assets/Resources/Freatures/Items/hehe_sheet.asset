@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4128e9a3918cb2b498001db86c30d848, type: 3}
   m_Name: hehe_sheet
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: 77d672ae0bdd01a4cb25563b462edfb1, type: 3}
+  icon: {fileID: 21300000, guid: 5d462c213d4d3dd44a501d85d76439f2, type: 3}
   id: hehe_sheet
   title: 
   description: 
   FreatureType: 1
-  prefab: {fileID: 4160826004695510512, guid: 2e61f2a7d0940a94392f566b3921d66d, type: 3}
+  prefab: {fileID: 38520967078140561, guid: 816c9c9d2bf9a364d8e2bf7d52ae7d13, type: 3}
   maxCountInPack: 1

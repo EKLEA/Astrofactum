@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4128e9a3918cb2b498001db86c30d848, type: 3}
   m_Name: hehe_wire
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: f2bb2ddcfbfa88141bb5f84243f0252b, type: 3}
+  icon: {fileID: 21300000, guid: 719532d9f77cd5448947f982d49c1ba2, type: 3}
   id: hehe_wire
   title: 
   description: 
   FreatureType: 1
-  prefab: {fileID: 4160826004695510512, guid: 2e61f2a7d0940a94392f566b3921d66d, type: 3}
+  prefab: {fileID: 191467624603780345, guid: 48851bee1d8f5044fb249c23703be419, type: 3}
   maxCountInPack: 1
