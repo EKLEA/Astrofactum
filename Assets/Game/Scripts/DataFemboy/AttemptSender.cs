@@ -6,12 +6,12 @@ public class AttemptSender : MonoBehaviour
 {
     public string saveAttemptUrl = "http://localhost:5000/save_attempt_from_game";
 
-    public void SendTestResults(int score, float duration)
+    public void SendTestResults(int score, double duration)
     {
         StartCoroutine(SendAttemptCoroutine(score, duration));
     }
 
-    IEnumerator SendAttemptCoroutine(int score, float duration)
+    IEnumerator SendAttemptCoroutine(int score, double duration)
     {
         if (string.IsNullOrEmpty(GameSessionData.ActiveCode))
         {
@@ -52,6 +52,6 @@ public class AttemptSender : MonoBehaviour
     private class AttemptData { 
         public string code;
         public int score;
-        public float duration;
+        public double duration;
     }
 }

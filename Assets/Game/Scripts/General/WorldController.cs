@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Splines;
 using UnityEngine.UIElements;
@@ -36,12 +38,29 @@ public class WorldController : MonoBehaviour
     {
         tickManager.StopTick();
     }
+
+    private AttemptSender attemptSender;
+
     void EndGame(int score)
     {
-        
         StopLevel();
-        //Запрос
-        //чет делать с очками
         Debug.Log("Конец");
+
+        string currentCode = GameSessionData.ActiveCode;
+        double elapsedTime = Math.Round(tickManager.ElapsedTime, 1);
+
+        if (currentCode == "123")
+        {
+            Debug.Log($"[Псевдвокод: {currentCode}] - Очки {score}; Время {elapsedTime}");
+        }
+        else
+        {
+            attemptSender = FindAnyObjectByType<AttemptSender>();
+            if (attemptSender != null)
+            {
+                Debug.Log($"[Нормискод: {currentCode}] - Очки {score}; Время {elapsedTime}");
+                attemptSender.SendTestResults(score, elapsedTime);
+            }
+        }
     }
 }

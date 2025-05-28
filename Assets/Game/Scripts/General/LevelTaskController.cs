@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 
-public class LevelTaskController:UIController
+public class LevelTaskController : UIController
 {
     public event Action<int> OnTaskDone;
     public TaskConfig config;
@@ -22,16 +22,16 @@ public class LevelTaskController:UIController
     {
         for (int i = 0; i < uiItemPool.Length; i++)
         {
-           var gm = Instantiate(Item, grid);
+            var gm = Instantiate(Item, grid);
             gm.gameObject.SetActive(false);
-            uiItemPool[i]=gm;
+            uiItemPool[i] = gm;
         }
         Instance = this;
     }
-    
+
     public void SetUpTask()
     {
-        score=config.score;
+        score = config.score;
         for (int i = 0; i < uiItemPool.Length; i++)
         {
             uiItemPool[i].gameObject.SetActive(false);
@@ -40,25 +40,25 @@ public class LevelTaskController:UIController
         {
             var item = InfoDataBase.itemInfoBase.GetInfo(config.taskItems[i].id);
             uiItemPool[i].image.sprite = item.icon;
-            uiItemPool[i].text.text= item.title;
-            uiItemPool[i].Amount.text = string.Format("0/{0}",config.taskItems[i].amount);
+            uiItemPool[i].text.text = item.title;
+            uiItemPool[i].Amount.text = string.Format("0/{0}", config.taskItems[i].amount);
             uiItemPool[i].gameObject.SetActive(true);
             currItems.Add(config.taskItems[i].id, 0);
             linkedUIItems.Add(config.taskItems[i].id, uiItemPool[i]);
         }
         Score.text = "Очки: " + score.ToString();
-        
+
     }
-   public void AddItem(string id, int amount)
+    public void AddItem(string id, int amount)
     {
         if (currItems.ContainsKey(id) && linkedUIItems.ContainsKey(id) && amount > 0)
         {
             currItems[id] += amount;
-            
+
             string[] parts = linkedUIItems[id].Amount.text.Split('/');
             linkedUIItems[id].Amount.text = $"{currItems[id]}/{parts[1]}";
         }
-        
+
         if (CheckWin()) OnTaskDone?.Invoke(score);
     }
     public void RemoveScore(int s)
@@ -70,7 +70,7 @@ public class LevelTaskController:UIController
     {
         for (int i = 0; i < config.taskItems.Length; i++)
         {
-            if(currItems[config.taskItems[i].id]<config.taskItems[i].amount) return false;
+            if (currItems[config.taskItems[i].id] < config.taskItems[i].amount) return false;
         }
         return true;
     }

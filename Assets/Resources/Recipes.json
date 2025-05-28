@@ -1,35 +1,192 @@
 [
-    {
-      "id": "iron_ingot",
-      "tag": "Smelting",
-      "title": "Железный слиток",
+  {
+      "id": "uia_rotor",
+      "tag": "Assembling",
+      "title": "Ротор УИА-1",
       "duration": 1.0,
       "iconPath": "Items/iron_ingot",
       "inputs": [
         {
-          "itemID": "iron_ore",
+          "itemID": "cat_plate",
+          "amount": 1
+        },
+        {
+          "itemID": "hehe_sheet",
           "amount": 1
         }
       ],
       "outputs": [
         {
-          "itemID": "iron_ingot",
+          "itemID": "uia_rotor",
           "amount": 1
         }
       ]
     },
     {
-      "id": "generate_iron_ore",
+      "id": "maxwell_frame",
+      "tag": "Assembling",
+      "title": "Каркас Максвелла",
+      "duration": 1.0,
+      "iconPath": "Items/iron_ingot",
+      "inputs": [
+        {
+          "itemID": "cat_rod",
+          "amount": 1
+        },
+        {
+          "itemID": "hehe_wire",
+          "amount": 1
+        }
+
+      ],
+      "outputs": [
+        {
+          "itemID": "maxwell_frame",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "cat_rod",
+      "tag": "Construction",
+      "title": "Котинитовый прут",
+      "duration": 1.0,
+      "iconPath": "Items/iron_ingot",
+      "inputs": [
+        {
+          "itemID": "cat_ingot",
+          "amount": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemID": "cat_rod",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "cat_plate",
+      "tag": "Construction",
+      "title": "Котинитовая пластина",
+      "duration": 1.0,
+      "iconPath": "Items/iron_ingot",
+      "inputs": [
+        {
+          "itemID": "cat_ingot",
+          "amount": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemID": "cat_plate",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "cat_ingot",
+      "tag": "Smelting",
+      "title": "Котинитовый слиток",
+      "duration": 1.0,
+      "iconPath": "Items/iron_ingot",
+      "inputs": [
+        {
+          "itemID": "cat_ore",
+          "amount": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemID": "cat_ingot",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "generate_cat_ore",
       "tag": "Generator",
-      "title": "Железная руда",
+      "title": "Котинитовая руда",
       "duration": 1,
       "iconPath": "Items/iron_ore",
       "inputs": [],
       "outputs": [
         {
-          "itemID": "iron_ore",
+          "itemID": "cat_ore",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "hehe_sheet",
+      "tag": "Construction",
+      "title": "Ржомбиевый лист",
+      "duration": 1.0,
+      "iconPath": "Items/iron_ingot",
+      "inputs": [
+        {
+          "itemID": "hehe_ingot",
+          "amount": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemID": "hehe_sheet",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "hehe_wire",
+      "tag": "Construction",
+      "title": "Ржомбиевая проволка",
+      "duration": 1.0,
+      "iconPath": "Items/iron_ingot",
+      "inputs": [
+        {
+          "itemID": "hehe_ingot",
+          "amount": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemID": "hehe_wire",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "hehe_ingot",
+      "tag": "Smelting",
+      "title": "Ржомбиевый слиток",
+      "duration": 1.0,
+      "iconPath": "Items/iron_ingot",
+      "inputs": [
+        {
+          "itemID": "hehe_ore",
+          "amount": 1
+        }
+      ],
+      "outputs": [
+        {
+          "itemID": "hehe_ingot",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "generate_hehe_ore",
+      "tag": "Generator",
+      "title": "Ржомбиевая руда",
+      "duration": 1,
+      "iconPath": "Items/iron_ore",
+      "inputs": [],
+      "outputs": [
+        {
+          "itemID": "hehe_ore",
           "amount": 1
         }
       ]
     }
+
   ]
