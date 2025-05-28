@@ -88,8 +88,15 @@ public class Connector : Building,IHavePorts,IAmTickable,IWorkWithItems
     }
     public void Clear()
     {
-        if (IAmSetUped) LevelTaskController.Instance.RemoveScore(5);
-        foreach(var p in _inPortsGM) p.transferSlot=null;
-        foreach(var p in _outPortsGM) p.transferSlot=null;
+        foreach(var p in _inPortsGM)
+        {
+             if (IAmSetUped&&p.transferSlot!=null) LevelTaskController.Instance.RemoveScore(p.transferSlot.Count);
+            p.transferSlot=null;
+        }
+        foreach(var p in _outPortsGM)
+        {
+             if (IAmSetUped&&p.transferSlot!=null)  LevelTaskController.Instance.RemoveScore(p.transferSlot.Count);
+             p.transferSlot=null;
+        }
     }
 }

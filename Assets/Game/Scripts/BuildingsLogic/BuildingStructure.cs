@@ -47,7 +47,6 @@ public class BuildingStructure : MonoBehaviour, IAmSctructure
 			var b=_buildings.Where(x=>x!=null);
 			foreach (var s in b)
 				s.UnPhantom();
-			DestroyImmediate(gameObject);
 		}
 		
 	}
