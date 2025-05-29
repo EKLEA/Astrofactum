@@ -3,7 +3,7 @@
       "id": "uia_rotor",
       "tag": "Assembling",
       "title": "Ротор УИА-1",
-      "duration": 1.0,
+      "duration": 3.0,
       "iconPath": "Items/uia_rotor",
       "inputs": [
         {
@@ -26,7 +26,7 @@
       "id": "maxwell_frame",
       "tag": "Assembling",
       "title": "Каркас Максвелла",
-      "duration": 1.0,
+      "duration": 3.0,
       "iconPath": "Items/maxwell_frame",
       "inputs": [
         {

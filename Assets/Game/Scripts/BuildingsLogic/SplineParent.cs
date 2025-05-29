@@ -267,7 +267,7 @@ public static class SplineExtensons
         return type switch
         {
             SplineState.Active=>2,
-            SplineState.Passive=>(int)(spline.GetLength() / 5),
+            SplineState.Passive=>math.max((int)(spline.GetLength() / 5),1),
             _=>2
         };
     }

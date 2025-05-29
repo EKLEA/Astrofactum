@@ -687,7 +687,7 @@ PrefabInstance:
     - target: {fileID: 5040612161321526882, guid: e9103737086751a4290ee7e553affed3, type: 3}
       propertyPath: config
       value: 
-      objectReference: {fileID: 11400000, guid: f701fdb2a6192f745854787a8c797e1d, type: 2}
+      objectReference: {fileID: 11400000, guid: 791214e78af66114cab4dd3846c3c0c7, type: 2}
     - target: {fileID: 5477028314813510058, guid: e9103737086751a4290ee7e553affed3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -791,7 +791,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e903be8438d8d44195c2b7f2dc0e700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveAttemptUrl: 158.46.107.231:5000/save_attempt_from_game
+  saveAttemptUrl: http://127.0.0.1:5000//save_attempt_from_game
 --- !u!4 &1220171635
 Transform:
   m_ObjectHideFlags: 0

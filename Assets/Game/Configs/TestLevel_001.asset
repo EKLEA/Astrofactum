@@ -14,5 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 100
   taskItems:
-  - id: cat_ore
-    amount: 5
+  - id: uia_rotor
+    amount: 10
+  - id: maxwell_frame
+    amount: 10
+  - id: cat_plate
+    amount: 40
+  - id: hehe_wire
+    amount: 20

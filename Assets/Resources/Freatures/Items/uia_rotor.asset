@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4128e9a3918cb2b498001db86c30d848, type: 3}
   m_Name: uia_rotor
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: d66aad6cb6f93324b8031ac46522eebe, type: 3}
+  icon: {fileID: 21300000, guid: 62ca5d545e74a694297064b764ed70f2, type: 3}
   id: uia_rotor
   title: 
   description: 
